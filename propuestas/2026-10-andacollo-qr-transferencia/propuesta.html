@@ -1,0 +1,363 @@
+<title>Andacollo · QR de transferencia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<style>
+/* Layout: propuesta técnica en formato dossier. Banda de ficha arriba, índice a la izquierda en escritorio, columna de lectura con maquetas del teléfono y la tarjeta. */
+:root {
+  --bg: #F3F5F9; --surface: #FFFFFF; --ink: #0F1A33; --muted: #55607A; --rule: #DAE0EA;
+  --navy: #1C3A6B; --navy-soft: #E5ECF7; --copper: #B84A00; --copper-soft: #FCEBDD;
+  --ok: #1E7449; --ok-soft: #E2F3EA; --warn: #8F5200; --warn-soft: #FFF2D9;
+  --band: #1C3A6B; --band-ink: #F4F7FC; --band-muted: #B9C7E0; --stage: #E3E8F0;
+  /* Teléfono y tarjeta: maquetas, colores de iOS claro */
+  --ios-bg: #F2F2F7; --ios-card: #FFFFFF; --ios-fg: #000000; --ios-fg2: rgba(60,60,67,.6); --ios-sep: rgba(60,60,67,.18); --ios-tint: #007AFF; --ios-ok: #34C759;
+  --card-paper: #FFFFFF; --card-ink: #111418; --card-accent: #1C3A6B;
+  --f-display: "IBM Plex Sans Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", "Cascadia Mono", Consolas, "Courier New", monospace;
+  --f-ios: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0C1322; --surface: #131C30; --ink: #E6EBF4; --muted: #9AA6BD; --rule: #25314A;
+    --navy: #93B3E8; --navy-soft: #1A2742; --copper: #FF8F45; --copper-soft: #33200F;
+    --ok: #5FCB93; --ok-soft: #12291D; --warn: #EAAE52; --warn-soft: #2E220C;
+    --band: #101A30; --band-ink: #EEF2FA; --band-muted: #93A3C2; --stage: #18223A;
+    --ios-bg: #000000; --ios-card: #1C1C1E; --ios-fg: #FFFFFF; --ios-fg2: rgba(235,235,245,.6); --ios-sep: rgba(84,84,88,.6); --ios-tint: #0A84FF; --ios-ok: #30D158;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0C1322; --surface: #131C30; --ink: #E6EBF4; --muted: #9AA6BD; --rule: #25314A;
+  --navy: #93B3E8; --navy-soft: #1A2742; --copper: #FF8F45; --copper-soft: #33200F;
+  --ok: #5FCB93; --ok-soft: #12291D; --warn: #EAAE52; --warn-soft: #2E220C;
+  --band: #101A30; --band-ink: #EEF2FA; --band-muted: #93A3C2; --stage: #18223A;
+  --ios-bg: #000000; --ios-card: #1C1C1E; --ios-fg: #FFFFFF; --ios-fg2: rgba(235,235,245,.6); --ios-sep: rgba(84,84,88,.6); --ios-tint: #0A84FF; --ios-ok: #30D158;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15.5px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: var(--navy); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--copper); outline-offset: 2px; border-radius: 2px; }
+code, .mono { font-family: var(--f-mono); font-size: 0.86em; }
+:not(pre) > code { background: var(--navy-soft); padding: 0.08em 0.36em; border-radius: 4px; overflow-wrap: anywhere; }
+
+.band { background: var(--band); color: var(--band-ink); padding-inline: 20px; padding-block: 36px 30px; }
+.band-inner { max-width: 1180px; margin: 0 auto; display: grid; gap: 22px; }
+.eyebrow { font-family: var(--f-display); font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; font-size: 12.5px; color: var(--band-muted); }
+.band h1 { font-family: var(--f-display); font-weight: 700; font-size: clamp(30px, 5vw, 46px); line-height: 1.05; margin: 6px 0 10px; text-wrap: balance; letter-spacing: -0.01em; }
+.band .lede { max-width: 70ch; margin: 0; font-size: 16.5px; opacity: .92; }
+.ficha { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1px; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.14); border-radius: 6px; overflow: hidden; margin: 0; }
+.ficha div { background: var(--band); padding: 12px 14px; min-width: 0; }
+.ficha dt { font-family: var(--f-display); font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--band-muted); }
+.ficha dd { margin: 3px 0 0; font-size: 14.5px; overflow-wrap: anywhere; }
+.ficha dd code { background: rgba(255,255,255,0.1); color: var(--band-ink); }
+
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 80px; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 44px; align-items: start; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); font-size: 13.5px; }
+nav.toc .toc-h { font-family: var(--f-display); font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; font-size: 12px; color: var(--muted); margin: 0 0 10px; }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; counter-reset: toc; }
+nav.toc li { counter-increment: toc; }
+nav.toc a { display: grid; grid-template-columns: 26px 1fr; text-decoration: none; color: var(--ink); padding: 5px 8px; border-radius: 4px; line-height: 1.35; }
+nav.toc a::before { content: counter(toc, decimal-leading-zero); font-family: var(--f-mono); font-size: 11.5px; color: var(--muted); padding-top: 1px; }
+nav.toc a:hover { background: var(--navy-soft); }
+main { min-width: 0; }
+@media (max-width: 1000px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  nav.toc { position: static; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 14px 12px; }
+  nav.toc ol { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+}
+section { padding-block: 10px 26px; border-top: 1px solid var(--rule); scroll-margin-top: 16px; }
+section:first-child { border-top: 0; }
+h2 { font-family: var(--f-display); font-weight: 700; font-size: 28px; line-height: 1.15; margin: 22px 0 6px; text-wrap: balance; }
+h2 .num { font-family: var(--f-mono); font-weight: 500; font-size: 14px; color: var(--copper); display: block; letter-spacing: 0.04em; margin-bottom: 4px; }
+h3 { font-family: var(--f-display); font-weight: 600; font-size: 20px; margin: 26px 0 6px; color: var(--navy); text-wrap: balance; }
+h4 { font-family: var(--f-display); font-weight: 600; font-size: 15px; margin: 0 0 4px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+p, li { max-width: 74ch; }
+p { margin: 8px 0; }
+ul, ol { padding-left: 1.3em; margin: 8px 0; }
+li { margin: 3px 0; }
+.sub { color: var(--muted); margin-top: 0; }
+.small { font-size: 13.5px; color: var(--muted); }
+
+.note { border-radius: 6px; padding: 12px 14px; margin: 14px 0; background: var(--navy-soft); max-width: 78ch; }
+.note > :first-child { margin-top: 0; } .note > :last-child { margin-bottom: 0; }
+.note .lbl { font-family: var(--f-display); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; margin-right: 6px; color: var(--navy); }
+.note.warn { background: var(--warn-soft); } .note.warn .lbl { color: var(--warn); }
+.note.ok { background: var(--ok-soft); } .note.ok .lbl { color: var(--ok); }
+.chip { display: inline-block; font-family: var(--f-display); font-weight: 600; font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; white-space: nowrap; vertical-align: 1px; }
+.chip.ok { background: var(--ok-soft); color: var(--ok); }
+.chip.warn { background: var(--warn-soft); color: var(--warn); }
+.chip.info { background: var(--navy-soft); color: var(--navy); }
+
+.tw { overflow-x: auto; margin: 12px 0 16px; border: 1px solid var(--rule); border-radius: 6px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--rule); }
+tr:last-child td { border-bottom: 0; }
+th { font-family: var(--f-display); font-weight: 600; font-size: 12.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); background: var(--bg); white-space: nowrap; }
+td.n { font-variant-numeric: tabular-nums; white-space: nowrap; }
+tr.total td { font-weight: 600; background: var(--bg); }
+
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 12px 0; }
+.panel { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 14px 16px; min-width: 0; }
+.panel ul { margin: 6px 0 0; }
+ol.steps { counter-reset: s; list-style: none; padding: 0; display: grid; gap: 10px; }
+ol.steps > li { counter-increment: s; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; max-width: 80ch; margin: 0; }
+ol.steps > li::before { content: counter(s); font-family: var(--f-display); font-weight: 700; font-size: 15px; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--copper-soft); color: var(--copper); }
+ol.steps > li > div { min-width: 0; }
+.copyfmt { font-family: var(--f-mono); font-size: 13.5px; background: var(--navy-soft); border-radius: 6px; padding: 12px 14px; line-height: 1.7; white-space: pre-wrap; margin: 10px 0; max-width: 60ch; }
+
+/* ── Escenario de maquetas ───────────────── */
+.stage { background: var(--stage); border-radius: 8px; padding: 28px 16px; display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; gap: 36px 48px; margin: 16px 0 8px; }
+.fig { display: grid; justify-items: center; gap: 10px; }
+.fig figcaption { font-size: 13px; color: var(--muted); text-align: center; max-width: 30ch; }
+
+/* Teléfono */
+.phone { width: 300px; max-width: 100%; aspect-ratio: 300 / 620; border-radius: 46px; padding: 10px; background: #1b1d22; box-shadow: 0 20px 50px rgba(15,26,51,.25), inset 0 0 0 2px #3a3d44; }
+.screen { position: relative; height: 100%; border-radius: 37px; overflow: hidden; background: var(--ios-bg); color: var(--ios-fg); font-family: var(--f-ios); display: flex; flex-direction: column; }
+.island { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 92px; height: 26px; border-radius: 20px; background: #000; z-index: 2; }
+.sbar { display: flex; justify-content: space-between; padding: 14px 26px 0; font-size: 13px; font-weight: 600; }
+.urlbar { margin: 18px 12px 0; padding: 6px 10px; border-radius: 10px; background: var(--ios-card); font-size: 11.5px; color: var(--ios-fg2); text-align: center; }
+.scr-body { padding: 16px 14px 0; display: grid; gap: 6px; flex: 1; align-content: start; }
+.scr-brand { font-size: 10.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ios-fg2); }
+.scr-h { font-family: var(--f-ios); color: var(--ios-fg); letter-spacing: 0; font-size: 25px; font-weight: 700; line-height: 1.12; margin: 0; }
+.scr-lead { font-size: 12px; color: var(--ios-fg2); margin: 0 0 8px; }
+.ios-group { background: var(--ios-card); border-radius: 10px; overflow: hidden; }
+.ios-row { all: unset; box-sizing: border-box; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px; width: 100%; padding: 6px 12px; position: relative; cursor: pointer; }
+.ios-row + .ios-row::before { content: ""; position: absolute; top: 0; left: 12px; right: 0; border-top: .5px solid var(--ios-sep); }
+.ios-row:focus-visible { outline: 2px solid var(--ios-tint); outline-offset: -2px; }
+.ios-row .k { display: block; font-size: 10px; color: var(--ios-fg2); }
+.ios-row .v { display: block; font-size: 13px; font-variant-numeric: tabular-nums; }
+.ios-row svg { width: 16px; height: 16px; color: var(--ios-tint); }
+.ios-row.done svg { color: var(--ios-ok); }
+.scr-cta { all: unset; box-sizing: border-box; margin: 10px 12px 22px; height: 40px; border-radius: 12px; background: var(--ios-tint); color: #fff; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; transition: background-color .2s, transform .12s; }
+.scr-cta:active { transform: scale(.98); }
+.scr-cta.done { background: var(--ios-ok); }
+.scr-toast { position: absolute; left: 50%; top: 46px; transform: translate(-50%, -8px); background: var(--ios-card); color: var(--ios-fg); padding: 6px 14px; border-radius: 999px; font-size: 12px; font-weight: 600; box-shadow: 0 6px 20px rgba(0,0,0,.18); opacity: 0; transition: .25s; pointer-events: none; z-index: 3; white-space: nowrap; }
+.scr-toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* Tarjeta con stand */
+.standee { display: grid; justify-items: center; }
+.card { width: 230px; max-width: 100%; aspect-ratio: 100 / 150; background: var(--card-paper); color: var(--card-ink); border-radius: 6px; box-shadow: 0 14px 30px rgba(15,26,51,.22), 0 1px 0 rgba(15,26,51,.08); padding: 20px 18px 16px; display: grid; grid-template-rows: auto auto 1fr auto; justify-items: center; text-align: center; gap: 8px; font-family: var(--f-ios); }
+.card .logo { font-family: var(--f-display); font-weight: 700; font-size: 19px; letter-spacing: .18em; text-transform: uppercase; color: var(--card-accent); }
+.card .t1 { font-size: 15px; font-weight: 700; line-height: 1.2; text-wrap: balance; }
+.card .t1 small { display: block; font-weight: 500; font-size: 11.5px; color: #5b6170; margin-top: 3px; }
+.card .mid { display: grid; grid-template-columns: auto auto; align-items: center; gap: 12px; align-self: center; }
+.card .qr { width: 124px; height: 124px; padding: 6px; background: #fff; border-radius: 6px; box-shadow: inset 0 0 0 1px #e3e6ec; color: #111418; display: grid; }
+.card .qr svg { width: 100%; height: 100%; shape-rendering: crispEdges; }
+.card .nfc { width: 44px; display: grid; justify-items: center; gap: 2px; font-size: 9px; font-weight: 600; letter-spacing: .08em; color: var(--card-accent); }
+.card .nfc svg { width: 34px; height: 34px; }
+.card .url { font-family: var(--f-mono); font-size: 10.5px; color: #5b6170; }
+.base { width: 170px; max-width: 80%; height: 16px; margin-top: -2px; border-radius: 3px 3px 8px 8px; background: linear-gradient(#2a2f3a, #14171d); box-shadow: 0 10px 14px rgba(15,26,51,.25); }
+
+footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--rule); padding-top: 16px; margin-top: 30px; }
+</style>
+
+<header class="band">
+  <div class="band-inner">
+    <div>
+      <div class="eyebrow">apalmo studio · Propuesta técnica · Rev 0 · 8 de octubre de 2026</div>
+      <h1>Datos de transferencia con QR y NFC para Andacollo</h1>
+      <p class="lede">El cliente escanea un QR o acerca su teléfono a una tarjeta, ve los datos de la cuenta y los copia con un toque, listos para pegarlos en su banco. Se acaba el transcribir desde un papel y los errores de tipeo en el RUT o el número de cuenta.</p>
+    </div>
+    <dl class="ficha">
+      <div><dt>Cliente</dt><dd>Andacollo</dd></div>
+      <div><dt>Enlace</dt><dd><code>andacollo.com/transferencia</code></dd></div>
+      <div><dt>Entregables</dt><dd>Página de datos de pago + tarjeta NFC/QR con stand</dd></div>
+      <div><dt>Infraestructura</dt><dd>Dominio y Railway de la propuesta en curso</dd></div>
+      <div><dt>Plazo estimado</dt><dd>5 días hábiles, impresión incluida</dd></div>
+      <div><dt>Preparado por</dt><dd>Juan Apalmo · apalmo studio</dd></div>
+    </dl>
+  </div>
+</header>
+
+<div class="wrap">
+<nav class="toc" aria-label="Índice">
+  <p class="toc-h">Índice</p>
+  <ol>
+    <li><a href="#problema">El problema</a></li>
+    <li><a href="#solucion">La solución</a></li>
+    <li><a href="#pagina">La página</a></li>
+    <li><a href="#tarjeta">La tarjeta NFC + QR</a></li>
+    <li><a href="#tecnico">Detalle técnico</a></li>
+    <li><a href="#plan">Plan de trabajo</a></li>
+    <li><a href="#inversion">Inversión</a></li>
+    <li><a href="#necesitamos">Qué necesitamos</a></li>
+  </ol>
+</nav>
+
+<main>
+<section id="problema">
+  <h2><span class="num">01</span>El problema</h2>
+  <p>Hoy, quien quiere pagar por transferencia recibe los datos en un papel o se los dictan. Tiene que escribir a mano nombre, RUT, banco, tipo y número de cuenta en la app de su banco. Es lento, genera filas en el mesón y basta un dígito mal puesto para que la transferencia rebote o llegue a otra cuenta.</p>
+</section>
+
+<section id="solucion">
+  <h2><span class="num">02</span>La solución</h2>
+  <p>Un enlace propio, <code>andacollo.com/transferencia</code>, con los datos de la cuenta y un botón para copiarlos. Se llega a él de dos formas desde una misma tarjeta en el mesón:</p>
+  <div class="grid2">
+    <div class="panel"><h4>Acercar el teléfono (NFC)</h4><p>La tarjeta lleva un chip NFC. El cliente acerca su iPhone o Android y el enlace se abre solo, sin abrir la cámara ni instalar nada.</p></div>
+    <div class="panel"><h4>Escanear el QR</h4><p>Para teléfonos sin NFC o con NFC apagado, el mismo enlace va en un código QR impreso en la tarjeta.</p></div>
+  </div>
+  <p>Aprovecha lo que ya está en marcha: el dominio y el servicio en Railway de la propuesta pendiente. Esta página se monta sobre esa misma base, así que no suma infraestructura ni costos mensuales nuevos.</p>
+</section>
+
+<section id="pagina">
+  <h2><span class="num">03</span>La página de datos de pago</h2>
+  <p class="sub">Diseñada siguiendo las guías de interfaz de Apple: lista agrupada, tipografía del sistema, un solo botón principal al alcance del pulgar y modo oscuro automático. Abre en menos de un segundo.</p>
+
+  <div class="stage">
+    <figure class="fig">
+      <div class="phone"><div class="screen">
+        <div class="island"></div>
+        <div class="sbar"><span>9:41</span><span>●●● ▮</span></div>
+        <div class="urlbar">andacollo.com/transferencia</div>
+        <div class="scr-body">
+          <span class="scr-brand">Andacollo</span>
+          <h3 class="scr-h">Datos de transferencia</h3>
+          <p class="scr-lead">Toca un dato para copiarlo o copia todo de una vez.</p>
+          <div class="ios-group" id="demo-list"></div>
+        </div>
+        <button class="scr-cta" id="demo-all" type="button">Copiar todos los datos</button>
+        <div class="scr-toast" id="demo-toast" role="status" aria-live="polite"></div>
+      </div></div>
+      <figcaption>Maqueta funcional: prueba los botones. Datos de ejemplo.</figcaption>
+    </figure>
+  </div>
+
+  <h3>Cómo se usa</h3>
+  <ol class="steps">
+    <li><div><strong>Abre el enlace</strong> acercando el teléfono a la tarjeta o escaneando el QR.</div></li>
+    <li><div><strong>Copia.</strong> El botón grande copia todos los datos en un bloque. Cada fila también se copia sola con un toque, porque muchas apps de banco piden los datos campo por campo al agregar un destinatario.</div></li>
+    <li><div><strong>Pega en el banco</strong> y transfiere. La página confirma cada copia con un aviso breve y un check verde.</div></li>
+  </ol>
+
+  <h3>Formato del texto copiado</h3>
+  <p>El orden sigue el del formulario "nuevo destinatario" de los bancos chilenos:</p>
+  <div class="copyfmt">Nombre: Comercial Andacollo SpA
+RUT: 76.123.456-7
+Banco: Banco de Chile
+Tipo de cuenta: Cuenta Corriente
+N° de cuenta: 00-123-45678-09
+Correo: pagos@andacollo.com</div>
+  <p class="small">Datos de ejemplo. Se reemplazan por los reales antes de publicar.</p>
+</section>
+
+<section id="tarjeta">
+  <h2><span class="num">04</span>La tarjeta NFC + QR con stand</h2>
+  <p class="sub">Mismo formato que las tarjetas NFC que ya hemos hecho: tarjeta rígida impresa a color con chip NFC adherido por detrás, sobre un stand de mesón.</p>
+  <div class="stage">
+    <figure class="fig">
+      <div class="standee">
+        <div class="card">
+          <div class="logo">Andacollo</div>
+          <div class="t1">Acerca tu teléfono<small>o escanea el código para obtener los datos de pago</small></div>
+          <div class="mid">
+            <div class="qr" aria-label="Código QR a andacollo.com/transferencia"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 37" class="segno"><path class="qrline" stroke="currentColor" d="M0 0.5h7m3 0h1m1 0h3m2 0h2m2 0h2m2 0h4m1 0h7m-37 1h1m5 0h1m1 0h2m4 0h1m2 0h2m1 0h1m1 0h1m2 0h1m4 0h1m5 0h1m-37 1h1m1 0h3m1 0h1m2 0h1m3 0h2m2 0h2m3 0h1m3 0h1m3 0h1m1 0h3m1 0h1m-37 1h1m1 0h3m1 0h1m2 0h2m1 0h1m2 0h1m2 0h2m1 0h3m1 0h2m1 0h1m1 0h1m1 0h3m1 0h1m-37 1h1m1 0h3m1 0h1m2 0h2m6 0h1m1 0h1m2 0h2m3 0h1m2 0h1m1 0h3m1 0h1m-37 1h1m5 0h1m1 0h2m1 0h2m2 0h6m1 0h1m5 0h1m1 0h1m5 0h1m-37 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-29 1h2m1 0h1m2 0h2m1 0h2m1 0h2m1 0h1m1 0h1m-22 1h4m1 0h1m1 0h1m2 0h3m1 0h2m1 0h1m2 0h2m1 0h2m1 0h2m3 0h1m-36 1h2m2 0h1m2 0h1m1 0h1m2 0h1m1 0h1m1 0h1m1 0h2m1 0h3m2 0h1m3 0h1m3 0h2m-33 1h1m1 0h2m1 0h4m2 0h2m1 0h1m1 0h1m1 0h3m1 0h3m1 0h1m2 0h1m1 0h1m-35 1h1m3 0h1m3 0h4m1 0h2m2 0h1m1 0h1m2 0h3m1 0h4m1 0h2m1 0h1m1 0h1m-37 1h1m1 0h1m2 0h6m1 0h2m1 0h2m1 0h3m1 0h3m4 0h3m2 0h2m-36 1h1m3 0h2m1 0h2m1 0h1m2 0h1m7 0h1m1 0h7m2 0h1m1 0h1m-35 1h3m3 0h1m2 0h1m4 0h5m1 0h2m1 0h3m1 0h2m1 0h2m1 0h2m-35 1h1m1 0h2m1 0h1m1 0h5m1 0h2m2 0h1m1 0h1m1 0h3m2 0h1m2 0h1m4 0h2m-36 1h2m1 0h2m1 0h3m1 0h1m2 0h3m2 0h2m2 0h1m1 0h1m4 0h3m1 0h4m-36 1h2m1 0h1m2 0h1m2 0h2m2 0h3m1 0h2m1 0h1m3 0h3m4 0h1m-32 1h3m1 0h4m1 0h2m5 0h7m1 0h1m1 0h1m2 0h3m1 0h1m-35 1h2m3 0h1m1 0h2m1 0h3m1 0h2m2 0h1m3 0h3m4 0h4m1 0h1m1 0h1m-37 1h2m1 0h1m1 0h3m4 0h1m14 0h1m1 0h2m3 0h1m1 0h1m-37 1h1m1 0h1m1 0h1m2 0h2m1 0h5m1 0h4m1 0h2m2 0h3m1 0h1m2 0h2m-34 1h1m1 0h1m3 0h3m1 0h1m4 0h1m8 0h1m2 0h3m3 0h2m-35 1h1m1 0h3m2 0h1m1 0h1m4 0h2m1 0h4m2 0h2m1 0h1m1 0h1m2 0h1m2 0h1m1 0h1m-37 1h1m2 0h1m1 0h2m1 0h2m1 0h1m5 0h1m7 0h3m2 0h5m1 0h1m-37 1h1m1 0h2m6 0h1m1 0h1m2 0h4m1 0h1m1 0h1m1 0h2m2 0h5m-28 1h2m2 0h4m1 0h2m3 0h1m3 0h2m3 0h2m4 0h2m-32 1h2m1 0h3m2 0h1m5 0h1m1 0h1m2 0h1m2 0h1m3 0h1m2 0h2m-35 1h2m1 0h1m2 0h1m4 0h2m1 0h1m1 0h3m5 0h1m2 0h6m2 0h1m-28 1h1m1 0h3m2 0h1m2 0h4m1 0h1m2 0h1m1 0h1m3 0h2m-34 1h7m1 0h2m2 0h1m5 0h2m2 0h2m1 0h2m1 0h1m1 0h1m1 0h3m-35 1h1m5 0h1m1 0h2m1 0h1m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m1 0h1m1 0h1m3 0h1m1 0h3m-37 1h1m1 0h3m1 0h1m1 0h1m1 0h2m3 0h2m4 0h4m3 0h8m-36 1h1m1 0h3m1 0h1m2 0h1m1 0h2m2 0h2m1 0h2m1 0h2m2 0h4m1 0h2m-32 1h1m1 0h3m1 0h1m2 0h1m3 0h1m1 0h1m1 0h1m2 0h2m4 0h3m1 0h2m3 0h1m-36 1h1m5 0h1m2 0h1m1 0h2m3 0h1m4 0h2m1 0h1m1 0h2m2 0h1m1 0h1m1 0h2m-36 1h7m3 0h1m1 0h1m1 0h1m4 0h2m1 0h3m2 0h1m2 0h3m1 0h3"/></svg></div>
+            <div class="nfc"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M14 16a12 12 0 0 1 0 16"/><path d="M21 11a19 19 0 0 1 0 26"/><path d="M28 6a26 26 0 0 1 0 36"/><circle cx="8" cy="24" r="2.5" fill="currentColor" stroke="none"/></svg>NFC</div>
+          </div>
+          <div class="url">andacollo.com/transferencia</div>
+        </div>
+        <div class="base"></div>
+      </div>
+      <figcaption>Tarjeta de 10 × 15 cm en stand acrílico. El logo final reemplaza el texto.</figcaption>
+    </figure>
+  </div>
+  <div class="tw"><table>
+    <thead><tr><th>Elemento</th><th>Especificación</th></tr></thead>
+    <tbody>
+      <tr><td>Tarjeta</td><td>10 × 15 cm (ajustable al formato de las anteriores), PVC o cartulina rígida con laminado mate.</td></tr>
+      <tr><td>Contenido</td><td>Logo de Andacollo, "Acerca tu teléfono para obtener los datos de pago", ícono NFC, QR y el enlace escrito.</td></tr>
+      <tr><td>Chip</td><td>NFC NTAG213 o NTAG215, grabado con el enlace y <strong>bloqueado contra reescritura</strong>.</td></tr>
+      <tr><td>QR</td><td>Corrección de errores alta (nivel H): se lee aunque la tarjeta tenga rayas o reflejos.</td></tr>
+      <tr><td>Stand</td><td>Acrílico transparente de mesón.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="tecnico">
+  <h2><span class="num">05</span>Detalle técnico</h2>
+  <div class="tw"><table>
+    <thead><tr><th>Tema</th><th>Decisión</th></tr></thead>
+    <tbody>
+      <tr><td>Tipo de sitio</td><td>Una página estática (un archivo HTML de unos 10 KB). Sin base de datos, sin login y sin dependencias externas.</td></tr>
+      <tr><td>Hosting</td><td>Servicio existente en Railway de la propuesta en curso, ruta <code>/transferencia</code>. Alias opcionales <code>/pago</code> y <code>/datos-pago</code> que redirigen a la misma página.</td></tr>
+      <tr><td>Dominio y HTTPS</td><td>Dominio de la propuesta en curso. Certificado HTTPS automático de Railway.</td></tr>
+      <tr><td>Copiado</td><td>API de portapapeles del navegador, con respaldo para navegadores antiguos. Funciona en Safari, Chrome y las vistas de Instagram y WhatsApp.</td></tr>
+      <tr><td>Privacidad</td><td>La página solo muestra los datos que ya se entregan en papel. No guarda cookies ni registra a quien la visita.</td></tr>
+      <tr><td>Seguridad</td><td>El chip se bloquea al grabarlo para que nadie lo reescriba con otro enlace. Como el enlace es del dominio propio, el cliente puede ver que la dirección es <code>andacollo.com</code> antes de transferir.</td></tr>
+      <tr><td>Cambios de datos</td><td>Los datos viven en un solo lugar del código. Si cambia la cuenta, se actualiza la página y la tarjeta impresa sigue sirviendo, porque el enlace no cambia.</td></tr>
+      <tr><td>Accesibilidad</td><td>Contraste alto, modo oscuro automático, botones de 44 pt o más y lectura correcta con VoiceOver.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="plan">
+  <h2><span class="num">06</span>Plan de trabajo</h2>
+  <div class="tw"><table>
+    <thead><tr><th>Día</th><th>Trabajo</th><th>Requiere</th></tr></thead>
+    <tbody>
+      <tr><td class="n">1</td><td>Recepción de datos y logo. Ajuste final del diseño de página y tarjeta.</td><td>Datos de la cuenta y logo</td></tr>
+      <tr><td class="n">2</td><td>Publicación de <code>andacollo.com/transferencia</code> y prueba en iPhone y Android.</td><td>Dominio activo</td></tr>
+      <tr><td class="n">2</td><td>Aprobación del diseño de la tarjeta.</td><td>Visto bueno de Andacollo</td></tr>
+      <tr><td class="n">3 a 5</td><td>Impresión, grabado y bloqueo del chip, armado en el stand y entrega.</td><td></td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><span class="lbl">Dependencia</span> La página sale al aire cuando el dominio esté comprado y apuntando a Railway, paso que ya es parte de la propuesta pendiente. Si esa propuesta se demora, la página puede publicarse antes con una dirección temporal de Railway; la tarjeta se imprime solo con el dominio definitivo.</div>
+</section>
+
+<section id="inversion">
+  <h2><span class="num">07</span>Inversión</h2>
+  <div class="tw"><table>
+    <thead><tr><th>Ítem</th><th>Detalle</th><th>Valor</th></tr></thead>
+    <tbody>
+      <tr><td>Página de datos de transferencia</td><td>Diseño, desarrollo, publicación y pruebas</td><td class="n"><span class="chip warn">Por definir</span></td></tr>
+      <tr><td>Tarjeta NFC + QR con stand</td><td>Diseño, impresión, chip grabado y bloqueado, stand</td><td class="n"><span class="chip warn">Por definir</span></td></tr>
+      <tr><td>Dominio y hosting</td><td>Incluidos en la propuesta en curso</td><td class="n"><span class="chip ok">Sin costo extra</span></td></tr>
+      <tr><td>Cambios de datos durante el primer año</td><td>Actualización de la página si cambia la cuenta</td><td class="n"><span class="chip ok">Incluido</span></td></tr>
+      <tr class="total"><td>Total</td><td></td><td class="n"><span class="chip warn">Por definir</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="small">Tarjetas adicionales para otros mesones o sucursales se cotizan por unidad.</p>
+</section>
+
+<section id="necesitamos">
+  <h2><span class="num">08</span>Qué necesitamos de Andacollo</h2>
+  <ul>
+    <li>Datos de la cuenta tal como deben aparecer: nombre o razón social, RUT, banco, tipo y número de cuenta, y correo para comprobantes.</li>
+    <li>Logo en buena calidad (vectorial si existe).</li>
+    <li>Cuántas tarjetas y para qué puntos de atención.</li>
+    <li>Visto bueno del diseño de la tarjeta antes de imprimir.</li>
+  </ul>
+  <footer>apalmo studio · Propuesta técnica para Andacollo · Rev 0 · 8 de octubre de 2026. Los datos bancarios que aparecen en este documento son de ejemplo.</footer>
+</section>
+</main>
+</div>
+
+<script>
+  const CUENTA = [
+    ["Nombre", "Comercial Andacollo SpA"], ["RUT", "76.123.456-7"], ["Banco", "Banco de Chile"],
+    ["Tipo de cuenta", "Cuenta Corriente"], ["N° de cuenta", "00-123-45678-09"], ["Correo", "pagos@andacollo.com"],
+  ];
+  const COPY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>';
+  const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  const list = document.getElementById("demo-list"), toast = document.getElementById("demo-toast"), all = document.getElementById("demo-all");
+  let tt;
+  async function copiar(texto) {
+    try { await navigator.clipboard.writeText(texto); return true; }
+    catch { const a = document.createElement("textarea"); a.value = texto; a.style.position = "fixed"; a.style.opacity = "0";
+      document.body.appendChild(a); a.select(); let ok = false; try { ok = document.execCommand("copy"); } catch {} a.remove(); return ok; }
+  }
+  function avisar(msg) { toast.textContent = msg; toast.classList.add("show"); clearTimeout(tt); tt = setTimeout(() => toast.classList.remove("show"), 1500); }
+  for (const [k, v] of CUENTA) {
+    const b = document.createElement("button"); b.className = "ios-row"; b.type = "button"; b.setAttribute("aria-label", `Copiar ${k}: ${v}`);
+    b.innerHTML = `<span><span class="k">${k}</span><span class="v">${v}</span></span>${COPY}`;
+    b.onclick = async () => { await copiar(v); avisar(`${k} copiado`); b.classList.add("done"); b.querySelector("svg").outerHTML = CHECK;
+      setTimeout(() => { b.classList.remove("done"); b.querySelector("svg").outerHTML = COPY; }, 1500); };
+    list.appendChild(b);
+  }
+  all.onclick = async () => { await copiar(CUENTA.map(([k, v]) => `${k}: ${v}`).join("\n")); avisar("Datos copiados");
+    all.classList.add("done"); all.textContent = "Copiado"; setTimeout(() => { all.classList.remove("done"); all.textContent = "Copiar todos los datos"; }, 1500); };
+</script>
