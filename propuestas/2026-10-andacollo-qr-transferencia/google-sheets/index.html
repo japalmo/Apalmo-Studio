@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="theme-color" content="#f2f2f7">
+<style>
+  /* Lista agrupada estilo iOS (Apple HIG): título grande, una tarjeta con filas, botón principal fijo abajo. */
+  :root {
+    --bg: #f2f2f7; --card: #ffffff; --fg: #000000; --fg2: rgba(60,60,67,.6);
+    --sep: rgba(60,60,67,.18); --tint: #007aff; --ok: #34c759; --press: #e5e5ea;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #000000; --card: #1c1c1e; --fg: #ffffff; --fg2: rgba(235,235,245,.6);
+      --sep: rgba(84,84,88,.6); --tint: #0a84ff; --ok: #30d158; --press: #2c2c2e; color-scheme: dark; }
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; background: var(--bg); color: var(--fg); }
+  body {
+    font: 17px/1.3 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; min-height: 100dvh;
+    padding: max(24px, env(safe-area-inset-top)) 16px calc(120px + env(safe-area-inset-bottom));
+  }
+  main { max-width: 480px; margin: 0 auto; display: grid; gap: 8px; }
+  .brand { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--fg2); }
+  h1 { font-size: 34px; line-height: 1.12; font-weight: 700; letter-spacing: .01em; margin: 0 0 4px; text-wrap: balance; }
+  .lead { color: var(--fg2); font-size: 15px; margin: 0 0 16px; }
+  .group { background: var(--card); border-radius: 12px; overflow: hidden; }
+  .row {
+    all: unset; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px;
+    width: 100%; box-sizing: border-box; padding: 11px 16px; cursor: pointer; position: relative;
+  }
+  .row + .row::before { content: ""; position: absolute; top: 0; left: 16px; right: 0; border-top: .5px solid var(--sep); }
+  .row:active { background: var(--press); }
+  .row:focus-visible { outline: 2px solid var(--tint); outline-offset: -2px; }
+  .k { font-size: 13px; color: var(--fg2); display: block; }
+  .v { font-size: 17px; display: block; font-variant-numeric: tabular-nums; word-break: break-word; }
+  .ic { color: var(--tint); width: 22px; height: 22px; }
+  .row.done .ic { color: var(--ok); }
+  .hint { color: var(--fg2); font-size: 13px; padding: 6px 16px 0; margin: 0; }
+  .bar {
+    position: fixed; left: 0; right: 0; bottom: 0; padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    background: color-mix(in srgb, var(--bg) 80%, transparent); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  }
+  .cta {
+    all: unset; box-sizing: border-box; display: flex; justify-content: center; align-items: center; gap: 8px;
+    width: 100%; max-width: 480px; margin: 0 auto; height: 50px; border-radius: 14px;
+    background: var(--tint); color: #fff; font-weight: 600; font-size: 17px; cursor: pointer;
+    transition: transform .12s, background-color .2s;
+  }
+  .cta:active { transform: scale(.98); }
+  .cta:focus-visible { outline: 3px solid color-mix(in srgb, var(--tint) 40%, transparent); outline-offset: 2px; }
+  .cta.done { background: var(--ok); }
+  .toast {
+    position: fixed; left: 50%; top: max(16px, env(safe-area-inset-top)); transform: translate(-50%, -12px);
+    background: var(--card); color: var(--fg); padding: 10px 18px; border-radius: 999px; font-size: 15px; font-weight: 600;
+    box-shadow: 0 6px 24px rgba(0,0,0,.15); opacity: 0; transition: .25s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<main>
+  <span class="brand" id="marca">Andacollo</span>
+  <h1 id="titulo">Datos de pago</h1>
+  <p class="lead" id="bajada">Toca un dato para copiarlo o copia todo de una vez y pégalo en tu banco.</p>
+
+  <div class="group" id="list"></div>
+  <p class="hint" id="nota">Recuerda enviar el comprobante al correo indicado.</p>
+</main>
+
+<div class="bar"><button class="cta" id="all" type="button">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>
+  <span id="boton">Copiar todos los datos</span></button></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  // Datos inyectados por Code.gs desde la planilla (hojas "Datos" y "Config").
+  const DATA = <?!= payload ?>;
+  const CUENTA = DATA.cuenta;
+  const CFG = DATA.config || {};
+  for (const id of ["marca", "titulo", "bajada", "nota", "boton"]) {
+    if (CFG[id]) document.getElementById(id).textContent = CFG[id];
+  }
+  if (!CFG.nota) document.getElementById("nota").hidden = true;
+  const TXT_BOTON = CFG.boton || "Copiar todos los datos";
+
+  const COPY = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>';
+  const CHECK = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  const list = document.getElementById("list"), toast = document.getElementById("toast");
+  let t;
+
+  async function copiar(texto) {
+    try { await navigator.clipboard.writeText(texto); return true; }
+    catch {
+      const a = document.createElement("textarea"); a.value = texto; a.setAttribute("readonly", "");
+      a.style.position = "fixed"; a.style.opacity = "0"; document.body.appendChild(a); a.select(); a.setSelectionRange(0, texto.length);
+      let ok = false; try { ok = document.execCommand("copy"); } catch {} a.remove(); return ok;
+    }
+  }
+  function avisar(msg, el, original) {
+    toast.textContent = msg; toast.classList.add("show");
+    if (navigator.vibrate) navigator.vibrate(10);
+    el.classList.add("done"); if (original) el.querySelector(".ic").outerHTML = CHECK;
+    clearTimeout(t); t = setTimeout(() => toast.classList.remove("show"), 1600);
+    setTimeout(() => { el.classList.remove("done"); if (original) el.querySelector(".ic").outerHTML = COPY; }, 1600);
+  }
+
+  for (const [k, v] of CUENTA) {
+    const b = document.createElement("button");
+    b.className = "row"; b.type = "button"; b.setAttribute("aria-label", `Copiar ${k}: ${v}`);
+    b.innerHTML = `<span><span class="k"></span><span class="v"></span></span>${COPY}`;
+    b.querySelector(".k").textContent = k; b.querySelector(".v").textContent = v;
+    b.onclick = async () => { if (await copiar(v)) avisar(`${k} copiado`, b, true); };
+    list.appendChild(b);
+  }
+  const all = document.getElementById("all");
+  all.onclick = async () => {
+    const texto = CUENTA.map(([k, v]) => `${k}: ${v}`).join("\n");
+    if (await copiar(texto)) { avisar("Datos copiados", all); all.querySelector("span").textContent = "Copiado";
+      setTimeout(() => all.querySelector("span").textContent = TXT_BOTON, 1600); }
+  };
+</script>
+</body>
+</html>

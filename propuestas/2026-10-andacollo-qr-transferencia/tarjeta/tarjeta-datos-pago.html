@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Tarjeta datos de pago · Andacollo</title>
+<style>
+  /* Tarjeta 100 × 150 mm + 3 mm de sangrado por lado = 106 × 156 mm. Marcas de corte fuera del sangrado. */
+  @page { size: 126mm 176mm; margin: 0; }
+  :root {
+    --ink: #10233F; --ink2: #5A6B82; --paper: #FFFFFF; --tint: #F1F4F8; --line: #D5DCE6;
+    --f: "Inter Display", "Inter", "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 126mm; height: 176mm; background: #fff; }
+  body { font-family: var(--f); color: var(--ink); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .sheet { position: relative; width: 126mm; height: 176mm; }
+  /* Marcas de corte */
+  .crop { position: absolute; background: #000; }
+  .h { height: .25mm; width: 7mm; } .v { width: .25mm; height: 7mm; }
+  .bleed { position: absolute; left: 10mm; top: 10mm; width: 106mm; height: 156mm; background: var(--paper); overflow: hidden; }
+  .card { position: absolute; left: 3mm; top: 3mm; width: 100mm; height: 150mm;
+    display: grid; grid-template-rows: auto auto 1fr auto; justify-items: center; text-align: center;
+    padding: 11mm 9mm 0; }
+  /* Franja inferior que se extiende al sangrado */
+  .foot-band { position: absolute; left: 0; right: 0; bottom: 0; height: 21mm; background: var(--ink); }
+
+  /* Logo Andacollo en la malla (wordmark; reemplazable por el vectorial oficial) */
+  .logo { display: grid; justify-items: center; gap: 2.2mm; }
+  .logo .mark { width: 11mm; height: 11mm; }
+  .logo .word { font-weight: 600; font-size: 6.4mm; letter-spacing: .32em; margin-right: -.32em; line-height: 1; }
+  .logo .rule { width: 14mm; height: .35mm; background: var(--ink); opacity: .9; }
+
+  .title { margin-top: 7mm; display: grid; gap: 2mm; }
+  .title h1 { font-weight: 700; font-size: 9.6mm; letter-spacing: -.01em; line-height: 1.02; }
+  .title p { font-size: 3.6mm; color: var(--ink2); line-height: 1.35; font-weight: 500; }
+
+  .qr-zone { align-self: center; display: grid; justify-items: center; gap: 3.2mm; }
+  .qr { width: 50mm; height: 50mm; border-radius: 3mm; background: #fff; position: relative;
+        outline: .3mm dashed #B8C2D1; outline-offset: -.15mm; display: grid; place-items: center; }
+  .qr span { font-size: 3mm; letter-spacing: .14em; text-transform: uppercase; color: #AAB4C3; font-weight: 600; }
+  .nfc { display: inline-flex; align-items: center; gap: 2.2mm; padding: 2mm 4mm 2mm 3mm; border-radius: 99mm; background: var(--tint);
+         font-size: 3.4mm; font-weight: 600; }
+  .nfc svg { width: 5.6mm; height: 5.6mm; }
+
+  .foot { position: relative; z-index: 1; color: #fff; display: grid; gap: .8mm; height: 18mm; align-content: center; margin-top: 6mm; }
+  .foot b { font-size: 3.7mm; font-weight: 600; }
+  .foot small { font-size: 2.8mm; opacity: .72; letter-spacing: .02em; }
+  body.preview .crop { display: none; }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <!-- marcas de corte: línea de corte en 13mm y 113mm (x), 13mm y 163mm (y) -->
+  <div class="crop h" style="left:2mm;top:13mm"></div><div class="crop h" style="left:117mm;top:13mm"></div>
+  <div class="crop h" style="left:2mm;top:163mm"></div><div class="crop h" style="left:117mm;top:163mm"></div>
+  <div class="crop v" style="left:13mm;top:2mm"></div><div class="crop v" style="left:113mm;top:2mm"></div>
+  <div class="crop v" style="left:13mm;top:167mm"></div><div class="crop v" style="left:113mm;top:167mm"></div>
+
+  <div class="bleed">
+    <div class="foot-band"></div>
+    <div class="card">
+      <div class="logo" aria-label="Andacollo">
+        <svg class="mark" viewBox="0 0 44 44" fill="none" aria-hidden="true">
+          <circle cx="22" cy="22" r="20.5" stroke="#10233F" stroke-width="1.6"/>
+          <path d="M8 30 L17 17 L22.5 24 L27 18.5 L36 30" stroke="#10233F" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+          <circle cx="29" cy="12.5" r="2.6" fill="#10233F"/>
+        </svg>
+        <div class="word">ANDACOLLO</div>
+        <div class="rule"></div>
+      </div>
+
+      <div class="title">
+        <h1>Datos de pago</h1>
+        <p>Escanea el código o acerca tu teléfono<br>y copia los datos para transferir</p>
+      </div>
+
+      <div class="qr-zone">
+        <div class="qr"><span>QR 50 × 50 mm</span></div>
+        <div class="nfc">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#10233F" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 8.5a5 5 0 0 1 0 7"/><path d="M11.5 6a8.6 8.6 0 0 1 0 12"/><path d="M15 3.5a12.2 12.2 0 0 1 0 17"/><circle cx="4.5" cy="12" r="1.3" fill="#10233F" stroke="none"/></svg>
+          Acerca tu teléfono aquí
+        </div>
+      </div>
+
+      <div class="foot">
+        <b>Copia y pega en tu banco</b>
+        <small>Sin transcribir · Sin errores</small>
+      </div>
+    </div>
+  </div>
+</div>
+<script>if (location.hash === "#preview") document.body.classList.add("preview");</script>
+</body>
+</html>
