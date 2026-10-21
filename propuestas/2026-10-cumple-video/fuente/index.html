@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Feliz cumpleaños</title>
+<style>
+@font-face{font-family:'Caveat';src:url('fonts/Caveat.ttf');font-weight:400 700;}
+@font-face{font-family:'Playfair';src:url('fonts/PlayfairDisplay.ttf');font-weight:400 900;}
+@font-face{font-family:'Playfair';src:url('fonts/PlayfairDisplay-Italic.ttf');font-weight:400 900;font-style:italic;}
+@font-face{font-family:'Nunito';src:url('fonts/Nunito.ttf');font-weight:200 900;}
+
+:root{
+  --paper:#f4ecdc; --paper2:#e9dcc4; --ink:#1f2a44; --red:#b4323c; --gold:#c9a24a; --sea:#9fc3c9; --land:#d9cfb6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:var(--paper);font-family:'Nunito',sans-serif;color:var(--ink)}
+
+/* paper texture */
+#paper{position:absolute;inset:0;background:
+  radial-gradient(ellipse at 20% 10%, rgba(255,255,255,.55), transparent 55%),
+  radial-gradient(ellipse at 80% 90%, rgba(190,160,110,.25), transparent 60%),
+  linear-gradient(180deg,var(--paper),var(--paper2));}
+#grain{position:absolute;inset:0;opacity:.35;mix-blend-mode:multiply}
+#vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center, transparent 55%, rgba(80,50,20,.28) 100%);pointer-events:none}
+
+/* map */
+#mapwrap{position:absolute;left:0;top:210px;width:1080px;height:1500px;transform-origin:0 0}
+#mapwrap svg{position:absolute;left:0;top:0;width:1080px;height:1500px;overflow:visible}
+#land{fill:var(--land);stroke:#9a8c6b;stroke-width:1.2;opacity:.9}
+#grid line{stroke:#8f8468;stroke-width:1;opacity:.18}
+#route{fill:none;stroke:var(--red);stroke-width:5;stroke-dasharray:14 16;stroke-linecap:round}
+#routeGlow{fill:none;stroke:#fff;stroke-width:12;opacity:.45;stroke-linecap:round}
+.pin{transform-box:fill-box;transform-origin:50% 100%}
+.pinlabel{font-family:'Caveat';font-size:38px;fill:var(--ink);font-weight:700}
+.pinlabel.small{font-size:26px;font-weight:400;fill:#4a4a5a}
+
+.scene{position:absolute;inset:0;opacity:0}
+
+/* polaroid */
+.pola{position:absolute;background:#fffdf8;padding:22px 22px 70px 22px;box-shadow:0 18px 40px rgba(40,25,10,.28),0 2px 6px rgba(0,0,0,.15);transform-origin:50% 50%}
+.pola .ph{overflow:hidden;background:#222}
+.pola .ph img{display:block;width:100%;height:100%;object-fit:cover;transform-origin:50% 50%}
+.pola .cap{position:absolute;left:0;right:0;bottom:16px;text-align:center;font-family:'Caveat';font-size:40px;color:#3a3a4a}
+.pola.c6{padding:16px 16px 54px 16px}
+.pola.c6 .cap{font-size:32px;bottom:10px}
+.tape{position:absolute;width:170px;height:46px;background:rgba(255,244,200,.75);box-shadow:0 1px 3px rgba(0,0,0,.15);backdrop-filter:blur(1px)}
+.tape.l{left:-40px;top:-18px;transform:rotate(-38deg)}
+.tape.r{right:-40px;top:-18px;transform:rotate(36deg)}
+.tape.c{left:50%;top:-20px;transform:translateX(-50%) rotate(-3deg)}
+
+/* text */
+.hand{font-family:'Caveat';font-weight:700;color:var(--ink)}
+.serif{font-family:'Playfair';color:var(--ink)}
+.t{position:absolute;left:80px;right:80px;text-align:center}
+.red{color:var(--red)}
+.word{display:inline-block}
+
+.heart{position:absolute;width:60px;height:60px}
+.balloon{position:absolute;width:120px;height:260px}
+.confetti{position:absolute;width:16px;height:28px;border-radius:3px}
+.star{position:absolute;width:34px;height:34px}
+.stk{position:absolute;filter:drop-shadow(0 10px 16px rgba(40,25,10,.32));transform-origin:50% 50%}
+.cf{position:absolute;transform-origin:50% 50%}
+.cf>*{display:block;width:100%;height:100%;transform-origin:50% 50%}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="paper"></div>
+  <svg id="grain" xmlns="http://www.w3.org/2000/svg" width="1080" height="1920">
+    <filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 0.45 0 0 0 0 0.38 0 0 0 0 0.25 0 0 0 0.6 0"/></filter>
+    <rect width="1080" height="1920" filter="url(#noise)"/>
+  </svg>
+
+  <!-- MAP -->
+  <div id="mapwrap">
+    <svg id="mapsvg" viewBox="0 0 1080 1500">
+      <defs>
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000" flood-opacity=".35"/></filter>
+        <clipPath id="chileClip"><rect width="60" height="40"/></clipPath>
+      </defs>
+      <g id="grid"></g>
+      <path id="land" d=""/>
+      <path id="routeGlow" d=""/>
+      <path id="route" d=""/>
+      <!-- Antofagasta pin -->
+      <g id="pinAwrap"><g id="pinA" class="pin" filter="url(#shadow)">
+        <path d="M0,-70 C-26,-70 -40,-50 -40,-30 C-40,-5 0,0 0,0 C0,0 40,-5 40,-30 C40,-50 26,-70 0,-70 Z" fill="#b4323c"/>
+        <circle cx="0" cy="-34" r="16" fill="#fff"/>
+        <g transform="translate(-30,-130)">
+          <rect x="0" y="0" width="60" height="20" fill="#fff" stroke="#999" stroke-width="1"/>
+          <rect x="0" y="20" width="60" height="20" fill="#d52b1e"/>
+          <rect x="0" y="0" width="20" height="20" fill="#0039a6"/>
+          <polygon points="10,4 11.8,8.8 17,8.8 12.8,11.8 14.4,16.6 10,13.6 5.6,16.6 7.2,11.8 3,8.8 8.2,8.8" fill="#fff"/>
+        </g>
+      </g></g>
+      <g id="pinBwrap"><g id="pinB" class="pin" filter="url(#shadow)">
+        <path d="M0,-70 C-26,-70 -40,-50 -40,-30 C-40,-5 0,0 0,0 C0,0 40,-5 40,-30 C40,-50 26,-70 0,-70 Z" fill="#b4323c"/>
+        <circle cx="0" cy="-34" r="16" fill="#fff"/>
+        <g transform="translate(-30,-130)">
+          <rect x="0" y="0" width="60" height="40" fill="#c60b1e"/>
+          <rect x="0" y="10" width="60" height="20" fill="#ffc400"/>
+        </g>
+      </g></g>
+      <g id="labelA"><text class="pinlabel" text-anchor="end">Antofagasta</text><text class="pinlabel small" text-anchor="end">Chile</text></g>
+      <g id="labelB"><text class="pinlabel">Mallorca</text><text class="pinlabel small">España</text></g>
+      <!-- plane -->
+      <g id="plane"><image href="stickers/jet.png" x="-120" y="-41" width="240" height="82"/></g>
+    </svg>
+  </div>
+  <svg id="compass" style="position:absolute;left:870px;top:1700px" width="150" height="150" viewBox="0 0 100 100"><g fill="none" stroke="#6b5a45" stroke-width="1.6"><circle cx="50" cy="50" r="40"/><circle cx="50" cy="50" r="33" stroke-dasharray="2 3"/></g><g fill="#b4323c"><polygon points="50,8 56,50 50,44 44,50"/></g><g fill="#6b5a45"><polygon points="50,92 44,50 50,56 56,50"/><polygon points="8,50 50,44 44,50 50,56"/><polygon points="92,50 50,56 56,50 50,44"/></g><g fill="#c9a24a" opacity=".8"><polygon points="24,24 50,46 46,50"/><polygon points="76,24 54,46 50,50"/><polygon points="24,76 46,54 50,50"/><polygon points="76,76 54,54 50,50"/></g><circle cx="50" cy="50" r="3" fill="#1f2a44"/><text x="50" y="7" text-anchor="middle" font-family="Caveat" font-size="10" fill="#1f2a44">N</text></svg>
+  <div id="vignette"></div>
+
+  <!-- SCENE 1: intro -->
+  <div class="scene" id="s1">
+    <div class="t hand" id="s1a" style="top:560px;font-size:96px;font-weight:400;color:#4a4a5a">Para ti,</div>
+    <div class="t serif" id="s1b" style="top:660px;font-size:150px;line-height:1;font-style:italic;font-weight:700">Feliz<br>cumpleaños</div>
+    <div class="t hand red" id="s1c" style="top:1010px;font-size:130px">mi amor</div>
+    <svg id="s1line" style="position:absolute;left:300px;top:1150px" width="480" height="40" viewBox="0 0 480 40"><path d="M6,28 C120,8 300,6 474,22" fill="none" stroke="#b4323c" stroke-width="6" stroke-linecap="round" pathLength="1"/></svg>
+  </div>
+
+  <!-- SCENE 2: first love -->
+  <div class="scene" id="s2">
+    <div class="t hand" id="s2a" style="top:150px;font-size:84px;font-weight:400;color:#4a4a5a">Todo empezó aquí…</div>
+    <div class="pola" id="p_joven" style="left:190px;top:330px;width:700px"><div class="tape c"></div><div class="ph" style="width:656px;height:980px"><img src="img/joven.jpg"></div><div class="cap">el principio de todo</div></div>
+    <img id="st_gorra" class="stk" src="stickers/gorra.png" style="left:690px;top:1150px;width:310px">
+    <div class="t serif" id="s2b" style="top:1450px;font-size:92px;font-style:italic;line-height:1.1">Mi primer amor</div>
+    <div class="t hand red" id="s2c" style="top:1570px;font-size:84px">…y el amor de mi vida</div>
+  </div>
+
+  <!-- SCENE 3: Antofagasta -->
+  <div class="scene" id="s3">
+    <div class="t serif" id="s3a" style="top:110px;font-size:80px;font-weight:700;line-height:1.1">Nuestro desierto,<br><span style="font-style:italic;font-weight:400">nuestro mar</span></div>
+    <img id="st_mano" class="stk" src="stickers/mano.png" style="left:30px;top:540px;width:310px">
+    <img id="st_portada" class="stk" src="stickers/portada.png" style="left:720px;top:450px;width:310px">
+    <div class="pola" id="p_mano" style="left:70px;top:1150px;width:470px"><div class="tape l"></div><div class="ph" style="width:426px;height:560px"><img src="img/mano.jpg"></div><div class="cap">bajo las estrellas</div></div>
+    <div class="pola" id="p_portada" style="left:560px;top:1210px;width:470px"><div class="tape r"></div><div class="ph" style="width:426px;height:560px"><img src="img/portada.jpg"></div><div class="cap">La Portada</div></div>
+  </div>
+
+  <!-- SCENE 4: Mallorca -->
+  <div class="scene" id="s4">
+    <div class="pola" id="p_palma" style="left:60px;top:90px;width:470px"><div class="tape l"></div><div class="ph" style="width:426px;height:560px"><img src="img/palma.jpg"></div><div class="cap">noches de Palma</div></div>
+    <div class="pola" id="p_mallorca" style="left:550px;top:150px;width:470px"><div class="tape r"></div><div class="ph" style="width:426px;height:560px"><img src="img/mallorca.jpg"></div><div class="cap">nuestro Mediterráneo</div></div>
+    <img id="st_catedral" class="stk" src="stickers/catedral.png" style="left:650px;top:950px;width:350px">
+    <div class="t serif" id="s4a" style="top:1480px;font-size:72px;line-height:1.15">De Antofagasta<br>a Mallorca…</div>
+    <div class="t hand red" id="s4b" style="top:1680px;font-size:100px">siempre contigo</div>
+  </div>
+
+  <!-- SCENE 5: everyday -->
+  <div class="scene" id="s5">
+    <div class="t hand" id="s5a" style="top:120px;font-size:72px;font-weight:400;color:#4a4a5a">Y entre un viaje y otro…</div>
+    <div class="pola" id="p_lentes" style="left:70px;top:300px;width:560px"><div class="tape l"></div><div class="ph" style="width:516px;height:640px"><img src="img/lentes.jpg"></div><div class="cap">la vida de todos los días</div></div>
+    <div class="pola" id="p_capitan" style="left:450px;top:900px;width:560px"><div class="tape r"></div><div class="ph" style="width:516px;height:640px"><img src="img/capitan.jpg"></div><div class="cap">mi capitán ⚓</div></div>
+    <div class="t serif" id="s5b" style="top:1745px;font-size:70px;font-style:italic">…tú eres mi lugar favorito.</div>
+  </div>
+
+  <!-- SCENE 6: collage -->
+  <div class="scene" id="s6">
+    <div class="pola c6" id="c_portada" style="left:40px;top:80px;width:480px"><div class="tape l"></div><div class="ph" style="width:436px;height:400px"><img src="img/portada.jpg"></div><div class="cap">La Portada</div></div>
+    <div class="pola c6" id="c_palma" style="left:560px;top:110px;width:480px"><div class="tape r"></div><div class="ph" style="width:436px;height:400px"><img src="img/palma.jpg"></div><div class="cap">Palma</div></div>
+    <div class="pola c6" id="c_capitan" style="left:-20px;top:700px;width:360px"><div class="tape c"></div><div class="ph" style="width:316px;height:380px"><img src="img/capitan.jpg"></div><div class="cap">mi capitán</div></div>
+    <div class="pola c6" id="c_joven" style="left:740px;top:700px;width:360px"><div class="tape c"></div><div class="ph" style="width:316px;height:380px"><img src="img/joven.jpg"></div><div class="cap">el principio</div></div>
+    <div class="pola c6" id="c_mano" style="left:290px;top:600px;width:500px"><div class="tape c"></div><div class="ph" style="width:456px;height:560px"><img src="img/mano.jpg"></div><div class="cap">Antofagasta</div></div>
+    <div class="pola c6" id="c_lentes" style="left:40px;top:1300px;width:480px"><div class="tape l"></div><div class="ph" style="width:436px;height:400px"><img src="img/lentes.jpg"></div><div class="cap">siempre juntos</div></div>
+    <div class="pola c6" id="c_mallorca" style="left:560px;top:1330px;width:480px"><div class="tape r"></div><div class="ph" style="width:436px;height:400px"><img src="img/mallorca.jpg"></div><div class="cap">Mallorca</div></div>
+    <!-- torn paper ribbon -->
+    <div id="ribbon" style="position:absolute;left:120px;top:1150px;width:840px;height:200px;transform-origin:50% 50%">
+      <svg width="840" height="200" viewBox="0 0 840 200" style="position:absolute;left:0;top:0;filter:drop-shadow(0 10px 18px rgba(40,25,10,.35))"><path d="M14,38 L60,22 L130,40 L210,18 L300,34 L390,14 L470,36 L560,20 L650,38 L730,16 L826,30 L832,160 L760,180 L680,162 L590,184 L500,166 L410,186 L320,168 L230,188 L140,170 L60,186 L10,170 Z" fill="#fffaf0" stroke="#e6d8bd" stroke-width="2"/></svg>
+      <div class="hand red" style="position:absolute;left:0;right:0;top:28px;text-align:center;font-size:132px;line-height:1">Te amo</div>
+    </div>
+    <img id="plane2" class="stk" src="stickers/jet.png" style="left:0;top:0;width:280px">
+    <img id="cake2" class="stk" src="stickers/torta.png" style="left:430px;top:1650px;width:220px">
+    <img id="st_gorra2" class="stk" src="stickers/gorra.png" style="left:20px;top:1110px;width:240px">
+    <img id="st_globos2" class="stk" src="stickers/globos.png" style="left:850px;top:1560px;width:200px">
+  </div>
+
+  <!-- SCENE 7: final -->
+  <div class="scene" id="s7">
+    <div class="t hand" id="s7a" style="top:300px;font-size:76px;font-weight:400;color:#4a4a5a">Gracias por cada día.</div>
+    <div class="t serif" id="s7b" style="top:420px;font-size:82px;font-style:italic;line-height:1.2">Soy feliz<br>viviendo mi vida<br>a tu lado.</div>
+    <div class="t serif" id="s7c" style="top:1265px;font-size:110px;font-weight:700;line-height:1.05">Feliz<br>cumpleaños,</div>
+    <div class="t hand red" id="s7d" style="top:1525px;font-size:130px">mi amor</div>
+    <svg id="s7heart" style="position:absolute;left:830px;top:1545px" width="130" height="120" viewBox="0 0 32 29"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z" fill="#b4323c"/></svg>
+    <img id="cake" class="stk" src="stickers/torta.png" style="left:60px;top:1540px;width:220px">
+  </div>
+
+  <!-- decorations layer -->
+  <div id="deco" style="position:absolute;inset:0;pointer-events:none"></div>
+</div>
+
+<script src="data/map.js"></script>
+<script>
+const T = 44; // total seconds
+const anims = [];
+function A(el, tracks, opts={}){
+  if(typeof el==='string') el=document.querySelector(el);
+  tracks=tracks.slice();
+  if(tracks[0].t>0){ tracks.unshift({...tracks[0], t:0, easing:undefined}); }
+  if(tracks[tracks.length-1].t<T){ tracks.push({...tracks[tracks.length-1], t:T}); }
+  const kf = tracks.map(k=>{const o={offset:Math.min(1,k.t/T)}; for(const p in k){ if(p!=='t' && k[p]!==undefined) o[p]=k[p]; } return o;});
+  const a = el.animate(kf, {duration:T*1000, fill:'both', ...opts});
+  a.pause(); anims.push(a); return a;
+}
+// convenience: scene fade in/out
+function scene(id, t0, t1, fade=0.7){
+  A(id,[{t:t0,opacity:0},{t:t0+fade,opacity:1},{t:t1-fade,opacity:1},{t:t1,opacity:0}]);
+}
+// text rise-in
+function rise(id, t0, dur=0.9, dy=40){
+  A(id,[{t:t0,opacity:0,transform:`translateY(${dy}px)`,easing:'cubic-bezier(.2,.7,.2,1)'},{t:t0+dur,opacity:1,transform:'translateY(0)'},{t:T,opacity:1,transform:'translateY(0)'}]);
+}
+// polaroid drop-in with rotation and gentle ken burns on the photo
+function pola(id, t0, rot, from='bottom', dur=1.1){
+  const el=document.querySelector(id);
+  const start = from==='bottom'?'translateY(420px)':from==='top'?'translateY(-420px)':from==='left'?'translateX(-500px)':'translateX(500px)';
+  A(el,[{t:t0,opacity:0,transform:`${start} rotate(${rot+8}deg) scale(1.04)`,easing:'cubic-bezier(.15,.8,.2,1)'},{t:t0+dur,opacity:1,transform:`translate(0,0) rotate(${rot}deg) scale(1)`},{t:T,opacity:1,transform:`translate(0,0) rotate(${rot}deg) scale(1)`}]);
+  const img=el.querySelector('img');
+  A(img,[{t:t0,transform:'scale(1.0)',easing:'linear'},{t:t0+9,transform:'scale(1.12)'},{t:T,transform:'scale(1.12)'}]);
+}
+
+function stick(id,t0,rot,dur=0.8,from='pop'){
+  const start = from==='pop' ? `scale(.4) rotate(${rot-20}deg)` : from==='left' ? `translateX(-400px) rotate(${rot-15}deg)` : `translateX(400px) rotate(${rot+15}deg)`;
+  A(id,[{t:t0,opacity:0,transform:start,easing:'cubic-bezier(.3,1.4,.5,1)'},{t:t0+dur,opacity:1,transform:`translate(0,0) scale(1) rotate(${rot}deg)`},{t:T,opacity:1,transform:`translate(0,0) scale(1) rotate(${rot}deg)`}]);
+}
+// ---------- MAP ----------
+const M=window.MAP;
+document.getElementById('land').setAttribute('d',M.d);
+const grid=document.getElementById('grid');
+for(let x=0;x<=1080;x+=120){const l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',x);l.setAttribute('x2',x);l.setAttribute('y1',0);l.setAttribute('y2',1500);grid.appendChild(l);}
+for(let y=0;y<=1500;y+=120){const l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',0);l.setAttribute('x2',1080);l.setAttribute('y1',y);l.setAttribute('y2',y);grid.appendChild(l);}
+const [ax,ay]=M.anto,[bx,by]=M.palma;
+const cx=(ax+bx)/2-130, cy=(ay+by)/2-280;
+const routeD=`M${ax},${ay} Q${cx},${cy} ${bx},${by}`;
+document.getElementById('route').setAttribute('d',routeD);
+document.getElementById('routeGlow').setAttribute('d',routeD);
+const routeEl=document.getElementById('route'); const L=routeEl.getTotalLength();
+routeEl.style.strokeDasharray=`14 16`;
+// draw via a mask trick: use pathLength + dashoffset on glow; for dashed route use clip by a second animation: simpler - animate stroke-dashoffset on a solid overlay is messy; use an SVG mask
+// -> implement by animating a wiping clip: we create a copy path with big dash and animate dashoffset.
+routeEl.setAttribute('pathLength','1'); routeEl.style.strokeDasharray='0.012 0.014';
+const glow=document.getElementById('routeGlow'); glow.setAttribute('pathLength','1'); glow.style.strokeDasharray='1 1';
+// Wipe: route is revealed using a mask whose path gets stroke-dashoffset animated
+const svg=document.getElementById('mapsvg');
+const defs=svg.querySelector('defs');
+const mask=document.createElementNS('http://www.w3.org/2000/svg','mask'); mask.id='routeMask';
+const mp=document.createElementNS('http://www.w3.org/2000/svg','path'); mp.setAttribute('d',routeD); mp.setAttribute('pathLength','1'); mp.setAttribute('fill','none'); mp.setAttribute('stroke','#fff'); mp.setAttribute('stroke-width','30'); mp.style.strokeDasharray='1 1'; mp.style.strokeDashoffset='1';
+mask.appendChild(mp); defs.appendChild(mask);
+routeEl.setAttribute('mask','url(#routeMask)'); glow.setAttribute('mask','url(#routeMask)');
+
+document.getElementById('pinAwrap').setAttribute('transform',`translate(${ax},${ay})`);
+document.getElementById('pinBwrap').setAttribute('transform',`translate(${bx},${by})`);
+const lA=document.getElementById('labelA'); lA.setAttribute('transform',`translate(${ax-34},${ay+8})`); lA.children[1].setAttribute('y',32);
+const lB=document.getElementById('labelB'); lB.setAttribute('transform',`translate(${bx+34},${by-16})`); lB.children[1].setAttribute('y',32);
+const plane=document.getElementById('plane');
+plane.style.offsetPath=`path("${routeD}")`; plane.style.offsetRotate='-32deg';
+
+// Map timeline
+// Intro: faint map, slow drift. Scene3 (11-18): zoom to Antofagasta. Scene4 (18-25): route draws, plane flies, zoom shows both. Scene 7: both pins + route visible
+const mapwrap=document.getElementById('mapwrap');
+function MT(s,px,py,sx,sy){ // place map point (px,py) at stage (sx,sy) with scale s
+  const tx=sx-s*px, ty=sy-210-s*py; return `translate(${tx}px,${ty}px) scale(${s})`;
+}
+const mx=(ax+bx)/2, my=(ay+by)/2;
+const T_intro=MT(1.0,540,750,540,960), T_s2=MT(1.05,540,750,540,960);
+const T_s3=MT(1.5,ax,ay,430,950);
+const T_s4=MT(0.85,mx,my,540,1130);
+const T_s5=MT(1.0,540,750,540,960);
+const T_f1=MT(0.75,mx,my,540,990), T_f2=MT(0.8,mx,my,540,990);
+A(mapwrap,[
+  {t:0,opacity:.35,transform:T_intro,easing:'ease-in-out'},
+  {t:5,opacity:.35,transform:T_intro,easing:'ease-in-out'},
+  {t:5.7,opacity:.18,transform:T_s2,easing:'ease-in-out'},
+  {t:10.5,opacity:.18,transform:T_s2,easing:'cubic-bezier(.4,0,.2,1)'},
+  {t:12,opacity:1,transform:T_s3,easing:'ease-in-out'},
+  {t:17.5,opacity:1,transform:T_s3,easing:'cubic-bezier(.4,0,.2,1)'},
+  {t:19.5,opacity:1,transform:T_s4,easing:'ease-in-out'},
+  {t:25,opacity:1,transform:T_s4,easing:'ease-in-out'},
+  {t:26,opacity:.22,transform:T_s5,easing:'ease-in-out'},
+  {t:31,opacity:.22,transform:T_s5},
+  {t:31.5,opacity:.2,transform:T_s5},
+  {t:37,opacity:.2,transform:T_s5},
+  {t:38,opacity:.6,transform:T_f1,easing:'ease-in-out'},
+  {t:T,opacity:.6,transform:T_f2}
+]);
+A('#compass',[{t:0,opacity:0},{t:11.6,opacity:0},{t:12.4,opacity:.9},{t:25,opacity:.9},{t:25.8,opacity:0},{t:38,opacity:0},{t:38.8,opacity:.9},{t:T,opacity:.9}]);
+// pins
+A('#pinA',[{t:0,opacity:0,transform:'translateY(-80px) scale(.3)'},{t:12.6,opacity:0,transform:'translateY(-80px) scale(.3)',easing:'cubic-bezier(.3,1.4,.5,1)'},{t:13.2,opacity:1,transform:'translateY(0) scale(.6)'},{t:T,opacity:1,transform:'translateY(0) scale(.6)'}]);
+A('#labelA',[{t:0,opacity:0},{t:13.2,opacity:0},{t:13.8,opacity:1},{t:T,opacity:1}]);
+A('#pinB',[{t:0,opacity:0,transform:'translateY(-80px) scale(.3)'},{t:22.6,opacity:0,transform:'translateY(-80px) scale(.3)',easing:'cubic-bezier(.3,1.4,.5,1)'},{t:23.2,opacity:1,transform:'translateY(0) scale(.6)'},{t:T,opacity:1,transform:'translateY(0) scale(.6)'}]);
+A('#labelB',[{t:0,opacity:0},{t:23.2,opacity:0},{t:23.8,opacity:1},{t:T,opacity:1}]);
+// route wipe + plane
+A(mp,[{t:0,strokeDashoffset:1},{t:19.3,strokeDashoffset:1,easing:'cubic-bezier(.45,.05,.55,.95)'},{t:22.8,strokeDashoffset:0},{t:T,strokeDashoffset:0}]);
+A(plane,[{t:0,opacity:0,offsetDistance:'0%'},{t:19.0,opacity:0,offsetDistance:'0%'},{t:19.4,opacity:1,offsetDistance:'0%',easing:'cubic-bezier(.45,.05,.55,.95)'},{t:22.9,opacity:1,offsetDistance:'100%'},{t:23.4,opacity:0,offsetDistance:'100%'},{t:38.6,opacity:0,offsetDistance:'0%'},{t:39.1,opacity:1,offsetDistance:'0%',easing:'cubic-bezier(.45,.05,.55,.95)'},{t:43.6,opacity:1,offsetDistance:'100%'},{t:T,opacity:1,offsetDistance:'100%'}]);
+// route pulse in final scene: animate dash offset of route continuously
+A(routeEl,[{t:0,strokeDashoffset:0,easing:'linear'},{t:T,strokeDashoffset:-2.6}]);
+// map group pulse for final (re-use plane): small second flight in final scene
+// (keep it simple: no second flight)
+
+// ---------- SCENES ----------
+scene('#s1',0,5.6,0.6);
+rise('#s1a',0.4);
+A('#s1b',[{t:0.9,opacity:0,transform:'scale(.92) translateY(30px)',easing:'cubic-bezier(.2,.7,.2,1)'},{t:2.0,opacity:1,transform:'scale(1) translateY(0)'},{t:T,opacity:1,transform:'scale(1) translateY(0)'}]);
+rise('#s1c',2.2,0.8,30);
+A('#s1line path',[{t:0,strokeDasharray:'1 1',strokeDashoffset:1},{t:2.8,strokeDasharray:'1 1',strokeDashoffset:1,easing:'ease-out'},{t:3.6,strokeDashoffset:0},{t:T,strokeDashoffset:0}]);
+
+scene('#s2',5.3,11.3,0.6);
+rise('#s2a',5.6);
+pola('#p_joven',6.0,-2.5,'bottom');
+stick('#st_gorra',7.3,-8);
+rise('#s2b',7.6);
+rise('#s2c',8.6,0.9,30);
+
+scene('#s3',11,18.3,0.6);
+rise('#s3a',11.4);
+stick('#st_mano',12.9,-6,0.8,'left');
+stick('#st_portada',13.2,5,0.8,'right');
+pola('#p_mano',13.6,-5,'left');
+pola('#p_portada',14.2,4,'right');
+
+scene('#s4',18,25.6,0.6);
+pola('#p_palma',18.6,-4,'top');
+pola('#p_mallorca',19.2,5,'top');
+stick('#st_catedral',23.4,4);
+rise('#s4a',23.2);
+rise('#s4b',24.1,0.9,30);
+
+scene('#s5',25.3,31.8,0.6);
+rise('#s5a',25.7);
+pola('#p_lentes',26.2,-3,'left');
+pola('#p_capitan',27.0,3.5,'right');
+rise('#s5b',28.6);
+
+scene('#s6',31.4,37.9,0.7);
+pola('#c_portada',31.6,-4,'top',0.9);
+pola('#c_palma',31.9,4,'top',0.9);
+pola('#c_capitan',32.2,-8,'left',0.9);
+pola('#c_joven',32.5,7,'right',0.9);
+pola('#c_mano',32.8,-2,'bottom',0.9);
+pola('#c_lentes',33.1,-3,'bottom',0.9);
+pola('#c_mallorca',33.4,4,'bottom',0.9);
+A('#ribbon',[{t:34.3,opacity:0,transform:'scale(.6) rotate(-6deg)',easing:'cubic-bezier(.3,1.4,.5,1)'},{t:35.0,opacity:1,transform:'scale(1) rotate(-3deg)'},{t:T,opacity:1,transform:'scale(1) rotate(-3deg)'}]);
+stick('#cake2',35.2,-3);
+stick('#st_gorra2',35.5,-12);
+stick('#st_globos2',35.8,8);
+A('#plane2',[{t:33.6,opacity:0,transform:'translate(-320px,660px) rotate(-10deg)'},{t:33.9,opacity:1,transform:'translate(-200px,648px) rotate(-10deg)',easing:'linear'},{t:36.9,opacity:1,transform:'translate(1080px,500px) rotate(-10deg)'},{t:37.2,opacity:0,transform:'translate(1200px,488px) rotate(-10deg)'},{t:T,opacity:0,transform:'translate(1200px,488px)'}]);
+
+scene('#s7',37.4,T+1,0.7);
+rise('#s7a',37.9);
+rise('#s7b',38.7,1.1);
+stick('#cake',39.4,-4);
+rise('#s7c',40.4,0.9);
+rise('#s7d',41.2,0.9,30);
+A('#s7heart',[{t:0,opacity:0,transform:'scale(.3)'},{t:42.0,opacity:0,transform:'scale(.3)',easing:'cubic-bezier(.3,1.5,.5,1)'},{t:42.7,opacity:1,transform:'scale(1)'},{t:T,opacity:1,transform:'scale(1)'}]);
+
+// ---------- DECORATIONS ----------
+const deco=document.getElementById('deco');
+const HEART='<svg viewBox="0 0 32 29" width="100%" height="100%"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z" fill="COLOR"/></svg>';
+function balloonSVG(c1,c2){return `<svg viewBox="0 0 120 260" width="100%" height="100%"><defs><radialGradient id="g${c1.slice(1)}" cx="35%" cy="30%" r="70%"><stop offset="0" stop-color="${c2}"/><stop offset="1" stop-color="${c1}"/></radialGradient></defs><path d="M60,8 C25,8 8,42 8,78 C8,118 38,146 60,164 C82,146 112,118 112,78 C112,42 95,8 60,8 Z" fill="url(#g${c1.slice(1)})"/><path d="M54,166 L66,166 L60,176 Z" fill="${c1}"/><path d="M60,176 C50,200 72,220 58,256" fill="none" stroke="#6b5a45" stroke-width="2"/><ellipse cx="42" cy="40" rx="8" ry="16" fill="rgba(255,255,255,.35)" transform="rotate(-20 42 40)"/></svg>`;}
+let seed=7; function rnd(){seed=(seed*9301+49297)%233280; return seed/233280;}
+
+// balloons on intro and final
+function balloons(t0,t1,n,margins=false){
+  for(let i=0;i<n;i++){
+    const b=document.createElement('div');b.className='balloon';
+    const flip=i%2?-1:1;
+    b.innerHTML=`<img src="stickers/globos.png" style="width:100%;height:100%;transform:scaleX(${flip});filter:drop-shadow(0 10px 16px rgba(40,25,10,.3))">`;
+    const s=margins?0.6+rnd()*0.3:0.8+rnd()*0.5; const w=170*s; const x= margins ? (i%2? 1080-w-10-rnd()*40 : 10+rnd()*40) : 40+rnd()*900, d=rnd()*2.5;
+    b.style.left=x+'px'; b.style.top='1920px'; b.style.width=w+'px'; b.style.height=(258*s)+'px';
+    b.style.transformOrigin='50% 100%';
+    deco.appendChild(b);
+    const drift = (rnd()-0.5)*120;
+    A(b,[{t:0,opacity:0,transform:'translateY(0)'},{t:t0+d,opacity:0,transform:'translateY(0)',easing:'ease-out'},{t:t0+d+0.6,opacity:1,transform:`translate(${drift*0.1}px,-300px) rotate(${(rnd()-0.5)*8}deg)`,easing:'linear'},{t:t1,opacity:1,transform:`translate(${drift}px,-2400px) rotate(${(rnd()-0.5)*10}deg)`},{t:T,opacity:0,transform:`translate(${drift}px,-2400px)`}]);
+  }
+}
+balloons(0.2,7.5,3,true);
+balloons(38.0,T+2,4,true);
+
+// floating hearts in scenes 2, 5, 6
+function hearts(t0,t1,n,color='#b4323c'){
+  for(let i=0;i<n;i++){
+    const h=document.createElement('div');h.className='heart';h.innerHTML=HEART.replace('COLOR',color);
+    const x=60+rnd()*960, s=0.4+rnd()*0.9, d=rnd()*(t1-t0-3);
+    h.style.left=x+'px';h.style.top='1960px';h.style.width=(60*s)+'px';h.style.height=(60*s)+'px';h.style.opacity=0;
+    deco.appendChild(h);
+    const dx=(rnd()-0.5)*200;
+    A(h,[{t:0,opacity:0,transform:'translateY(0)'},{t:t0+d,opacity:0,transform:'translateY(0)',easing:'ease-out'},{t:t0+d+0.5,opacity:.85,transform:`translate(${dx*0.1}px,-200px) rotate(${(rnd()-0.5)*30}deg)`,easing:'ease-in'},{t:t0+d+4.5,opacity:0,transform:`translate(${dx}px,-1500px) rotate(${(rnd()-0.5)*40}deg)`},{t:T,opacity:0,transform:`translate(${dx}px,-1500px)`}]);
+  }
+}
+hearts(6.5,11.3,8); hearts(26,31.8,8); hearts(35.5,38,5); hearts(38,T,10);
+
+// confetti on final + collage
+function confetti(t0,t1,n){
+  const cols=['#b4323c','#1f3a6e','#c9a24a','#e8737a','#6b8fd6','#f2dc9a','#fff2d6'];
+  const shapes=[
+    c=>`<svg viewBox="0 0 16 28"><rect x="1" y="1" width="14" height="26" rx="3" fill="${c}"/></svg>`,
+    c=>`<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="${c}"/></svg>`,
+    c=>`<svg viewBox="0 0 20 60"><path d="M4,2 C18,10 2,20 14,30 C2,40 18,50 6,58" fill="none" stroke="${c}" stroke-width="4" stroke-linecap="round"/></svg>`,
+    c=>`<svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.2H22l-6.2 4.5 2.4 7.3L12 16.6 5.8 21l2.4-7.3L2 9.2h7.6z" fill="${c}"/></svg>`,
+    c=>`<svg viewBox="0 0 32 29"><path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z" fill="${c}"/></svg>`,
+    c=>`<svg viewBox="0 0 20 20"><polygon points="10,1 19,10 10,19 1,10" fill="${c}"/></svg>`
+  ];
+  const dims=[[16,28],[16,16],[20,60],[24,24],[26,24],[20,20]];
+  for(let i=0;i<n;i++){
+    const k=Math.floor(rnd()*shapes.length), c=cols[Math.floor(rnd()*cols.length)];
+    const el=document.createElement('div');el.className='cf';el.innerHTML=shapes[k](c);
+    const sc=0.8+rnd()*1.1, x=rnd()*1080, d=rnd()*2.2, fall=1500+rnd()*700, dur=4+rnd()*1.5;
+    el.style.left=x+'px';el.style.top='-70px';el.style.width=(dims[k][0]*sc)+'px';el.style.height=(dims[k][1]*sc)+'px';
+    deco.appendChild(el);
+    const dx=(rnd()-0.5)*360, sway=(rnd()-0.5)*120;
+    // fall with gentle sway
+    const kf=[{t:0,opacity:0,transform:'translate(0,0)'},{t:t0+d,opacity:0,transform:'translate(0,0)',easing:'linear'},{t:t0+d+0.15,opacity:1,transform:`translate(${dx*0.05}px,40px) rotate(0deg)`,easing:'cubic-bezier(.35,.1,.7,.9)'}];
+    const steps=6;
+    for(let j=1;j<=steps;j++){ const f=j/steps; kf.push({t:t0+d+0.15+dur*f,opacity:f<0.9?1:0.6,transform:`translate(${dx*f+sway*Math.sin(f*Math.PI*3)}px,${fall*f}px) rotate(${(360+rnd()*360)*f}deg)`,easing:'linear'}); }
+    kf.push({t:t0+d+0.15+dur+0.3,opacity:0,transform:`translate(${dx}px,${fall+120}px)`});
+    A(el,kf);
+    // tumble (flip) on inner shape
+    const inner=el.firstElementChild; const period=0.35+rnd()*0.35; const tk=[{t:0,transform:'scaleX(1)'}];
+    for(let tt=t0+d; tt<t0+d+dur+0.5; tt+=period){ tk.push({t:tt,transform:'scaleX(1) rotateZ(0deg)',easing:'ease-in-out'}); tk.push({t:tt+period/2,transform:'scaleX(.12) rotateZ(12deg)',easing:'ease-in-out'}); }
+    A(inner,tk);
+  }
+}
+confetti(35.0,38.5,40); confetti(40.0,T,55);
+
+// small gold stars sprinkled on map scenes
+function stars(t0,t1,n){
+  for(let i=0;i<n;i++){
+    const s=document.createElement('div');s.className='star';
+    s.innerHTML='<svg viewBox="0 0 24 24" width="100%" height="100%"><path d="M12 2l2.4 7.2H22l-6.2 4.5 2.4 7.3L12 16.6 5.8 21l2.4-7.3L2 9.2h7.6z" fill="#c9a24a"/></svg>';
+    s.style.left=(rnd()*1040)+'px'; s.style.top=(rnd()*1840)+'px'; const sc=0.4+rnd()*0.8; s.style.width=(34*sc)+'px';s.style.height=(34*sc)+'px';
+    deco.appendChild(s);
+    const d=rnd()*1.5, p=1.2+rnd()*1.5;
+    const kf=[{t:0,opacity:0,transform:'scale(.2)'},{t:t0+d,opacity:0,transform:'scale(.2)'}];
+    for(let tt=t0+d+0.3; tt<t1-0.5; tt+=p){kf.push({t:tt,opacity:1,transform:'scale(1) rotate(0deg)'}); kf.push({t:Math.min(tt+p*0.5,t1-0.5),opacity:.25,transform:'scale(.6) rotate(20deg)'});}
+    kf.push({t:t1,opacity:0,transform:'scale(.2)'}); kf.push({t:T,opacity:0,transform:'scale(.2)'});
+    A(s,kf);
+  }
+}
+stars(0.5,5.3,10); stars(11.5,25.3,14); stars(38,T,12);
+
+// ---------- SEEK API ----------
+window.seek = function(t){ for(const a of anims){ a.currentTime = t*1000; } };
+window.TOTAL = T;
+window.ready = Promise.all([document.fonts.ready, ...Array.from(document.images).map(i=>i.complete?Promise.resolve():new Promise(r=>{i.onload=r;i.onerror=r;}))]);
+window.seek(0);
+</script>
+</body>
+</html>
