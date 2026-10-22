@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>PORTA · modelo 3D del producto</title>
+<style>
+*{margin:0;box-sizing:border-box}
+body{width:1920px;height:1080px;overflow:hidden;font-family:Inter,sans-serif;color:#1C2126;background:radial-gradient(1400px 900px at 50% 45%,#F6F2EC 0%,#E6DFD4 100%)}
+body.transparente{background:transparent}
+canvas{position:absolute;inset:0;width:1920px;height:1080px}
+#ov{position:absolute;inset:0;pointer-events:none}
+#ov svg{position:absolute;inset:0;width:100%;height:100%}
+.lb{position:absolute;font-size:19px;font-weight:600;line-height:1.25;white-space:nowrap;background:rgba(255,255,255,.88);border:1px solid #e2dbd0;border-radius:10px;padding:8px 13px;box-shadow:0 6px 18px rgba(28,33,38,.08)}
+.lb small{display:block;font-size:14px;font-weight:500;color:#6B7580}
+.marca{position:absolute;left:96px;top:78px}
+.marca .k{font-size:20px;font-weight:800;letter-spacing:.22em;color:#F26B1D}
+.marca h1{font-size:46px;letter-spacing:-.02em;margin-top:8px}
+.fin{position:absolute;left:0;right:0;bottom:120px;text-align:center;font-size:54px;font-weight:800;letter-spacing:-.01em}
+.fin em{font-style:normal;color:#F26B1D}
+.fin small{display:block;font-size:24px;font-weight:500;color:#6B7580;margin-top:10px;letter-spacing:0}
+</style>
+<script type="importmap">
+{ "imports": { "three": "./node_modules/three/build/three.module.js", "three/addons/": "./node_modules/three/examples/jsm/" } }
+</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="ov"><svg id="lines"></svg><div id="labels"></div></div>
+<div class="marca" id="marca"><div class="k">PORTA</div><h1 id="titulo">Vista explosionada</h1></div>
+<div class="fin" id="fin">PORTA <em>·</em> 7 × 4 × 3 cm<small>Computador + dashcam doble · abrazado al pie del retrovisor</small></div>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const P = new URLSearchParams(location.search);
+const MODO = P.get('modo') || 'video';           // video | explosionado | armado | transparente
+if (MODO === 'transparente') document.body.classList.add('transparente');
+
+const qr = await (await fetch('qr.json')).json();
+const NARANJO = 0xF26B1D, GRAFITO = 0x2A3138;
+const W = 7, H = 4, R = .6;                      // ancho, alto, radio de esquina (cm)
+
+/* ---------- utilidades ---------- */
+function tex(w, h, draw) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  draw(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
+}
+const rr = (g, x, y, w, h, r) => { g.beginPath(); g.roundRect(x, y, w, h, r); };
+const rrShape = (w, h, r) => { const s = new THREE.Shape(); const x = -w / 2, y = -h / 2;
+  s.moveTo(x + r, y); s.lineTo(x + w - r, y); s.quadraticCurveTo(x + w, y, x + w, y + r); s.lineTo(x + w, y + h - r);
+  s.quadraticCurveTo(x + w, y + h, x + w - r, y + h); s.lineTo(x + r, y + h); s.quadraticCurveTo(x, y + h, x, y + h - r);
+  s.lineTo(x, y + r); s.quadraticCurveTo(x, y, x + r, y); return s; };
+const mat = (c, r = .6, m = 0) => new THREE.MeshStandardMaterial({ color: c, roughness: r, metalness: m });
+const graf = new THREE.MeshPhysicalMaterial({ color: GRAFITO, roughness: .5, clearcoat: .2, clearcoatRoughness: .5 });
+const box = (w, h, d, m) => new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m);
+const cyl = (r, h, m, seg = 32) => new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, seg), m);
+
+/* ---------- texturas de las caras (proporción 7:4) ---------- */
+const LX = .22;                                   // posición horizontal de la lente en la textura (22 %)
+const texCabina = tex(1400, 800, (g, w, h) => {
+  g.fillStyle = '#2A3138'; g.fillRect(0, 0, w, h);
+  rr(g, 640, 110, 680, 580, 56); g.fillStyle = '#F26B1D'; g.fill();
+  g.strokeStyle = '#fff'; g.lineWidth = 24; g.lineCap = 'round';
+  const cx = 715, cy = 400;
+  g.beginPath(); g.arc(cx, cy, 17, 0, 7); g.fillStyle = '#fff'; g.fill();
+  for (const r of [62, 116, 170]) { g.beginPath(); g.arc(cx, cy, r, -0.85, 0.85); g.stroke(); }
+  g.fillStyle = '#fff'; g.font = '700 66px Inter'; g.textAlign = 'left';
+  g.fillText('Acerca tu', 915, 382); g.fillText('teléfono', 915, 462);
+  // anillo oscuro de la lente
+  g.beginPath(); g.arc(LX * w, h / 2, 150, 0, 7); g.fillStyle = '#20262c'; g.fill();
+});
+const texQR = tex(1400, 800, (g, w, h) => {
+  g.fillStyle = '#2A3138'; g.fillRect(0, 0, w, h);
+  rr(g, 700, 70, 600, 660, 40); g.fillStyle = '#fff'; g.fill();
+  const n = qr.size, s = 430 / n, ox = 785, oy = 105;
+  g.fillStyle = '#111';
+  for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) if (qr.data[i * n + j]) g.fillRect(ox + j * s, oy + i * s, s + .6, s + .6);
+  g.fillStyle = '#F26B1D'; g.font = '800 64px Inter'; g.textAlign = 'center'; g.fillText('PORTA', 1000, 625);
+  g.fillStyle = '#4a5058'; g.font = '600 34px Inter'; g.fillText('Escanea para conectarte', 1000, 685);
+  g.beginPath(); g.arc(LX * w, h / 2, 160, 0, 7); g.fillStyle = '#20262c'; g.fill();
+});
+const texSombra = tex(256, 256, (g, w, h) => {
+  const gr = g.createRadialGradient(128, 128, 10, 128, 128, 128); gr.addColorStop(0, 'rgba(40,30,20,.55)'); gr.addColorStop(1, 'rgba(40,30,20,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, w, h);
+});
+const texHeader = tex(512, 64, (g, w, h) => { g.fillStyle = '#111'; g.fillRect(0, 0, w, h);
+  for (let i = 0; i < 20; i++) for (let j = 0; j < 2; j++) { g.fillStyle = '#d4a93a'; g.fillRect(8 + i * 25.2, 10 + j * 30, 9, 9); } });
+const texNFC = tex(512, 512, (g, w, h) => { g.fillStyle = '#f7f7f5'; g.beginPath(); g.arc(256, 256, 250, 0, 7); g.fill();
+  g.strokeStyle = '#c47a3a'; g.lineWidth = 7; for (let r = 200; r > 110; r -= 16) { g.beginPath(); g.arc(256, 256, r, 0, 7); g.stroke(); }
+  g.fillStyle = '#c47a3a'; g.fillRect(250, 60, 12, 120); });
+const texSD = tex(256, 340, (g, w, h) => { g.fillStyle = '#1b1d22'; g.fillRect(0, 0, w, h);
+  g.fillStyle = '#F26B1D'; g.fillRect(0, 150, w, 70); g.fillStyle = '#fff'; g.font = '700 46px Inter'; g.textAlign = 'center'; g.fillText('128GB', 128, 202);
+  g.fillStyle = '#d4a93a'; for (let i = 0; i < 8; i++) g.fillRect(20 + i * 28, 10, 18, 50); });
+const texLTE = tex(512, 380, (g, w, h) => { g.fillStyle = '#c9ccd0'; g.fillRect(0, 0, w, h); g.fillStyle = '#7c838b'; g.font = '800 78px Inter'; g.textAlign = 'center';
+  g.fillText('LTE', 256, 170); g.font = '600 40px Inter'; g.fillText('4G · GNSS', 256, 240); });
+
+/* ---------- caras con forma redondeada y UV normalizadas ---------- */
+function cara(map, w = W - .12, h = H - .12, r = R - .06) {
+  const geo = new THREE.ShapeGeometry(rrShape(w, h, r), 12);
+  const uv = geo.attributes.uv, pos = geo.attributes.position;
+  for (let i = 0; i < uv.count; i++) uv.setXY(i, (pos.getX(i) + w / 2) / w, (pos.getY(i) + h / 2) / h);
+  return new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map, roughness: .45 }));
+}
+function tapa(map) {                               // placa de 0,3 cm con la cara texturizada hacia +z local
+  const g = new THREE.Group();
+  const geo = new THREE.ExtrudeGeometry(rrShape(W - .1, H - .1, R - .05), { depth: .22, bevelEnabled: true, bevelThickness: .04, bevelSize: .05, bevelSegments: 3, curveSegments: 12 });
+  geo.translate(0, 0, -.13); g.add(new THREE.Mesh(geo, graf));
+  const c = cara(map); c.position.z = .135; g.add(c); return g;
+}
+function lente(r) {                                // barril + vidrio, mirando hacia +z
+  const g = new THREE.Group();
+  const barril = cyl(r, .7, mat(0x0c0c0e, .3, .5)); barril.rotation.x = Math.PI / 2; g.add(barril);
+  const aro = new THREE.Mesh(new THREE.TorusGeometry(r * .92, r * .12, 12, 40), mat(0x2c3036, .25, .8)); aro.position.z = .35; g.add(aro);
+  const vid = new THREE.Mesh(new THREE.SphereGeometry(r * .7, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshPhysicalMaterial({ color: 0x1c2c4a, roughness: .02, metalness: .3, clearcoat: 1 }));
+  vid.rotation.x = Math.PI / 2; vid.position.z = .3; vid.scale.y = .5; g.add(vid); return g;
+}
+
+/* ---------- escena ---------- */
+const canvas = document.getElementById('c');
+const ren = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
+ren.setPixelRatio(1); ren.setSize(1920, 1080, false);
+ren.toneMapping = THREE.ACESFilmicToneMapping; ren.toneMappingExposure = 1.0; ren.outputColorSpace = THREE.SRGBColorSpace;
+ren.setClearColor(0x000000, 0);
+const scene = new THREE.Scene();
+scene.environment = new THREE.PMREMGenerator(ren).fromScene(new RoomEnvironment(), .04).texture;
+const key = new THREE.DirectionalLight(0xfff4e8, 1.3); key.position.set(-20, 40, 30); scene.add(key);
+const rim = new THREE.DirectionalLight(0xdfe8ff, .6); rim.position.set(30, 10, -30); scene.add(rim);
+const cam = new THREE.PerspectiveCamera(28, 1920 / 1080, 1, 500);
+
+const raiz = new THREE.Group(); scene.add(raiz);      // gira en el video
+const partes = {};                                   // nombre -> { obj, armado:Vector3, expl:Vector3 }
+function parte(nombre, obj, armado, expl) { obj.position.copy(armado); raiz.add(obj); partes[nombre] = { obj, a: armado.clone(), e: expl.clone() }; return obj; }
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+
+// carcasa: manga redondeada abierta adelante y atrás (PETG)
+{ const s = rrShape(W, H, R); s.holes.push(rrShape(W - .5, H - .5, R - .22));
+  const geo = new THREE.ExtrudeGeometry(s, { depth: 2.3, bevelEnabled: true, bevelThickness: .08, bevelSize: .05, bevelSegments: 3, curveSegments: 16 });
+  geo.translate(0, 0, -1.15);
+  const m = new THREE.Group(); m.add(new THREE.Mesh(geo, graf));
+  // ranuras de ventilación laterales
+  for (let i = 0; i < 5; i++) for (const sx of [-1, 1]) { const r = box(.04, .14, 1.4, mat(0x15181b, .8)); r.position.set(sx * (W / 2 + .04), -.8 + i * .4, 0); m.add(r); }
+  parte('carcasa', m, V(0, 0, 0), V(0, 0, 0)); }
+
+// tapa cabina (+z) y tapa parabrisas (−z, girada 180°)
+const tCab = tapa(texCabina); parte('tapaCabina', tCab, V(0, 0, 1.3), V(0, 0, 11.5));
+const xL = -W / 2 + LX * W;                         // −1,96 cm
+for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2;
+  const led = new THREE.Mesh(new THREE.SphereGeometry(.075, 12, 8), new THREE.MeshStandardMaterial({ color: 0x5a0f0f, emissive: 0xa01818, emissiveIntensity: .9 }));
+  led.position.set(xL + Math.cos(a) * .9, Math.sin(a) * .9, .15); tCab.add(led); }
+const ledOk = new THREE.Mesh(new THREE.SphereGeometry(.09, 16, 10), new THREE.MeshStandardMaterial({ color: 0x2E9E5B, emissive: 0x3ce07f, emissiveIntensity: 2.2 }));
+ledOk.position.set(W / 2 - .45, H / 2 - .45, .15); tCab.add(ledOk);
+const tQR = tapa(texQR); tQR.rotation.y = Math.PI; parte('tapaQR', tQR, V(0, 0, -1.3), V(0, 0, -10.8));
+
+// etiqueta NFC (disco blanco con bobina) tras la zona naranja
+{ const d = new THREE.Mesh(new THREE.CircleGeometry(1.15, 48), new THREE.MeshStandardMaterial({ map: texNFC, roughness: .7, side: THREE.DoubleSide }));
+  parte('nfc', d, V(1.55, 0, 1.1), V(1.55, 0, 9)); }
+
+// cámara interior USB IR: placa negra + lente hacia la cabina
+{ const g = new THREE.Group();
+  g.add(box(2.6, 2.4, .1, mat(0x1a1a1c, .6)));
+  const l = lente(.5); l.position.z = .8; g.add(l);
+  for (let i = 0; i < 4; i++) { const led = new THREE.Mesh(new THREE.SphereGeometry(.12, 12, 8), new THREE.MeshStandardMaterial({ color: 0x5a0f0f, emissive: 0x801010, emissiveIntensity: .7 }));
+    led.position.set((i % 2 ? .95 : -.95), (i < 2 ? .85 : -.85), .1); g.add(led); }
+  const usb = box(.8, .3, .25, mat(0xb9bec4, .3, .9)); usb.position.set(0, -1.15, -.15); g.add(usb);
+  parte('camIR', g, V(xL, 0, .5), V(xL, 0, 7)); }
+
+// Raspberry Pi Zero 2 W (65 × 30 mm)
+{ const g = new THREE.Group();
+  const pcb = new THREE.Mesh(new THREE.ExtrudeGeometry(rrShape(6.5, 3.0, .3), { depth: .12, bevelEnabled: false }), mat(0x1f7a3a, .55)); pcb.position.z = -.06; g.add(pcb);
+  for (const [x, y] of [[-2.9, -1.15], [2.9, -1.15], [-2.9, 1.15], [2.9, 1.15]]) { const h = cyl(.14, .14, mat(0xd4a93a, .3, .9), 16); h.rotation.x = Math.PI / 2; h.position.set(x, y, 0); g.add(h); }
+  const soc = box(1.4, 1.4, .14, mat(0x111214, .35)); soc.position.set(-.6, -.25, .13); g.add(soc);
+  const wifi = box(1.0, .75, .12, mat(0xc3c8cd, .25, .9)); wifi.position.set(.9, -.45, .12); g.add(wifi);
+  const hdr = new THREE.Mesh(new THREE.BoxGeometry(5.1, .5, .25), [mat(0x111111), mat(0x111111), mat(0x111111), mat(0x111111), new THREE.MeshStandardMaterial({ map: texHeader, roughness: .4 }), mat(0x111111)]);
+  hdr.position.set(0, 1.1, .18); g.add(hdr);
+  for (const x of [1.5, 2.55]) { const u = box(.8, .3, .28, mat(0xc3c8cd, .25, .9)); u.position.set(x, -1.42, .2); g.add(u); }
+  const hdmi = box(1.1, .35, .32, mat(0xc3c8cd, .25, .9)); hdmi.position.set(-1.4, -1.38, .2); g.add(hdmi);
+  const slot = box(1.1, 1.2, .14, mat(0xb0b5ba, .3, .9)); slot.position.set(-2.7, .1, .12); g.add(slot);
+  const ccam = box(.4, 1.6, .14, mat(0x2a2a2a, .5)); ccam.position.set(3.05, 0, .1); g.add(ccam);
+  parte('pi', g, V(0, 0, -.05), V(0, 0, 3.4)); }
+
+// tarjeta microSD (sale por el costado)
+{ const sd = new THREE.Mesh(new THREE.BoxGeometry(1.1, 1.5, .07), [mat(0x1b1d22), mat(0x1b1d22), mat(0x1b1d22), mat(0x1b1d22), new THREE.MeshStandardMaterial({ map: texSD, roughness: .5 }), mat(0x1b1d22)]);
+  parte('sd', sd, V(-2.7, .1, .05), V(-5.3, -3.1, 3.4)); }
+
+// módulo 4G LTE + GPS con ranura nano-SIM y antena flexible
+{ const g = new THREE.Group();
+  g.add(box(5.2, 2.9, .1, mat(0x1d3d6e, .55)));
+  const can = new THREE.Mesh(new THREE.BoxGeometry(2.6, 2.0, .22), [mat(0xc9ccd0, .25, .9), mat(0xc9ccd0, .25, .9), mat(0xc9ccd0, .25, .9), mat(0xc9ccd0, .25, .9), new THREE.MeshStandardMaterial({ map: texLTE, roughness: .3, metalness: .6 }), mat(0xc9ccd0, .25, .9)]);
+  can.position.set(-.9, 0, .16); g.add(can);
+  const sim = box(1.3, 1.1, .14, mat(0xb7bcc1, .3, .9)); sim.position.set(1.65, .45, .12); g.add(sim);
+  const simc = box(1.1, .85, .03, mat(0xF26B1D, .5)); simc.position.set(1.65, .45, .2); g.add(simc);
+  const usb = box(.8, .3, .25, mat(0xc3c8cd, .25, .9)); usb.position.set(1.6, -1.2, .15); g.add(usb);
+  const ufl = cyl(.13, .12, mat(0xd4a93a, .3, .9), 12); ufl.rotation.x = Math.PI / 2; ufl.position.set(2.2, -.4, .12); g.add(ufl);
+  parte('lte', g, V(0, 0, -.55), V(0, 0, -4.2)); }
+{ const ant = new THREE.Group();
+  const flex = box(4.2, 1.0, .03, mat(0xb8752a, .45, .2)); ant.add(flex);
+  const traza = box(3.6, .12, .035, mat(0xe6c27a, .3, .8)); traza.position.set(0, .2, .01); ant.add(traza);
+  const traza2 = box(2.4, .12, .035, mat(0xe6c27a, .3, .8)); traza2.position.set(-.6, -.2, .01); ant.add(traza2);
+  parte('antena', ant, V(0, 1.45, -.85), V(0, 3.3, -4.2)); }
+
+// supercondensador
+{ const g = new THREE.Group();
+  const c = cyl(.45, 1.8, mat(0x22364f, .35)); c.rotation.z = Math.PI / 2; g.add(c);
+  const tapaC = cyl(.46, .08, mat(0xc3c8cd, .25, .9)); tapaC.rotation.z = Math.PI / 2; tapaC.position.x = .9; g.add(tapaC);
+  parte('supercap', g, V(1.6, -1.25, -.95), V(1.4, -3.3, -4.2)); }
+
+// cámara frontal (Camera Module 3 Wide), lente hacia el parabrisas (−z)
+{ const g = new THREE.Group();
+  g.add(box(2.5, 2.4, .1, mat(0x1f7a3a, .55)));
+  const casa = box(.95, .95, .45, mat(0x111214, .4)); casa.position.z = -.25; g.add(casa);
+  const l = lente(.42); l.rotation.y = Math.PI; l.position.z = -.82; g.add(l);
+  const flexC = box(.8, 1.2, .02, mat(0xc99a3a, .4)); flexC.position.set(0, -1.7, 0); g.add(flexC);
+  parte('camFrontal', g, V(-xL, 0, -.5), V(-xL, 0, -7.4)); }
+
+// abrazadera: barra + anillo grafito con interior naranjo (eje del pie del espejo ≈ z)
+{ const g = new THREE.Group();
+  const barra = new THREE.Mesh(new THREE.ExtrudeGeometry(rrShape(1.3, 3.0, .2), { depth: .5, bevelEnabled: true, bevelThickness: .04, bevelSize: .04, bevelSegments: 2 }), graf);
+  barra.position.set(0, 1.5, -.25); g.add(barra);
+  const anilloG = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 1.4, 48, 1, true), graf); anilloG.rotation.x = Math.PI / 2; anilloG.position.y = 4.15; g.add(anilloG);
+  const anilloN = new THREE.Mesh(new THREE.CylinderGeometry(.98, .98, 1.42, 48, 1, true), new THREE.MeshStandardMaterial({ color: NARANJO, roughness: .5, side: THREE.DoubleSide })); anilloN.rotation.x = Math.PI / 2; anilloN.position.y = 4.15; g.add(anilloN);
+  for (const z of [-.7, .7]) { const ring = new THREE.Mesh(new THREE.RingGeometry(.98, 1.2, 48), new THREE.MeshPhysicalMaterial({ color: GRAFITO, roughness: .5, side: THREE.DoubleSide })); ring.position.set(0, 4.15, z); g.add(ring); }
+  const collar = box(1.5, .3, .7, mat(NARANJO, .5)); collar.position.set(0, 3.0, 0); g.add(collar);
+  const tornillo = cyl(.22, .5, mat(0x111214, .4)); tornillo.position.set(0, 5.45, 0); g.add(tornillo);
+  parte('abrazadera', g, V(0, H / 2, 0), V(0, H / 2 + 4.2, 0)); }
+
+// sombra de contacto
+const sombra = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: texSombra, transparent: true, depthWrite: false }));
+sombra.rotation.x = -Math.PI / 2; scene.add(sombra);
+
+/* ---------- etiquetas de la vista explosionada ---------- */
+const ETQ = [
+  ['abrazadera', V(0, 4.15, -1.2), 'Abrazadera al pie del espejo', 'anillo naranjo de ajuste', 150, -10],
+  ['tapaCabina', V(-1.96, 1.2, .2), 'Tapa hacia la cabina', 'NFC + cámara interior IR', -120, -150],
+  ['nfc', V(0, 1.1, 0), 'Etiqueta NFC', 'sin batería', -60, -250],
+  ['camIR', V(0, -1.2, 0), 'Cámara interior USB', 'visión nocturna IR', -200, 190],
+  ['sd', V(0, -.7, 0), 'microSD 128 GB', 'video y documentos', 20, 200],
+  ['pi', V(-1.5, 1.35, .2), 'Raspberry Pi Zero 2 W', '6,5 × 3 cm · Wi-Fi', -80, -330],
+  ['carcasa', V(1.5, H / 2, 0), 'Carcasa impresa en 3D', 'PETG / ASA', 60, -300],
+  ['antena', V(-1.6, .3, 0), 'Antena flexible', '4G y GPS', 120, -200],
+  ['lte', V(1.8, -1.0, .2), 'Módulo 4G LTE + GPS', 'con tarjeta nano-SIM', 260, -40],
+  ['supercap', V(0, -.45, 0), 'Supercondensador', 'apagado seguro', -40, 170],
+  ['camFrontal', V(0, -1.2, 0), 'Cámara frontal', 'Camera Module 3 Wide', 90, 170],
+  ['tapaQR', V(-2.5, -1.6, -.2), 'Tapa hacia el parabrisas', 'código QR + cámara frontal', 120, 100],
+];
+const svg = document.getElementById('lines'), labs = document.getElementById('labels');
+const els = ETQ.map(([, , t, s]) => { const d = document.createElement('div'); d.className = 'lb'; d.innerHTML = `${t}<small>${s}</small>`; labs.appendChild(d); return d; });
+function dibujarEtiquetas(op) {
+  svg.innerHTML = ''; labs.style.opacity = op; svg.style.opacity = op;
+  if (op <= 0) return;
+  ETQ.forEach(([n, off, , , dx, dy], i) => {
+    const p = partes[n].obj.localToWorld(off.clone()).project(cam);
+    const x = (p.x + 1) / 2 * 1920, y = (1 - p.y) / 2 * 1080;
+    const el = els[i], w = el.offsetWidth, h = el.offsetHeight;
+    const lx = x + dx, ly = y + dy;
+    el.style.left = (dx < 0 ? lx - w : lx) + 'px'; el.style.top = (ly - h / 2) + 'px';
+    svg.insertAdjacentHTML('beforeend', `<line x1="${x}" y1="${y}" x2="${lx}" y2="${ly}" stroke="#1C2126" stroke-width="1.6" stroke-opacity=".55"/><circle cx="${x}" cy="${y}" r="5" fill="#F26B1D" stroke="#fff" stroke-width="2"/>`);
+  });
+}
+
+/* ---------- animación (tiempos absolutos) ---------- */
+const ease = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
+const seg = (t, a, b) => ease((t - a) / (b - a));
+const A0 = THREE.MathUtils.degToRad(32), AE = THREE.MathUtils.degToRad(-57);
+const camArm = { pos: V(0, 6.5, 33), tgt: V(0, 1.6, 0), fov: 28 };
+const camExp = { pos: V(0, 11, 62), tgt: V(-.5, .6, 0), fov: 26 };
+function aplicarCam(k) {
+  cam.position.lerpVectors(camArm.pos, camExp.pos, k); cam.fov = THREE.MathUtils.lerp(camArm.fov, camExp.fov, k);
+  cam.updateProjectionMatrix(); cam.lookAt(new THREE.Vector3().lerpVectors(camArm.tgt, camExp.tgt, k));
+}
+window.TOTAL = 14;
+window.seek = t => {
+  let rot, e, lab, fin = 0, kcam;
+  if (t < 6) { rot = A0 + seg(t, 0, 6) * Math.PI * 2; e = 0; kcam = 0; }
+  else if (t < 12.2) { rot = THREE.MathUtils.lerp(A0, AE, seg(t, 6, 7.2)); e = seg(t, 6.9, 8.8) - seg(t, 11.2, 12.6); kcam = seg(t, 6.2, 7.8) - seg(t, 11.3, 12.8); }
+  else { rot = THREE.MathUtils.lerp(AE, A0, seg(t, 12.2, 13.3)); e = 1 - seg(t, 11.2, 12.6); kcam = 1 - seg(t, 11.3, 12.8); fin = seg(t, 12.9, 13.6); }
+  lab = seg(t, 8.8, 9.4) * (1 - seg(t, 10.9, 11.25));
+  raiz.rotation.y = rot;
+  for (const k in partes) { const p = partes[k]; p.obj.position.lerpVectors(p.a, p.e, e); }
+  ledOk.material.emissiveIntensity = (Math.floor(t * 2) % 2 === 0) ? 2.4 : .2;
+  aplicarCam(kcam);
+  const piso = -H / 2 - .02 - e * 2.6;
+  sombra.position.set(0, piso, 0); sombra.scale.set(13 + e * 18, 9 + e * 8, 1); sombra.material.opacity = .9 - e * .45;
+  raiz.updateMatrixWorld(true);
+  ren.render(scene, cam);
+  dibujarEtiquetas(lab);
+  document.getElementById('marca').style.opacity = lab;
+  document.getElementById('fin').style.opacity = fin;
+};
+// poses fijas para las imágenes
+if (MODO === 'explosionado') { window.seek(10.2); document.getElementById('marca').style.opacity = 1; }
+else if (MODO === 'armado' || MODO === 'transparente') { window.seek(0); document.getElementById('fin').style.opacity = 0; document.getElementById('marca').style.opacity = 0; }
+else window.seek(0);
+window.ready = true;
+</script>
+</body>
+</html>
