@@ -134,6 +134,16 @@ main{flex:1;padding:16px 16px 28px}
 .hero .datos{display:flex;gap:8px;margin:28px 0 18px}
 .hero .datos div{flex:1;background:rgba(255,255,255,.06);border-radius:12px;padding:10px;font-size:11px;color:#aab3bc}
 .hero .datos b{display:block;color:#fff;font-size:15px;margin-top:2px}
+.cam{background:var(--grafito);color:#fff;border-radius:var(--r);padding:14px}
+.cam-top{display:flex;align-items:center;gap:8px;font-size:14px}
+.cam-top span:last-child{margin-left:auto;font-size:11.5px;color:#aab3bc}
+.rec{width:9px;height:9px;border-radius:50%;background:#ff4d4d;box-shadow:0 0 0 4px rgba(255,77,77,.22);animation:rec 1.2s infinite}
+@keyframes rec{50%{opacity:.35}}
+.cam-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0 10px}
+.cam-row div{background:rgba(255,255,255,.06);border-radius:10px;padding:8px 10px}
+.cam-row small{display:block;font-size:10.5px;color:#aab3bc}.cam-row b{font-size:13px}
+.cam .btn.sec2{background:transparent;color:#fff;border-color:rgba(255,255,255,.18);margin-top:0;padding:12px}
+.cam .btn.ok{background:var(--ok);border-color:var(--ok)}
 .pie{font-size:11px;color:var(--gris);text-align:center;padding:6px 0 18px}
 </style>
 </head>
@@ -160,6 +170,7 @@ const I = {
   search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>',
   nfc:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M8 8.5a5 5 0 0 1 0 7"/><path d="M11.5 6a9 9 0 0 1 0 12"/><path d="M15 3.5a13 13 0 0 1 0 17"/></svg>',
   user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
+  flag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg>',
   shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>',
 };
 
@@ -231,7 +242,7 @@ const cab = (titulo, sub, volver) => `
   <header class="top">
     <div class="top-row">
       ${volver ? `<a class="back" href="${volver}" aria-label="Volver">${I.back}</a>` : `<div class="logo"><i>${I.logo}</i>PORTA</div>`}
-      <div class="pill"><span class="dot"></span>Sin internet · local</div>
+      <div class="pill"><span class="dot"></span>Red local · sin señal</div>
     </div>
     ${titulo ? `<h1>${titulo}</h1>` : ''}${sub ? `<p>${sub}</p>` : ''}
   </header>`;
@@ -244,7 +255,7 @@ const V = {
       <div class="logo"><i>${I.logo}</i>PORTA</div>
       <div class="ondas"><span></span><span></span><span></span><b>${I.nfc}</b></div>
       <h1>Conectado a<br><em>${EQUIPO.nombre.split('· ')[1]}</em></h1>
-      <p>Toda la documentación y los checklists de tu faena, disponibles aquí mismo. No necesitas señal ni datos móviles.</p>
+      <p>Te conectaste con NFC o QR. Toda la documentación y los checklists de tu faena están aquí mismo, sin señal ni datos móviles.</p>
       <div class="datos">
         <div>Documentos<b>${EQUIPO.docs}</b></div>
         <div>Actualizado<b>${EQUIPO.sync}</b></div>
@@ -256,7 +267,7 @@ const V = {
   inicio(){
     const pend = S.registros.length;
     return cab('Hola 👷 ¿qué necesitas?', `${EQUIPO.faena} · ${EQUIPO.nombre.split('· ')[1]}`) + `<main>
-      <div class="estado">${ico('sync','')}<div><b>Datos actualizados ${EQUIPO.sync.toLowerCase()}</b><span>${EQUIPO.docs} documentos · se sincroniza al volver a base</span></div></div>
+      <div class="estado">${ico('sync','')}<div><b>Datos actualizados ${EQUIPO.sync.toLowerCase()}</b><span>${EQUIPO.docs} documentos · se actualiza por 4G apenas hay señal</span></div></div>
       <div class="sec">Documentación</div>
       <div class="grid">
         <a class="mod ancho" href="#/docs">${ico('folder','c-doc')}<div class="txt"><b>Biblioteca de documentos</b><span>Procedimientos, contratos, HDS, IRL</span></div></a>
@@ -268,11 +279,17 @@ const V = {
         <a class="mod" href="#/check/generador">${ico('bolt','c-gen')}<b>Generador</b><span>Equipo portátil</span></a>
         <a class="mod" href="#/registros">${ico('list','c-reg')}<b>Registros</b><span>Hechos hoy</span><em class="badge" style="background:var(--ok-suave);color:var(--ok)">${pend}</em></a>
       </div>
+      <div class="sec">Dashcam</div>
+      <div class="cam">
+        <div class="cam-top"><span class="rec"></span><b>Grabando</b><span>Frontal + cabina · 1080p</span></div>
+        <div class="cam-row"><div><small>Frontal</small><b>Ruta</b></div><div><small>Interior</small><b>Cabina (IR)</b></div><div><small>Memoria</small><b>38 h</b></div></div>
+        <button class="btn sec2" onclick="marcar()" id="btn-evento">${I.flag} Marcar incidente</button>
+      </div>
       <div class="sec">Emergencia</div>
       <div class="grid">
         <a class="mod ancho" href="#/doc/plan-emergencia">${ico('sos','c-emg')}<div class="txt"><b>Plan de emergencia</b><span>Contactos, punto de encuentro y canal radial</span></div></a>
       </div>
-    </main><div class="pie">PORTA funciona sin internet · Red Wi-Fi local del vehículo</div>`;
+    </main><div class="pie">PORTA funciona sin señal · Red Wi-Fi local del vehículo</div>`;
   },
 
   docs(){
@@ -337,7 +354,7 @@ const V = {
         <div><span>Inspector</span><b>${S.nombre||'Sin nombre'}</b></div>
         <div><span>Fecha y hora</span><b>${new Date().toLocaleString('es-CL',{dateStyle:'short',timeStyle:'short',hourCycle:'h23'})}</b></div>
         <div><span>Equipo</span><b>${EQUIPO.nombre.split('· ')[1]}</b></div>
-        <div><span>Envío a la nube</span><b>Pendiente · al volver a base</b></div>
+        <div><span>Envío a PORTA Central</span><b>Pendiente · al tener señal</b></div>
       </div>
       <a class="btn" href="#/" style="margin-top:16px">Volver al menú</a>
       <a class="btn sec2" href="#/registros">Ver registros</a>
@@ -351,7 +368,7 @@ const V = {
         const col = r.estado==='ok'?'var(--ok)':r.estado==='alerta'?'#C98F00':'var(--peligro)';
         return `<div class="item">${ico(ck.ico, ck.c)}<div class="txt"><b>${ck.titulo}</b><span>${r.quien} · ${r.hora}</span></div><b style="font-size:12px;color:${col}">${r.res}</b></div>`;
       }).join('')}</div>
-      <div class="estado" style="margin-top:12px">${ico('sync','')}<div><b>${S.registros.length} registros por enviar</b><span>Se suben solos a la carpeta de Drive cuando PORTA vuelve a tener Wi-Fi.</span></div></div>
+      <div class="estado" style="margin-top:12px">${ico('sync','')}<div><b>${S.registros.length} registros por enviar</b><span>Se envían solos a PORTA Central por 4G apenas el vehículo tenga señal.</span></div></div>
     </main>`;
   },
 };
@@ -389,6 +406,10 @@ function evaluar(id){
   if (fallas.length) return {estado:'alerta',titulo:'Operar con observaciones',texto:'Sin fallas críticas. Reporta las observaciones para su corrección.',obs,res:'Observado'};
   return {estado:'ok',titulo:'Apto para operar',texto:'Todos los ítems están conformes. Registro guardado.',obs,res:'Apto para operar'};
 }
+window.marcar = () => {
+  const b = document.getElementById('btn-evento');
+  b.classList.add('ok'); b.innerHTML = I.check + ' Video guardado: 1 min antes y después';
+};
 window.enviar = id => {
   const ev = evaluar(id);
   S.registros.push({ id, quien:S.nombre||'Sin nombre', hora:'Hoy '+new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit',hourCycle:'h23'}), res:ev.res, estado:ev.estado });

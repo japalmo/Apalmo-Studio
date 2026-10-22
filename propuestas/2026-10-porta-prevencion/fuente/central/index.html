@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PORTA Central · Administración de flota</title>
+<style>
+:root{
+  --n:#F26B1D;--n2:#FF8A3D;--ns:#FDE9DC;--g:#1C2126;--g2:#2A3138;--g3:#343c45;--gr:#6B7580;--l:#E4E1DA;--f:#F5F3EE;
+  --ok:#2E9E5B;--oks:#E3F4EA;--al:#C98F00;--als:#FFF4D6;--pe:#D64541;--pes:#FBE5E4;--az:#2F5D9E;--azs:#E8EEF7;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--f);color:var(--g);-webkit-font-smoothing:antialiased;font-size:14px}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+.lay{display:grid;grid-template-columns:232px 1fr;min-height:100vh}
+
+/* barra lateral */
+.side{background:var(--g);color:#cfd5db;padding:22px 14px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.16em;color:#fff;font-size:15px;padding:0 8px 22px}
+.logo i{width:28px;height:28px;border-radius:8px;background:var(--n);display:grid;place-items:center}
+.logo i svg{width:17px}
+.logo small{display:block;font-size:10px;letter-spacing:.14em;color:var(--n2);font-weight:700;margin-top:1px}
+.nav{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-weight:500}
+.nav svg{width:18px;height:18px;opacity:.8}
+.nav.on{background:rgba(255,255,255,.08);color:#fff}
+.nav.on svg{color:var(--n2);opacity:1}
+.nav .cnt{margin-left:auto;font-size:11px;font-weight:700;background:var(--pe);color:#fff;border-radius:99px;padding:1px 7px}
+.side .yo{margin-top:auto;display:flex;align-items:center;gap:10px;padding:12px;border-top:1px solid rgba(255,255,255,.08);font-size:12.5px}
+.side .yo b{display:block;color:#fff;font-size:13px}
+.av{width:32px;height:32px;border-radius:50%;background:var(--n);color:#fff;display:grid;place-items:center;font-weight:700;font-size:12px;flex:none}
+
+/* contenido */
+.main{padding:26px 32px 40px;min-width:0}
+.head{display:flex;align-items:flex-end;gap:16px;margin-bottom:20px}
+.head h1{font-size:26px;letter-spacing:-.01em}
+.head p{color:var(--gr);margin-top:4px}
+.head .acc{margin-left:auto;display:flex;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:10px;background:var(--n);color:#fff;font-weight:600}
+.btn.s{background:#fff;color:var(--g);border:1px solid var(--l)}
+.btn svg{width:16px;height:16px}
+.crumb{font-size:12.5px;color:var(--gr);margin-bottom:6px}
+.crumb a{color:var(--n);font-weight:600}
+
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px}
+.kpi{background:#fff;border:1px solid var(--l);border-radius:14px;padding:16px}
+.kpi small{color:var(--gr);font-size:12px;display:flex;align-items:center;gap:6px}
+.kpi b{font-size:28px;display:block;margin-top:6px;letter-spacing:-.02em}
+.kpi span{font-size:12px;color:var(--gr)}
+.kpi.al{border-color:#f3c3c1;background:#fff8f7}
+.kpi.al b{color:var(--pe)}
+
+.box{background:#fff;border:1px solid var(--l);border-radius:14px;overflow:hidden}
+.box-h{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--l)}
+.box-h h2{font-size:15px}
+.box-h .f{margin-left:auto;display:flex;gap:8px}
+.chip{font-size:12px;font-weight:600;padding:6px 11px;border-radius:99px;background:var(--f);color:var(--gr)}
+.chip.on{background:var(--g);color:#fff}
+.srch{display:flex;align-items:center;gap:8px;border:1px solid var(--l);border-radius:9px;padding:7px 10px;color:var(--gr);font-size:13px;width:240px}
+.srch svg{width:15px}
+
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--gr);font-weight:700;padding:10px 18px;background:#fbfaf7;border-bottom:1px solid var(--l)}
+td{padding:12px 18px;border-bottom:1px solid #efece6;vertical-align:middle;font-size:13.5px}
+tr:last-child td{border-bottom:0}
+tr.cl{cursor:pointer}
+tr.cl:hover td{background:#fcfbf8}
+.veh{display:flex;align-items:center;gap:10px}
+.veh .ic{width:34px;height:34px;border-radius:9px;background:var(--ns);color:var(--n);display:grid;place-items:center;flex:none}
+.veh .ic svg{width:18px}
+.veh b{display:block;font-size:13.5px}
+.veh span{font-size:12px;color:var(--gr);white-space:nowrap}
+.veh b{white-space:nowrap}
+.est{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:4px 9px;border-radius:99px;white-space:nowrap}
+.est i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.e-on{background:var(--oks);color:var(--ok)}.e-off{background:#eef0f2;color:#5b6570}.e-base{background:var(--azs);color:var(--az)}
+.ver{font-size:12.5px;white-space:nowrap}
+.ver.ok{color:var(--ok)}.ver.pend{color:var(--al)}
+.ver small{display:block;color:var(--gr);font-size:11px}
+.rec{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--gr)}
+.rec i{width:8px;height:8px;border-radius:50%;background:#e04848}
+.alrt{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--pe);background:var(--pes);padding:4px 9px;border-radius:99px;white-space:nowrap}
+.mut{color:var(--gr);font-size:12.5px}
+.bar{height:6px;background:#eceae4;border-radius:99px;overflow:hidden;width:90px;display:inline-block;vertical-align:middle;margin-right:6px}
+.bar i{display:block;height:100%;background:var(--n)}
+
+/* documentos */
+.dgrid{display:grid;grid-template-columns:250px 1fr;gap:18px}
+.tree{background:#fff;border:1px solid var(--l);border-radius:14px;padding:10px}
+.tree a{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;font-size:13.5px}
+.tree a.on{background:var(--ns);color:#b44c0e;font-weight:600}
+.tree a svg{width:16px;color:var(--gr)}
+.tree a.on svg{color:var(--n)}
+.tree a span{margin-left:auto;font-size:11.5px;color:var(--gr)}
+.drop{border:2px dashed #d9c2b2;background:#fffaf6;border-radius:14px;padding:20px;display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.drop .ic{width:46px;height:46px;border-radius:12px;background:var(--ns);color:var(--n);display:grid;place-items:center;flex:none}
+.drop .ic svg{width:22px}
+.drop b{font-size:14.5px}
+.drop p{font-size:12.5px;color:var(--gr);margin-top:2px}
+.drop .btn{margin-left:auto}
+.pub{background:var(--g);color:#fff;border-radius:14px;padding:16px 18px;margin-bottom:16px;display:grid;grid-template-columns:1fr auto;gap:10px 24px;align-items:center}
+.pub b{font-size:14.5px}
+.pub p{font-size:12.5px;color:#aab3bc;margin-top:3px}
+.pub .pb{grid-column:1/-1;height:8px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}
+.pub .pb i{display:block;height:100%;background:linear-gradient(90deg,var(--n),var(--n2));border-radius:99px}
+.pub .n{font-size:22px;font-weight:800;text-align:right}
+.pub .n small{display:block;font-size:11px;font-weight:500;color:#aab3bc}
+.pdf{width:30px;height:36px;border-radius:5px;background:var(--pes);color:var(--pe);font-size:9px;font-weight:800;display:grid;place-items:center;flex:none}
+
+/* detalle */
+.det{display:grid;grid-template-columns:1.35fr 1fr;gap:18px}
+.cams{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px}
+.cam{position:relative;border-radius:10px;overflow:hidden;background:#000;aspect-ratio:16/9}
+.cam img{width:100%;height:100%;object-fit:cover;display:block}
+.cam .tl{position:absolute;top:8px;left:8px;display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#fff;background:rgba(0,0,0,.45);padding:4px 8px;border-radius:6px;font-family:"JetBrains Mono",monospace}
+.cam .tl i{width:7px;height:7px;border-radius:50%;background:#ff4d4d}
+.cam .br{position:absolute;bottom:8px;right:8px;left:8px;display:flex;justify-content:space-between;font-size:10.5px;color:#fff;font-family:"JetBrains Mono",monospace;text-shadow:0 1px 2px #000}
+.ev{display:flex;gap:10px;padding:0 14px 14px}
+.ev div{flex:1;background:var(--f);border-radius:10px;padding:10px 12px;font-size:12px}
+.ev b{display:block;font-size:13px}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--l)}
+.kv div{background:#fff;padding:12px 16px}
+.kv small{display:block;color:var(--gr);font-size:11.5px}
+.kv b{font-size:14px}
+.tl2{padding:6px 18px 12px}
+.tli{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #efece6;font-size:13px;align-items:center}
+.tli:last-child{border-bottom:0}
+.tli .t{font-weight:400;font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--gr);width:44px;flex:none}
+.tli .d{width:10px;height:10px;border-radius:50%;flex:none}
+.tli span{margin-left:auto}
+.map{height:210px;position:relative;background:#efe6d6}
+.map svg{width:100%;height:100%;display:block}
+
+/* alertas */
+.agrid{display:grid;grid-template-columns:1fr 380px;gap:18px}
+.acard{padding:18px}
+.acard h3{font-size:18px;margin:8px 0 4px}
+.acard .obs{background:var(--pes);color:#8a2420;border-radius:10px;padding:12px;font-size:12.5px;line-height:1.6;margin:14px 0}
+.acard .acts{display:flex;flex-direction:column;gap:8px}
+.acard .btn{justify-content:center}
+</style>
+</head>
+<body>
+<div class="lay">
+  <aside class="side" id="side"></aside>
+  <main class="main" id="main"></main>
+</div>
+<script>
+const I = {
+  logo:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M5 9a10 10 0 0 1 14 0"/><path d="M8 12.5a5.5 5.5 0 0 1 8 0"/><circle cx="12" cy="17" r="1.7" fill="#fff" stroke="none"/></svg>',
+  flota:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h11v9H2zM13 10h4l4 3v3h-8"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>',
+  docs:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg>',
+  alert:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>',
+  cam:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/></svg>',
+  conf:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>',
+  up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg>',
+  send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>',
+  search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  dl:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M7 11l5 5 5-5M4 20h16"/></svg>',
+};
+
+/* ===== Datos de ejemplo ===== */
+const VERSION = 'v2026.10.22';
+const FLOTA = [
+  { id:'CH-04', tipo:'Camioneta 4x4', pat:'RT·KD-41', faena:'Quebrada Alta', cond:'Juan Pérez', est:'off', ult:'hace 38 min', ver:'ok', chk:'2/3', alerta:'Fatiga: no apto', mem:62 },
+  { id:'CH-07', tipo:'Camioneta 4x4', pat:'SB·LP-19', faena:'Quebrada Alta', cond:'María Rojas', est:'on', ult:'ahora', ver:'ok', chk:'3/3', mem:41 },
+  { id:'CH-11', tipo:'Camioneta 4x4', pat:'PX·TR-72', faena:'Quebrada Alta', cond:'Luis Araya', est:'on', ult:'ahora', ver:'ok', chk:'3/3', mem:55 },
+  { id:'CA-02', tipo:'Camión aljibe', pat:'HK·WZ-08', faena:'Sierra Norte', cond:'Pedro Soto', est:'off', ult:'hace 2 h', ver:'pend', chk:'1/3', alerta:'Vehículo: no operar', mem:78 },
+  { id:'CH-15', tipo:'Camioneta 4x4', pat:'LL·GH-33', faena:'Sierra Norte', cond:'Ana Cortés', est:'on', ult:'hace 1 min', ver:'ok', chk:'3/3', mem:33 },
+  { id:'BU-01', tipo:'Bus de personal', pat:'FZ·RD-56', faena:'Campamento', cond:'Raúl Díaz', est:'base', ult:'ahora', ver:'ok', chk:'3/3', mem:20 },
+  { id:'CH-18', tipo:'Camioneta 4x4', pat:'KT·VB-90', faena:'Sierra Norte', cond:'Carla Muñoz', est:'on', ult:'ahora', ver:'ok', chk:'2/3', mem:47 },
+  { id:'GE-03', tipo:'Contenedor generador', pat:'—', faena:'Quebrada Alta', cond:'—', est:'off', ult:'hace 5 h', ver:'pend', chk:'1/1', mem:12 },
+];
+const EST = { on:['e-on','En línea · 4G'], off:['e-off','En terreno · sin señal'], base:['e-base','En base · Wi-Fi'] };
+
+const DOCS = [
+  { n:'PTS-027 Uso de generador portátil', v:'v3', f:'Hoy 07:02', t:'1,2 MB', a:'Toda la flota', r:'11/18' },
+  { n:'PTS-012 Conducción en faena', v:'v4', f:'14 mar 2026', t:'2,4 MB', a:'Toda la flota', r:'18/18' },
+  { n:'PTS-031 Trabajo en altura', v:'v3', f:'09 ene 2026', t:'3,1 MB', a:'Quebrada Alta', r:'9/9' },
+  { n:'PTS-040 Bloqueo y aislamiento', v:'v1', f:'21 ago 2026', t:'1,8 MB', a:'Toda la flota', r:'18/18' },
+  { n:'HDS Petróleo diésel', v:'Rev. 2025', f:'02 feb 2026', t:'0,9 MB', a:'Toda la flota', r:'18/18' },
+  { n:'Plan de emergencia faena', v:'v5', f:'30 sep 2026', t:'4,6 MB', a:'Quebrada Alta', r:'9/9' },
+];
+
+/* ===== Vistas ===== */
+const side = act => `
+  <div class="logo"><i>${I.logo}</i><div>PORTA<small>CENTRAL</small></div></div>
+  <a class="nav ${act==='flota'?'on':''}" href="#/">${I.flota}Flota</a>
+  <a class="nav ${act==='docs'?'on':''}" href="#/documentos">${I.docs}Documentos</a>
+  <a class="nav ${act==='chk'?'on':''}" href="#/alertas">${I.check}Checklists</a>
+  <a class="nav ${act==='alertas'?'on':''}" href="#/alertas">${I.alert}Alertas<span class="cnt">2</span></a>
+  <a class="nav" href="#/vehiculo/CH-04">${I.cam}Dashcam</a>
+  <a class="nav" href="#/">${I.conf}Configuración</a>
+  <div class="yo"><div class="av">CV</div><div><b>Carolina Vega</b>Prevención de Riesgos</div></div>`;
+
+const filaVeh = v => `<tr class="cl" onclick="location.hash='#/vehiculo/${v.id}'">
+  <td><div class="veh"><div class="ic">${I.flota}</div><div><b>${v.id} <span style="font-weight:500;color:var(--gr)">· ${v.pat}</span></b><span>${v.tipo} · ${v.faena}</span></div></div></td>
+  <td>${v.cond}</td>
+  <td><span class="est ${EST[v.est][0]}"><i></i>${EST[v.est][1]}</span><div class="mut" style="margin-top:3px">${v.ult}</div></td>
+  <td><div class="ver ${v.ver}">${v.ver==='ok'?'✓ '+VERSION:'⟳ Pendiente'}<small>${v.ver==='ok'?'Documentos al día':'Se actualiza al tener señal'}</small></div></td>
+  <td>${v.chk}</td>
+  <td><span class="rec"><i></i>Grabando</span><div class="mut" style="margin-top:3px"><span class="bar"><i style="width:${v.mem}%"></i></span>${v.mem}%</div></td>
+  <td>${v.alerta?`<span class="alrt">${I.alert.replace('<svg','<svg width="13"')}${v.alerta}</span>`:'<span class="mut">—</span>'}</td>
+</tr>`;
+
+const V = {
+  flota(){
+    const on = FLOTA.filter(v=>v.est!=='off').length;
+    return `<div class="head"><div><h1>Flota</h1><p>Equipos PORTA instalados en vehículos y faenas · actualizado hace 1 min</p></div>
+      <div class="acc"><a class="btn s" href="#/documentos">${I.up}Subir documento</a><a class="btn" href="#/">${I.plus}Agregar equipo</a></div></div>
+    <div class="kpis">
+      <div class="kpi"><small>Equipos</small><b>18</b><span>14 vehículos · 4 faenas fijas</span></div>
+      <div class="kpi"><small>En línea ahora</small><b style="color:var(--ok)">12</b><span>por 4G o Wi-Fi de base</span></div>
+      <div class="kpi"><small>En terreno sin señal</small><b>6</b><span>funcionando en modo local</span></div>
+      <div class="kpi"><small>Documentos al día</small><b>16/18</b><span>versión ${VERSION}</span></div>
+      <div class="kpi al"><small>Alertas de hoy</small><b>2</b><span>requieren acción</span></div>
+    </div>
+    <div class="box">
+      <div class="box-h"><h2>Equipos</h2>
+        <div class="f"><span class="chip on">Todos</span><span class="chip">Quebrada Alta</span><span class="chip">Sierra Norte</span><span class="chip">Con alertas</span><div class="srch">${I.search}Buscar patente o conductor</div></div></div>
+      <table><tr><th>Vehículo</th><th>Conductor</th><th>Conexión</th><th>Documentos</th><th>Checklists hoy</th><th>Dashcam</th><th>Alertas</th></tr>
+      ${FLOTA.map(filaVeh).join('')}</table>
+    </div>`;
+  },
+
+  documentos(){
+    return `<div class="head"><div><h1>Documentos</h1><p>Lo que publiques aquí llega a cada PORTA por 4G, sin retirar el equipo del vehículo</p></div>
+      <div class="acc"><a class="btn s" href="#/documentos">${I.plus}Nueva carpeta</a></div></div>
+    <div class="dgrid">
+      <div class="tree">
+        <a class="on" href="#/documentos">${I.docs}Procedimientos (PTS)<span>12</span></a>
+        <a href="#/documentos">${I.docs}Contratos y anexos<span>146</span></a>
+        <a href="#/documentos">${I.docs}Reglamento interno<span>1</span></a>
+        <a href="#/documentos">${I.docs}IRL por cargo<span>9</span></a>
+        <a href="#/documentos">${I.docs}Hojas de seguridad (HDS)<span>23</span></a>
+        <a href="#/documentos">${I.docs}Plan de emergencia<span>3</span></a>
+        <a href="#/documentos">${I.check}Plantillas de checklists<span>5</span></a>
+      </div>
+      <div>
+        <div class="drop"><div class="ic">${I.up}</div><div><b>Arrastra aquí un PDF para publicarlo</b><p>Elige a quién va: toda la flota, una faena o vehículos específicos. Los contratos se envían solo al equipo del trabajador.</p></div><a class="btn" href="#/documentos">${I.send}Publicar</a></div>
+        <div class="pub"><div><b>Publicando «PTS-027 Uso de generador portátil v3» a toda la flota</b><p>Los equipos en terreno sin señal lo recibirán automáticamente apenas se conecten.</p></div>
+          <div class="n">11 / 18<small>equipos actualizados</small></div><div class="pb"><i style="width:61%"></i></div></div>
+        <div class="box"><div class="box-h"><h2>Procedimientos de trabajo seguro</h2><div class="f"><div class="srch">${I.search}Buscar documento</div></div></div>
+          <table><tr><th>Documento</th><th>Versión</th><th>Publicado</th><th>Destino</th><th>Recibido</th></tr>
+          ${DOCS.map(d=>`<tr><td><div class="veh"><div class="pdf">PDF</div><div><b>${d.n}</b><span>${d.t}</span></div></div></td><td>${d.v}</td><td class="mut">${d.f}</td><td>${d.a}</td>
+            <td>${d.r.split('/')[0]===d.r.split('/')[1]?`<span class="est e-on"><i></i>${d.r}</span>`:`<span class="est" style="background:var(--als);color:var(--al)"><i></i>${d.r}</span>`}</td></tr>`).join('')}
+          </table></div>
+      </div>
+    </div>`;
+  },
+
+  vehiculo(id){
+    const v = FLOTA.find(x=>x.id===id) || FLOTA[0];
+    return `<div class="crumb"><a href="#/">Flota</a> / ${v.id}</div>
+    <div class="head"><div><h1>${v.id} · ${v.tipo}</h1><p>${v.pat} · ${v.faena} · Conductor: ${v.cond}</p></div>
+      <div class="acc"><span class="est ${EST[v.est][0]}" style="align-self:center"><i></i>${EST[v.est][1]} · ${v.ult}</span><a class="btn s" href="#/vehiculo/${v.id}">${I.dl}Descargar video</a></div></div>
+    <div class="det">
+      <div>
+        <div class="box"><div class="box-h"><h2>Dashcam · último registro recibido</h2><div class="f"><span class="chip on">Frontal + cabina</span><span class="chip">Eventos</span></div></div>
+          <div class="cams">
+            <div class="cam"><img src="img/cam-frontal.jpg"><div class="tl"><i></i>FRONTAL</div><div class="br"><span>22-10-2026 07:03:18</span><span>42 km/h · GPS ✓</span></div></div>
+            <div class="cam"><img src="img/cam-cabina.jpg"><div class="tl"><i></i>CABINA · IR</div><div class="br"><span>22-10-2026 07:03:18</span><span>${v.id}</span></div></div>
+          </div>
+          <div class="ev"><div><b>Incidente marcado</b>06:58 · por el conductor</div><div><b>Frenada brusca</b>06:51 · km 14</div><div><b>Memoria</b>${v.mem}% · 38 h en bucle</div></div>
+        </div>
+        <div class="box" style="margin-top:18px"><div class="box-h"><h2>Recorrido de hoy</h2><span class="mut" style="margin-left:auto">Última posición GPS: km 22, camino a rajo</span></div>
+          <div class="map"><svg viewBox="0 0 600 210" preserveAspectRatio="none">
+            <path d="M0 160 C80 140 120 175 200 150 S330 90 400 110 S520 60 600 70 L600 210 L0 210Z" fill="#e6d8c0"/>
+            <path d="M0 60 C100 40 160 80 260 55 S420 20 600 35" fill="none" stroke="#dccab0" stroke-width="30"/>
+            <path d="M40 180 C120 170 150 120 230 118 S330 140 380 100 S470 50 540 58" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+            <path d="M40 180 C120 170 150 120 230 118 S330 140 380 100" fill="none" stroke="#F26B1D" stroke-width="4" stroke-linecap="round"/>
+            <path d="M380 100 S470 50 540 58" fill="none" stroke="#F26B1D" stroke-width="3" stroke-dasharray="6 7" stroke-linecap="round" opacity=".6"/>
+            <circle cx="40" cy="180" r="7" fill="#2F5D9E"/><text x="52" y="198" font-size="11" fill="#2F5D9E" font-family="Inter" font-weight="700">BASE</text>
+            <circle cx="380" cy="100" r="9" fill="#F26B1D" stroke="#fff" stroke-width="3"/><text x="394" y="92" font-size="11" fill="#1C2126" font-family="Inter" font-weight="700">${v.id}</text>
+            <rect x="210" y="70" width="150" height="22" rx="11" fill="#1C2126" opacity=".85"/><text x="285" y="85" font-size="10.5" fill="#fff" text-anchor="middle" font-family="Inter">Zona sin señal · km 6–38</text>
+          </svg></div>
+        </div>
+      </div>
+      <div>
+        <div class="box"><div class="box-h"><h2>Estado del equipo</h2></div>
+          <div class="kv">
+            <div><small>Documentos</small><b style="color:var(--ok)">✓ ${VERSION}</b></div>
+            <div><small>Última sincronización</small><b>Hoy 06:21 · 4G</b></div>
+            <div><small>Señal 4G</small><b>Sin cobertura</b></div>
+            <div><small>Teléfonos conectados</small><b>2</b></div>
+            <div><small>Temperatura</small><b>51 °C</b></div>
+            <div><small>Registros por enviar</small><b>3</b></div>
+          </div></div>
+        <div class="box" style="margin-top:18px"><div class="box-h"><h2>Actividad de hoy</h2></div>
+          <div class="tl2">
+            <div class="tli"><b class="t">07:41</b><i class="d" style="background:var(--pe)"></i>Fatiga y somnolencia · J. Pérez<span class="alrt">No apto</span></div>
+            <div class="tli"><b class="t">07:35</b><i class="d" style="background:var(--ok)"></i>Checklist vehículo · J. Pérez<span class="est e-on"><i></i>Apto</span></div>
+            <div class="tli"><b class="t">06:58</b><i class="d" style="background:var(--n)"></i>Incidente marcado en dashcam</div>
+            <div class="tli"><b class="t">06:21</b><i class="d" style="background:var(--az)"></i>Documentos actualizados por 4G (3 nuevos)</div>
+            <div class="tli"><b class="t">06:05</b><i class="d" style="background:var(--gr)"></i>Equipo encendido con el vehículo</div>
+          </div></div>
+      </div>
+    </div>`;
+  },
+
+  alertas(){
+    const R = [
+      ['07:41','CH-04','J. Pérez','Fatiga y somnolencia','mal','No apto'],
+      ['07:35','CH-04','J. Pérez','Vehículo (pre-uso)','ok','Apto'],
+      ['07:22','CA-02','P. Soto','Vehículo (pre-uso)','mal','No operar'],
+      ['07:10','CH-07','M. Rojas','Fatiga y somnolencia','ok','Apto'],
+      ['07:04','CH-11','L. Araya','Generador GEN-07','al','Observado'],
+      ['06:55','CH-07','M. Rojas','Vehículo (pre-uso)','ok','Apto'],
+      ['06:48','CH-15','A. Cortés','Fatiga y somnolencia','al','Precaución'],
+    ];
+    const cl = { ok:'e-on', al:'', mal:'' };
+    const sty = { ok:'', al:'background:var(--als);color:var(--al)', mal:'background:var(--pes);color:var(--pe)' };
+    return `<div class="head"><div><h1>Checklists y alertas</h1><p>Registros recibidos desde los equipos · hoy</p></div>
+      <div class="acc"><a class="btn s" href="#/alertas">${I.dl}Exportar a Excel</a></div></div>
+    <div class="agrid">
+      <div class="box"><div class="box-h"><h2>Registros de hoy</h2><div class="f"><span class="chip on">Todos</span><span class="chip">Vehículo</span><span class="chip">Fatiga</span><span class="chip">Equipos</span></div></div>
+        <table><tr><th>Hora</th><th>Equipo</th><th>Trabajador</th><th>Checklist</th><th>Resultado</th></tr>
+        ${R.map(r=>`<tr><td class="mut">${r[0]}</td><td><b>${r[1]}</b></td><td>${r[2]}</td><td>${r[3]}</td><td><span class="est ${cl[r[4]]}" style="${sty[r[4]]}"><i></i>${r[5]}</span></td></tr>`).join('')}</table></div>
+      <div class="box acard">
+        <span class="alrt">${I.alert.replace('<svg','<svg width="13"')}Alerta crítica · 07:41</span>
+        <h3>Conductor no apto para conducir</h3>
+        <p class="mut">Juan Pérez · CH-04 · Faena Quebrada Alta. Recibida por 4G a las 07:52 (el equipo estaba sin señal).</p>
+        <div class="obs"><b>Respuestas:</b><br>Menos de 5 horas de sueño<br>Somnolencia alta (4 de 5)<br>Más de 12 horas despierto<br>Bostezos y ojos pesados</div>
+        <div class="acts">
+          <a class="btn" href="#/alertas">Contactar al supervisor de turno</a>
+          <a class="btn s" href="#/vehiculo/CH-04">Ver vehículo y dashcam</a>
+          <a class="btn s" href="#/alertas">Marcar como gestionada</a>
+        </div>
+      </div>
+    </div>`;
+  },
+};
+
+function render(){
+  const h = (location.hash||'#/').slice(2).split('/');
+  let act='flota', html;
+  if (h[0]==='documentos'){ act='docs'; html=V.documentos(); }
+  else if (h[0]==='vehiculo'){ html=V.vehiculo(h[1]); }
+  else if (h[0]==='alertas'){ act='alertas'; html=V.alertas(); }
+  else html=V.flota();
+  document.getElementById('side').innerHTML = side(act);
+  document.getElementById('main').innerHTML = html;
+}
+addEventListener('hashchange', ()=>{ render(); scrollTo(0,0); });
+render();
+</script>
+</body>
+</html>
