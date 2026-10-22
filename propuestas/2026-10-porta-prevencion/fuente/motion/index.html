@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>PORTA · Cómo funciona</title>
+<style>
+:root{--n:#F26B1D;--n2:#FF8A3D;--g:#1C2126;--g2:#2A3138;--c:#F5F3EE;--ok:#2E9E5B;--mal:#D64541;--gris:#8C96A0}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:var(--g);font-family:Inter,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+.sc{position:absolute;inset:0;opacity:0;overflow:hidden}
+.abs{position:absolute}
+.bg{position:absolute;inset:-40px;background-size:cover;background-position:center}
+.velo{position:absolute;inset:0}
+.k{font-size:24px;font-weight:800;letter-spacing:.22em;color:var(--n)}
+h1{font-size:76px;line-height:1.04;letter-spacing:-.025em;font-weight:800}
+h2{font-size:60px;line-height:1.06;letter-spacing:-.02em;font-weight:800}
+p.l{font-size:32px;line-height:1.45;color:#c3cbd3}
+.paso{display:inline-flex;align-items:center;gap:14px;font-size:22px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--n)}
+.logo{display:flex;align-items:center;gap:22px;font-weight:800;letter-spacing:.16em}
+.logo i{display:grid;place-items:center;background:var(--n)}
+.chip{position:absolute;display:flex;align-items:center;gap:14px;background:#fff;color:var(--g);border-radius:18px;padding:16px 24px;font-size:28px;font-weight:700;box-shadow:0 20px 40px -18px rgba(0,0,0,.5)}
+.chip svg{width:34px;height:34px}
+.tag{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.08);border-radius:14px;padding:12px 20px;font-size:24px;font-weight:600}
+.tag i{width:12px;height:12px;border-radius:50%;background:var(--n)}
+.tel{position:absolute;width:300px;height:640px;border-radius:52px;padding:12px;background:linear-gradient(145deg,#3a4048,#15181c);box-shadow:0 0 0 2px #50565e inset,0 40px 80px -20px rgba(0,0,0,.6)}
+.tel .scr{position:relative;width:100%;height:100%;border-radius:42px;overflow:hidden;background:#0d1013}
+.tel .scr img{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;object-position:top}
+.tel .isl{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:86px;height:24px;background:#000;border-radius:99px;z-index:3}
+.ring{position:absolute;border-radius:50%;border:4px solid var(--n)}
+.check{width:40px;height:40px;border-radius:50%;background:var(--ok);display:grid;place-items:center}
+.check svg{width:24px;height:24px}
+.cap{position:absolute;left:0;right:0;text-align:center}
+.lbl{font-size:24px;line-height:1.5;color:#d5dbe0}
+.lbl div{display:flex;align-items:center;gap:12px}
+.lbl div:before{content:"";width:10px;height:10px;border-radius:50%;background:var(--n);flex:none}
+.frame{position:absolute;border-radius:22px;overflow:hidden;box-shadow:0 30px 60px -25px rgba(0,0,0,.7)}
+.frame img{width:100%;height:100%;object-fit:cover;display:block}
+.hud{position:absolute;font-family:"JetBrains Mono",monospace;color:#fff;text-shadow:0 1px 3px #000;font-size:22px}
+</style>
+</head>
+<body>
+
+<!-- ===== 1 · TÍTULO ===== -->
+<section class="sc" id="s1">
+  <div class="bg" id="s1bg" style="background-image:url(../../imagenes/ia/01-porta-bajo-retrovisor.png);background-position:60% center"></div>
+  <div class="velo" style="background:linear-gradient(90deg,rgba(20,24,28,.95) 0%,rgba(20,24,28,.85) 42%,rgba(20,24,28,.1) 80%)"></div>
+  <div class="abs" style="left:140px;top:270px;width:1050px">
+    <div class="logo" id="s1logo" style="font-size:54px"><i style="width:84px;height:84px;border-radius:22px"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M5 9a10 10 0 0 1 14 0"/><path d="M8 12.5a5.5 5.5 0 0 1 8 0"/><circle cx="12" cy="17" r="1.6" fill="#fff" stroke="none"/></svg></i>PORTA</div>
+    <h1 id="s1t" style="margin-top:46px">Documentación,<br>checklists y dashcam.</h1>
+    <p class="l" id="s1p" style="margin-top:28px;font-size:40px;color:#fff;font-weight:600">Siempre a bordo, <span style="color:var(--n2)">aunque no haya señal.</span></p>
+  </div>
+</section>
+
+<!-- ===== 2 · EL PROBLEMA ===== -->
+<section class="sc" id="s2" style="background:linear-gradient(180deg,#1C2126 0%,#2a2620 70%,#3b2e22 100%)">
+  <div class="abs" style="left:140px;top:110px">
+    <div class="paso">El problema</div>
+    <h2 style="margin-top:18px">En terreno, la señal<br>se pierde.</h2>
+  </div>
+  <div class="abs" id="s2sig" style="right:150px;top:120px;width:380px;background:rgba(255,255,255,.06);border-radius:24px;padding:26px 30px;display:flex;align-items:center;gap:26px">
+    <div style="display:flex;align-items:flex-end;gap:8px;height:60px">
+      <i class="bar" style="width:14px;height:18px;background:#fff;border-radius:3px"></i>
+      <i class="bar" style="width:14px;height:30px;background:#fff;border-radius:3px"></i>
+      <i class="bar" style="width:14px;height:44px;background:#fff;border-radius:3px"></i>
+      <i class="bar" style="width:14px;height:60px;background:#fff;border-radius:3px"></i>
+    </div>
+    <div style="position:relative;height:60px;flex:1">
+      <div id="s2ok" class="abs" style="top:10px;font-size:32px;font-weight:700">4G · Ciudad</div>
+      <div id="s2no" class="abs" style="top:10px;font-size:32px;font-weight:800;color:var(--mal);opacity:0">Sin servicio</div>
+    </div>
+  </div>
+  <svg class="abs" style="left:0;bottom:250px" width="1920" height="260" viewBox="0 0 1920 260">
+    <path d="M0 260 L0 170 L180 90 L330 160 L520 40 L700 150 L860 100 L1040 180 L1240 60 L1450 160 L1620 90 L1920 170 L1920 260Z" fill="#4a3a2c"/>
+    <path d="M0 260 L0 210 L260 150 L480 200 L760 140 L1000 210 L1300 150 L1600 210 L1920 160 L1920 260Z" fill="#5c4632"/>
+  </svg>
+  <div class="abs" style="left:0;right:0;bottom:0;height:250px;background:#6b513a"></div>
+  <div class="abs" style="left:0;right:0;bottom:150px;height:10px;background:repeating-linear-gradient(90deg,#d9c3a2 0 60px,transparent 60px 120px);opacity:.5"></div>
+  <svg class="abs" id="s2truck" style="left:0;bottom:150px" width="300" height="140" viewBox="0 0 300 140">
+    <path d="M20 60 L120 60 L140 20 L210 20 L240 60 L280 64 L284 100 L16 100 Z" fill="#F5F3EE"/>
+    <path d="M150 28 L205 28 L228 60 L140 60 Z" fill="#2A3138"/>
+    <rect x="186" y="34" width="14" height="9" rx="2" fill="#F26B1D"/>
+    <rect x="16" y="84" width="268" height="16" fill="#d8d4cc"/>
+    <circle cx="70" cy="104" r="22" fill="#1C2126"/><circle cx="70" cy="104" r="9" fill="#8C96A0"/>
+    <circle cx="230" cy="104" r="22" fill="#1C2126"/><circle cx="230" cy="104" r="9" fill="#8C96A0"/>
+    <rect x="270" y="66" width="12" height="10" rx="2" fill="#FFD27A"/>
+  </svg>
+  <div id="s2chips"></div>
+  <div class="cap" id="s2cap" style="bottom:50px;font-size:34px;font-weight:600;color:#fff">Procedimientos, contratos y checklists… <span style="color:var(--n2)">fuera de alcance.</span></div>
+</section>
+
+<!-- ===== 3 · EL EQUIPO (FOTO) ===== -->
+<section class="sc" id="s3">
+  <div class="bg" id="s3bg" style="background-image:url(../../imagenes/ia/01-porta-bajo-retrovisor.png);transform-origin:52% 52%"></div>
+  <div class="velo" style="background:linear-gradient(0deg,rgba(20,24,28,.92) 0%,rgba(20,24,28,.4) 30%,rgba(20,24,28,0) 55%)"></div>
+  <div class="abs" style="left:140px;bottom:90px;width:1640px">
+    <div class="paso" id="s3k">La solución</div>
+    <h2 id="s3t" style="margin-top:14px">PORTA va bajo el retrovisor, <span style="color:var(--n2)">como una dashcam.</span></h2>
+  </div>
+</section>
+
+<!-- ===== 3b · DOS CARAS ===== -->
+<section class="sc" id="s3b" style="background:radial-gradient(1300px 800px at 50% 40%,#2c333b 0%,#1C2126 65%)">
+  <div class="abs" style="left:140px;top:80px">
+    <div class="paso">El equipo</div>
+    <h2 style="margin-top:14px;font-size:54px">Más pequeño que un teléfono. Dos caras.</h2>
+  </div>
+  <div class="abs" id="s3front" style="left:140px;top:300px;width:344px">
+    <div style="font-size:22px;font-weight:700;letter-spacing:.12em;color:var(--gris);margin-bottom:18px">HACIA EL PARABRISAS</div>
+    <div id="s3frontsvg"></div>
+    <div class="lbl" style="margin-top:26px"><div>Cámara frontal (ruta)</div><div>Código QR hacia afuera</div></div>
+  </div>
+  <div class="abs" id="s3cabin" style="left:600px;top:300px;width:344px">
+    <div style="font-size:22px;font-weight:700;letter-spacing:.12em;color:var(--gris);margin-bottom:18px">HACIA LA CABINA</div>
+    <div id="s3cabinsvg"></div>
+    <div class="lbl" style="margin-top:26px"><div>Cámara interior infrarroja</div><div>NFC: acerca tu teléfono</div><div>Pantalla y luz de estado</div></div>
+  </div>
+  <!-- comparación de tamaño (4 px = 1 mm) -->
+  <div class="abs" id="s3size" style="left:1150px;top:250px;width:640px;height:660px">
+    <div class="abs" style="left:330px;top:0;width:288px;height:600px;border-radius:44px;border:4px dashed #6b7580"></div>
+    <div class="abs" style="left:330px;top:612px;width:288px;text-align:center;font-size:22px;color:var(--gris)">Teléfono · 150 mm</div>
+    <div class="abs" id="s3mini" style="left:0;top:392px;width:344px"></div>
+    <div class="abs" style="left:0;top:612px;width:344px;text-align:center;font-size:22px;color:var(--n2);font-weight:700">PORTA · 86 mm</div>
+  </div>
+  <div class="abs" id="s3chips" style="left:140px;top:870px;display:flex;gap:14px">
+    <span class="tag"><i></i>4G + GPS con SIM</span><span class="tag"><i></i>Raspberry Pi Zero 2 W</span><span class="tag"><i></i>Wi-Fi propio</span>
+  </div>
+</section>
+
+<!-- ===== 4 · PORTA CENTRAL ===== -->
+<section class="sc" id="s4" style="background:radial-gradient(1200px 800px at 30% 60%,#2c333b 0%,#1C2126 65%)">
+  <div class="abs" style="left:100px;top:70px">
+    <div class="paso">PORTA Central</div>
+    <h2 style="margin-top:14px;font-size:54px">Subes un documento en la oficina…</h2>
+  </div>
+  <img class="abs" id="s4nb" src="../../imagenes/mockups/notebook-central-02-documentos.png" style="left:40px;top:250px;width:1120px">
+  <div class="abs" id="s4pdf" style="left:0;top:0;width:96px;height:120px;background:#fff;border-radius:12px;box-shadow:0 20px 40px -10px rgba(0,0,0,.6);display:grid;place-items:center;color:#D64541;font-weight:800;font-size:26px">PDF<svg class="abs" style="right:-30px;bottom:-34px" width="44" height="44" viewBox="0 0 24 24"><path d="M5 3l14 8-6 2-3 6z" fill="#fff" stroke="#1C2126" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+  <div class="abs" id="s4pub" style="left:420px;top:780px;background:var(--n);border-radius:16px;padding:16px 28px;font-size:28px;font-weight:700;display:flex;align-items:center;gap:12px"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>Publicar a toda la flota</div>
+  <!-- torre 4G y flota -->
+  <div class="abs" style="left:1240px;top:250px;width:620px;height:760px">
+    <div class="abs" id="s4tower" style="left:250px;top:10px;width:120px;height:150px">
+      <svg width="120" height="150" viewBox="0 0 120 150"><path d="M60 40 L30 145 M60 40 L90 145 M42 100 L78 100 M36 122 L84 122" stroke="#c3cbd3" stroke-width="6" stroke-linecap="round" fill="none"/><circle cx="60" cy="36" r="12" fill="#F26B1D"/></svg>
+      <div class="abs" style="left:-40px;top:-6px;width:200px;text-align:center;font-size:22px;font-weight:800;color:var(--n2)">4G</div>
+    </div>
+    <div id="s4waves"></div>
+    <div id="s4fleet"></div>
+    <div class="abs" id="s4count" style="left:0;top:620px;width:620px;text-align:center"><b id="s4n" style="font-size:64px">0</b><span style="font-size:40px;font-weight:700;color:var(--gris)"> / 18</span><div style="font-size:24px;color:#c3cbd3;margin-top:2px">equipos actualizados</div></div>
+  </div>
+  <div class="cap" id="s4cap" style="bottom:42px;font-size:34px;font-weight:600">…y llega solo por 4G a cada vehículo. <span style="color:var(--n2)">Nunca hay que sacarlo.</span></div>
+</section>
+
+<!-- ===== 5 · RED LOCAL ===== -->
+<section class="sc" id="s5" style="background:radial-gradient(1100px 700px at 50% 55%,#2f2a24 0%,#1C2126 70%)">
+  <div class="abs" style="left:140px;top:90px">
+    <div class="paso">En terreno, sin señal</div>
+    <h2 style="margin-top:14px">PORTA enciende su propia red Wi-Fi.</h2>
+  </div>
+  <div id="s5rings"></div>
+  <div class="abs" id="s5dev" style="left:810px;top:470px;width:300px"></div>
+  <div class="abs" id="s5ssid" style="left:760px;top:330px;width:400px;text-align:center"><span style="display:inline-flex;align-items:center;gap:12px;background:#fff;color:#1C2126;border-radius:99px;padding:14px 28px;font-size:30px;font-weight:800"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#F26B1D" stroke-width="2.6" stroke-linecap="round"><path d="M3 9a13 13 0 0 1 18 0"/><path d="M6.5 12.5a8 8 0 0 1 11 0"/><circle cx="12" cy="17" r="1.8" fill="#F26B1D" stroke="none"/></svg>PORTA-CH04</span></div>
+  <div id="s5phones"></div>
+  <div class="cap" id="s5cap" style="bottom:60px;font-size:34px;font-weight:600">Sin datos móviles y <span style="color:var(--n2)">sin instalar ninguna app.</span></div>
+</section>
+
+<!-- ===== 6 · DOS FORMAS DE ENTRAR ===== -->
+<section class="sc" id="s6" style="background:#1C2126">
+  <div class="abs" style="left:100px;top:70px">
+    <div class="paso">Conectarse</div>
+    <h2 style="margin-top:14px;font-size:54px">Dos formas de entrar, sin escribir claves.</h2>
+  </div>
+  <div class="frame" id="s6foto" style="left:100px;top:240px;width:840px;height:560px"><img id="s6img" src="../../imagenes/ia/02-escaneo-qr-exterior.png"></div>
+  <div class="ring" id="s6ring" style="left:375px;top:445px;width:70px;height:70px"></div>
+  <div class="abs" id="s6capA" style="left:100px;top:830px;width:840px">
+    <div style="font-size:24px;font-weight:800;letter-spacing:.14em;color:var(--n2)">DESDE AFUERA</div>
+    <div style="font-size:36px;font-weight:700;margin-top:6px">Escanea el QR a través del vidrio</div>
+  </div>
+  <div class="abs" id="s6dev" style="left:1050px;top:300px;width:300px"></div>
+  <div id="s6nfc"></div>
+  <div class="tel" id="s6tel" style="left:1500px;top:330px"><div class="scr"><div class="isl"></div><img id="s6a" src="../capturas/01-bienvenida.png"><img id="s6b" src="../capturas/02-menu.png" style="opacity:0"></div></div>
+  <div class="abs" id="s6capB" style="left:1010px;top:560px;width:440px">
+    <div style="font-size:24px;font-weight:800;letter-spacing:.14em;color:var(--n2)">DESDE ADENTRO</div>
+    <div style="font-size:36px;font-weight:700;margin-top:6px;line-height:1.2">Acerca el teléfono al NFC</div>
+    <div style="font-size:26px;color:#c3cbd3;margin-top:14px">El menú se abre solo en el navegador.</div>
+  </div>
+</section>
+
+<!-- ===== 7 · CHECKLISTS ===== -->
+<section class="sc" id="s7" style="background:radial-gradient(1200px 800px at 70% 50%,#2c333b 0%,#1C2126 65%)">
+  <div class="abs" style="left:110px;top:300px;width:620px">
+    <div class="paso">Checklists</div>
+    <h2 style="margin-top:16px">Detecta el riesgo antes de salir.</h2>
+    <p class="l" style="margin-top:26px">Vehículo, fatiga y somnolencia, y equipos. Cada respuesta queda con nombre, fecha y hora.</p>
+  </div>
+  <div class="tel" id="s7a" style="left:780px;top:230px"><div class="scr"><div class="isl"></div><img src="../capturas/05-checklist-vehiculo.png"></div></div>
+  <div class="tel" id="s7b" style="left:1140px;top:200px"><div class="scr"><div class="isl"></div><img src="../capturas/06-checklist-fatiga.png"></div></div>
+  <div class="tel" id="s7c" style="left:1500px;top:230px"><div class="scr"><div class="isl"></div><img src="../capturas/08-resultado-fatiga.png"></div></div>
+  <div class="abs" id="s7alert" style="left:1420px;top:900px;width:460px;text-align:center"><span style="display:inline-flex;align-items:center;gap:12px;background:var(--mal);border-radius:99px;padding:14px 26px;font-size:26px;font-weight:700">⚠ No apto → avisa al supervisor</span></div>
+</section>
+
+<!-- ===== 8 · DASHCAM ===== -->
+<section class="sc" id="s8" style="background:#15181c">
+  <div class="abs" style="left:100px;top:70px">
+    <div class="paso">Dashcam doble</div>
+    <h2 style="margin-top:14px;font-size:54px">Graba la ruta y la cabina, todo el tiempo.</h2>
+  </div>
+  <div class="frame" id="s8f" style="left:100px;top:250px;width:840px;height:472px"><img id="s8fi" src="../central/img/cam-frontal.jpg"></div>
+  <div class="frame" id="s8c" style="left:980px;top:250px;width:840px;height:472px"><img id="s8ci" src="../central/img/cam-cabina.jpg"></div>
+  <div class="hud" style="left:126px;top:274px;display:flex;align-items:center;gap:10px;font-weight:700"><i class="recdot" style="width:16px;height:16px;border-radius:50%;background:#ff4d4d"></i>REC · FRONTAL</div>
+  <div class="hud" style="left:1006px;top:274px;display:flex;align-items:center;gap:10px;font-weight:700"><i class="recdot" style="width:16px;height:16px;border-radius:50%;background:#ff4d4d"></i>REC · CABINA IR</div>
+  <div class="hud ts" style="left:126px;top:676px">22-10-2026 07:03:18</div>
+  <div class="hud" style="left:700px;top:676px">42 km/h · GPS</div>
+  <div class="hud ts" style="left:1006px;top:676px">22-10-2026 07:03:18</div>
+  <div class="hud" style="left:1690px;top:676px">CH-04</div>
+  <div class="abs" id="s8btn" style="left:660px;top:800px;width:600px;height:96px;border-radius:24px;border:3px solid rgba(255,255,255,.25);display:grid;place-items:center;font-size:34px;font-weight:700">
+    <span id="s8b1" style="display:flex;align-items:center;gap:14px"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg>Marcar incidente</span>
+  </div>
+  <div class="abs" id="s8ok" style="left:560px;top:800px;width:800px;height:96px;border-radius:24px;background:var(--ok);display:grid;place-items:center;font-size:32px;font-weight:700;opacity:0">✓ Video guardado: 1 min antes y después</div>
+  <div class="cap" id="s8cap" style="bottom:56px;font-size:28px;color:#c3cbd3">Útil para investigar incidentes y para prevenir: la cámara interior se informa a los trabajadores.</div>
+</section>
+
+<!-- ===== 9 · ALERTA A LA CENTRAL ===== -->
+<section class="sc" id="s9" style="background:radial-gradient(1200px 800px at 30% 60%,#2c333b 0%,#1C2126 65%)">
+  <div class="abs" style="left:100px;top:70px">
+    <div class="paso">De vuelta con señal</div>
+    <h2 style="margin-top:14px;font-size:54px">La alerta llega sola a la central.</h2>
+  </div>
+  <img class="abs" id="s9nb" src="../../imagenes/mockups/notebook-central-04-alertas.png" style="left:40px;top:250px;width:1120px">
+  <div class="abs" id="s9toast" style="left:1230px;top:300px;width:600px;background:#fff;color:#1C2126;border-radius:24px;padding:28px 30px;box-shadow:0 30px 60px -20px rgba(0,0,0,.6)">
+    <div style="display:flex;align-items:center;gap:12px;font-size:20px;font-weight:800;letter-spacing:.1em;color:var(--mal)"><span style="width:14px;height:14px;border-radius:50%;background:var(--mal)"></span>ALERTA RECIBIDA POR 4G</div>
+    <div style="font-size:36px;font-weight:800;margin-top:12px;line-height:1.15">Conductor no apto para conducir</div>
+    <div style="font-size:24px;color:#6B7580;margin-top:10px">CH-04 · Juan Pérez · 07:41</div>
+  </div>
+  <div class="abs" id="s9steps" style="left:1230px;top:600px;width:600px;display:flex;flex-direction:column;gap:16px"></div>
+</section>
+
+<!-- ===== 10 · CIERRE ===== -->
+<section class="sc" id="s10">
+  <div class="bg" id="s10bg" style="background-image:url(../../imagenes/ia/01-porta-bajo-retrovisor.png)"></div>
+  <div class="velo" style="background:rgba(20,24,28,.88)"></div>
+  <div class="abs" style="left:0;right:0;top:170px;display:flex;flex-direction:column;align-items:center">
+    <div class="logo" id="s10logo" style="font-size:64px"><i style="width:96px;height:96px;border-radius:26px"><svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M5 9a10 10 0 0 1 14 0"/><path d="M8 12.5a5.5 5.5 0 0 1 8 0"/><circle cx="12" cy="17" r="1.6" fill="#fff" stroke="none"/></svg></i>PORTA</div>
+    <p class="l" id="s10sub" style="margin-top:30px;font-size:36px;color:#fff;text-align:center">La faena, siempre a bordo.</p>
+  </div>
+  <div class="abs" id="s10row" style="left:0;right:0;top:500px;display:flex;justify-content:center;gap:28px"></div>
+  <div class="cap" id="s10team" style="bottom:90px;font-size:26px;color:#aab3bc">Propuesta de innovación · Prevención de Riesgos</div>
+</section>
+
+<script>
+const T = 68.5;
+const anims = [], ticks = [];
+function A(el, tracks, opts={}){
+  if(typeof el==='string') el=document.querySelector(el);
+  tracks=tracks.slice();
+  if(tracks[0].t>0){ tracks.unshift({...tracks[0], t:0, easing:undefined}); }
+  if(tracks[tracks.length-1].t<T){ tracks.push({...tracks[tracks.length-1], t:T}); }
+  const kf = tracks.map(k=>{const o={offset:Math.min(1,Math.max(0,k.t/T))}; for(const p in k){ if(p!=='t' && k[p]!==undefined) o[p]=k[p]; } return o;});
+  const a = el.animate(kf, {duration:T*1000, fill:'both', ...opts});
+  a.pause(); anims.push(a); return a;
+}
+const E='cubic-bezier(.22,1,.36,1)';
+function scene(id,t0,t1,f=0.6){ A(id,[{t:Math.max(0,t0-f/2),opacity:0},{t:t0+f/2,opacity:1},{t:t1-f/2,opacity:1},{t:t1+f/2,opacity:0}]); }
+function inn(el,t,dy=40,d=0.8,out){ const k=[{t:t,opacity:0,transform:`translateY(${dy}px)`,easing:E},{t:t+d,opacity:1,transform:'translateY(0)'}]; if(out!=null) k.push({t:out,opacity:1,transform:'translateY(0)'},{t:out+0.4,opacity:0,transform:'translateY(0)'}); A(el,k); }
+function pop(el,t,d=0.6){ A(el,[{t:t,opacity:0,transform:'scale(.6)',easing:'cubic-bezier(.34,1.56,.64,1)'},{t:t+d,opacity:1,transform:'scale(1)'}]); }
+function counter(el,t0,t1,a,b){ el=document.querySelector(el); ticks.push(t=>{ const f=Math.max(0,Math.min(1,(t-t0)/(t1-t0))); const e=1-Math.pow(1-f,3); el.textContent=Math.round(a+(b-a)*e); }); }
+function blink(el,t0,t1,per=1){ const k=[]; for(let t=t0;t<t1;t+=per){ k.push({t:t,opacity:1},{t:t+per*0.5,opacity:1},{t:t+per*0.5+0.01,opacity:.2},{t:t+per-0.01,opacity:.2}); } A(el,k); }
+const div=(html,parent)=>{ const d=document.createElement('div'); d.innerHTML=html.trim(); const n=d.firstChild; document.querySelector(parent).appendChild(n); return n; };
+
+/* ---------- Equipo en SVG (escala 4 px = 1 mm: 344 × 208) ---------- */
+function qr(x,y,size){
+  const N=21, c=size/N; let s=`<rect x="${x-c}" y="${y-c}" width="${size+2*c}" height="${size+2*c}" rx="${c}" fill="#fff"/>`;
+  let seed=7; const rnd=()=>{ seed=(seed*16807)%2147483647; return seed/2147483647; };
+  const finder=(fx,fy)=>`<rect x="${x+fx*c}" y="${y+fy*c}" width="${7*c}" height="${7*c}" fill="#111"/><rect x="${x+(fx+1)*c}" y="${y+(fy+1)*c}" width="${5*c}" height="${5*c}" fill="#fff"/><rect x="${x+(fx+2)*c}" y="${y+(fy+2)*c}" width="${3*c}" height="${3*c}" fill="#111"/>`;
+  for(let i=0;i<N;i++) for(let j=0;j<N;j++){
+    const inF=(i<8&&j<8)||(i<8&&j>N-9)||(i>N-9&&j<8); if(inF) continue;
+    if(rnd()<0.48) s+=`<rect x="${(x+j*c).toFixed(2)}" y="${(y+i*c).toFixed(2)}" width="${(c+0.2).toFixed(2)}" height="${(c+0.2).toFixed(2)}" fill="#111"/>`;
+  }
+  return s+finder(0,0)+finder(N-7,0)+finder(0,N-7);
+}
+const BODY = `<rect x="0" y="0" width="344" height="208" rx="46" fill="#F26B1D"/>
+  <g stroke="#e05f14" stroke-width="1" opacity=".55">${Array.from({length:40},(_,i)=>`<line x1="10" x2="334" y1="${6+i*5}" y2="${6+i*5}"/>`).join('')}</g>
+  <rect x="16" y="16" width="312" height="176" rx="34" fill="#2A3138"/>`;
+const lens = (cx,cy,r,ir) => `<circle cx="${cx}" cy="${cy}" r="${r+12}" fill="#14181c"/><circle cx="${cx}" cy="${cy}" r="${r}" fill="#0a0d10" stroke="#3b434c" stroke-width="3"/>
+  <circle cx="${cx}" cy="${cy}" r="${r*0.62}" fill="#1b3a5c"/><circle cx="${cx}" cy="${cy}" r="${r*0.3}" fill="#08121d"/><circle cx="${cx-r*0.28}" cy="${cy-r*0.3}" r="${r*0.14}" fill="#9cc6f0" opacity=".8"/>
+  ${ir?Array.from({length:6},(_,i)=>{const a=i/6*Math.PI*2;return `<circle cx="${cx+Math.cos(a)*(r+6)}" cy="${cy+Math.sin(a)*(r+6)}" r="4" fill="#6b1b1b"/>`;}).join(''):''}`;
+const DEV_FRONT = () => `<svg viewBox="0 0 344 208" width="100%">${BODY}
+  ${lens(98,104,40,false)}
+  ${qr(190,44,104)}
+  <text x="242" y="178" text-anchor="middle" font-family="Inter" font-weight="700" font-size="13" fill="#c3cbd3">Escanea para conectarte</text></svg>`;
+const DEV_CABIN = (rec=true) => `<svg viewBox="0 0 344 208" width="100%">${BODY}
+  <rect x="44" y="40" width="150" height="32" rx="6" fill="#06080a"/>
+  <text x="58" y="62" font-family="Inter" font-weight="800" font-size="17" letter-spacing="1.5" fill="#FF8A3D">PORTA</text>
+  <circle cx="140" cy="56" r="6" fill="${rec?'#ff4d4d':'#2E9E5B'}"/><text x="152" y="62" font-family="Inter" font-weight="800" font-size="15" fill="#e8ecef">${rec?'REC':'OK'}</text>
+  <g fill="none" stroke="#F5F3EE" stroke-width="6" stroke-linecap="round"><path d="M86 104a18 18 0 0 1 0 28"/><path d="M100 94a32 32 0 0 1 0 48"/><path d="M114 84a46 46 0 0 1 0 68"/></g>
+  <circle cx="70" cy="118" r="7" fill="#F5F3EE"/>
+  <text x="44" y="178" font-family="Inter" font-weight="700" font-size="14" fill="#c3cbd3">Acerca tu teléfono</text>
+  ${lens(262,110,36,true)}
+  <circle cx="300" cy="44" r="6" fill="#2E9E5B"/></svg>`;
+const MOUNT = `<svg viewBox="0 0 344 120" width="100%"><rect x="0" y="0" width="344" height="60" rx="30" fill="#30363d"/><rect x="18" y="12" width="308" height="36" rx="18" fill="#3b424a"/><rect x="160" y="60" width="24" height="44" fill="#14181c"/><circle cx="172" cy="108" r="14" fill="#14181c"/></svg>`;
+
+const ICON = {
+  doc:'<svg viewBox="0 0 24 24" fill="none" stroke="#2F5D9E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>',
+  user:'<svg viewBox="0 0 24 24" fill="none" stroke="#6A3FA0" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
+  warn:'<svg viewBox="0 0 24 24" fill="none" stroke="#9A6B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>',
+  list:'<svg viewBox="0 0 24 24" fill="none" stroke="#2E9E5B" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg>',
+  ok:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+};
+const TRUCK = `<svg viewBox="0 0 300 130" width="100%"><path d="M20 60 L120 60 L140 20 L210 20 L240 60 L280 64 L284 100 L16 100 Z" fill="#F5F3EE"/><path d="M150 28 L205 28 L228 60 L140 60 Z" fill="#2A3138"/><rect x="186" y="34" width="16" height="10" rx="2" fill="#F26B1D"/><circle cx="70" cy="104" r="22" fill="#0f1215"/><circle cx="70" cy="104" r="9" fill="#8C96A0"/><circle cx="230" cy="104" r="22" fill="#0f1215"/><circle cx="230" cy="104" r="9" fill="#8C96A0"/></svg>`;
+
+/* ---------- 1 · Título (0–5.5) ---------- */
+scene('#s1',0,5.5);
+A('#s1bg',[{t:0,transform:'scale(1.02)'},{t:6,transform:'scale(1.12) translateX(-30px)'}]);
+inn('#s1logo',0.4); inn('#s1t',1.0,50,1); inn('#s1p',2.0,30,0.9);
+
+/* ---------- 2 · Problema (5.5–12) ---------- */
+scene('#s2',5.5,12);
+A('#s2truck',[{t:5.5,transform:'translateX(-320px)'},{t:12.2,transform:'translateX(1700px)'}]);
+inn('#s2sig',5.9,-30);
+document.querySelectorAll('#s2 .bar').forEach((b,i)=>{ const tt=7.1+(3-i)*0.35; A(b,[{t:tt,opacity:1},{t:tt+0.2,opacity:.18}]); });
+A('#s2ok',[{t:8.3,opacity:1},{t:8.6,opacity:0}]);
+A('#s2no',[{t:8.5,opacity:0,transform:'scale(.8)'},{t:8.9,opacity:1,transform:'scale(1)'}]);
+[['Procedimientos','doc',150,470],['Contratos','user',560,440],['Hojas de seguridad','warn',940,470],['Checklists','list',1400,440]].forEach(([n,ic,x,y],i)=>{
+  const c=div(`<div class="chip" style="left:${x}px;top:${y}px">${ICON[ic]}${n}<span class="nx" style="position:absolute;right:-14px;top:-14px;width:40px;height:40px;border-radius:50%;background:#D64541;display:grid;place-items:center;opacity:0"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></div>`,'#s2chips');
+  inn(c,6.3+i*0.25,30,0.7);
+  A(c,[{t:9.1+i*0.15,filter:'grayscale(0) opacity(1)'},{t:9.6+i*0.15,filter:'grayscale(1) opacity(.55)'}]);
+  pop(c.querySelector('.nx'),9.2+i*0.15,0.45);
+});
+inn('#s2cap',9.9,24);
+
+/* ---------- 3 · Foto bajo el retrovisor (12–16.5) ---------- */
+scene('#s3',12,16.5);
+A('#s3bg',[{t:12,transform:'scale(1.0)'},{t:16.8,transform:'scale(1.22)'}]);
+inn('#s3k',12.6,30); inn('#s3t',12.9,40,0.9);
+
+/* ---------- 3b · Dos caras (16.5–23) ---------- */
+scene('#s3b',16.5,23);
+document.querySelector('#s3frontsvg').innerHTML=DEV_FRONT();
+document.querySelector('#s3cabinsvg').innerHTML=DEV_CABIN();
+document.querySelector('#s3mini').innerHTML=DEV_CABIN();
+inn('#s3front',17.0,40); inn('#s3cabin',17.6,40);
+inn('#s3size',18.6,40);
+inn('#s3chips',19.6,30);
+
+/* ---------- 4 · PORTA Central (23–31) ---------- */
+scene('#s4',23,31);
+inn('#s4nb',23.3,40,0.9);
+A('#s4pdf',[{t:23.9,opacity:0,transform:'translate(200px,980px) rotate(-8deg)'},{t:24.2,opacity:1,transform:'translate(200px,960px) rotate(-8deg)',easing:'cubic-bezier(.45,0,.55,1)'},{t:25.4,opacity:1,transform:'translate(540px,420px) rotate(0deg)'},{t:25.7,opacity:1,transform:'translate(540px,420px) scale(.92)'},{t:26.0,opacity:0,transform:'translate(540px,420px) scale(.4)'}]);
+pop('#s4pub',25.9,0.5);
+A('#s4pub',[{t:26.6,boxShadow:'0 0 0 0 rgba(242,107,29,.7)'},{t:27.3,boxShadow:'0 0 0 30px rgba(242,107,29,0)'}],{composite:'add'});
+inn('#s4tower',24.2,30);
+for(let i=0;i<4;i++){
+  const w=div(`<div class="ring" style="left:${310-60}px;top:${46-60}px;width:120px;height:120px;border-color:#FF8A3D;opacity:0"></div>`,'#s4waves');
+  const t0=26.5+i*0.7;
+  A(w,[{t:t0,opacity:0,transform:'scale(.3)'},{t:t0+0.1,opacity:.9,transform:'scale(.4)'},{t:t0+1.6,opacity:0,transform:'scale(4)'}]);
+}
+const pos=[[20,230],[220,230],[420,230],[20,420],[220,420],[420,420]];
+pos.forEach(([x,y],i)=>{
+  const tr=div(`<div class="abs" style="left:${x}px;top:${y}px;width:180px;opacity:0">${TRUCK}<span class="check" style="position:absolute;right:-6px;top:-14px;opacity:0">${ICON.ok}</span></div>`,'#s4fleet');
+  inn(tr,24.4+i*0.12,20,0.6);
+  pop(tr.querySelector('.check'),27.0+i*0.4,0.45);
+});
+inn('#s4count',26.6,20); counter('#s4n',26.8,29.6,0,11);
+inn('#s4cap',27.6,24);
+
+/* ---------- 5 · Red local (31–36) ---------- */
+scene('#s5',31,36);
+document.querySelector('#s5dev').innerHTML=DEV_CABIN();
+inn('#s5dev',31.3,30);
+for(let i=0;i<5;i++){
+  const r=div(`<div class="ring" style="left:${960-150}px;top:${575-150}px;width:300px;height:300px;opacity:0"></div>`,'#s5rings');
+  const t0=32.0+i*0.75;
+  A(r,[{t:t0,opacity:0,transform:'scale(.5)'},{t:t0+0.1,opacity:.8,transform:'scale(.6)'},{t:t0+2.2,opacity:0,transform:'scale(3.4)'}]);
+}
+pop('#s5ssid',32.2,0.5);
+[[250,420],[1480,400],[420,760],[1350,770]].forEach(([x,y],i)=>{
+  const p=div(`<div class="abs" style="left:${x}px;top:${y}px;width:120px;height:200px;border-radius:24px;background:linear-gradient(145deg,#3a4048,#15181c);box-shadow:0 0 0 2px #50565e inset;display:grid;place-items:center;opacity:0"><div style="width:96px;height:176px;border-radius:16px;background:#F5F3EE;display:grid;place-items:center"><span class="check">${ICON.ok}</span></div></div>`,'#s5phones');
+  inn(p,32.8+i*0.35,30,0.6);
+});
+inn('#s5cap',33.6,24);
+
+/* ---------- 6 · Dos formas de entrar (36–44) ---------- */
+scene('#s6',36,44);
+inn('#s6foto',36.3,40,0.9);
+A('#s6img',[{t:36,transform:'scale(1.0)'},{t:44,transform:'scale(1.08)'}]);
+for(let k=0;k<3;k++) A(document.querySelectorAll('#s6ring')[0],[{t:37.4,opacity:0,transform:'scale(.6)'},{t:37.6,opacity:1,transform:'scale(1)'},{t:38.3,opacity:0,transform:'scale(1.8)'},{t:38.4,opacity:0,transform:'scale(.6)'},{t:38.6,opacity:1,transform:'scale(1)'},{t:39.3,opacity:0,transform:'scale(1.8)'}]);
+inn('#s6capA',37.2,30);
+document.querySelector('#s6dev').innerHTML=MOUNT+DEV_CABIN();
+inn('#s6dev',38.4,30);
+A('#s6tel',[{t:38.6,opacity:0,transform:'translate(60px,140px)'},{t:39.3,opacity:1,transform:'translate(0,60px)',easing:E},{t:40.2,opacity:1,transform:'translate(-90px,-40px) rotate(-6deg)',easing:E},{t:41.4,opacity:1,transform:'translate(-90px,-40px) rotate(-6deg)'},{t:42.2,opacity:1,transform:'translate(0,0) rotate(0deg)',easing:E}]);
+for(let i=0;i<3;i++){
+  const r=div(`<div class="ring" style="left:${1200-60}px;top:${500-60}px;width:120px;height:120px;border-color:#FF8A3D;opacity:0"></div>`,'#s6nfc');
+  const t0=40.3+i*0.35;
+  A(r,[{t:t0,opacity:0,transform:'scale(.4)'},{t:t0+0.1,opacity:1,transform:'scale(.5)'},{t:t0+1.0,opacity:0,transform:'scale(2.2)'}]);
+}
+A('#s6b',[{t:41.6,opacity:0},{t:42.1,opacity:1}]);
+inn('#s6capB',38.9,30);
+
+/* ---------- 7 · Checklists (44–50.5) ---------- */
+scene('#s7',44,50.5);
+inn('#s7a',44.4,60,0.9); inn('#s7b',44.8,60,0.9); inn('#s7c',45.4,60,0.9);
+A('#s7c',[{t:46.8,boxShadow:'0 0 0 2px #50565e inset,0 40px 80px -20px rgba(0,0,0,.6)'},{t:47.4,boxShadow:'0 0 0 2px #50565e inset,0 0 0 10px rgba(214,69,65,.6)'}]);
+pop('#s7alert',47.4,0.5);
+
+/* ---------- 8 · Dashcam (50.5–56.5) ---------- */
+scene('#s8',50.5,56.5);
+inn('#s8f',50.8,40,0.8); inn('#s8c',51.1,40,0.8);
+A('#s8fi',[{t:50.5,transform:'scale(1.05)'},{t:56.5,transform:'scale(1.14) translateY(-6px)'}]);
+A('#s8ci',[{t:50.5,transform:'scale(1.02)'},{t:56.5,transform:'scale(1.06)'}]);
+document.querySelectorAll('#s8 .recdot').forEach(d=>blink(d,50.5,56.6,1));
+document.querySelectorAll('#s8 .ts').forEach(el=>ticks.push(t=>{ const s=18+Math.max(0,Math.floor(t-50.5)); el.textContent=`22-10-2026 07:03:${String(s).padStart(2,'0')}`; }));
+inn('#s8btn',52.0,30);
+A('#s8btn',[{t:53.3,transform:'scale(1)',background:'rgba(255,255,255,0)'},{t:53.45,transform:'scale(.95)',background:'rgba(255,255,255,.18)'},{t:53.6,transform:'scale(1)',background:'rgba(255,255,255,0)'},{t:53.8,opacity:1},{t:54.0,opacity:0}]);
+pop('#s8ok',53.8,0.5);
+inn('#s8cap',54.4,20);
+
+/* ---------- 9 · Alerta en la central (56.5–62.5) ---------- */
+scene('#s9',56.5,62.5);
+inn('#s9nb',56.8,40,0.9);
+A('#s9toast',[{t:57.6,opacity:0,transform:'translateX(120px)',easing:E},{t:58.3,opacity:1,transform:'translateX(0)'}]);
+[['Supervisor contacta al conductor por radio','#F26B1D'],['Relevo de conductor y descanso','#F26B1D'],['Registro guardado para seguimiento','#2E9E5B']].forEach(([t,c],i)=>{
+  const s=div(`<div style="display:flex;align-items:center;gap:16px;font-size:28px;font-weight:600;opacity:0"><span class="check" style="background:${c};flex:none">${ICON.ok}</span>${t}</div>`,'#s9steps');
+  inn(s,59.2+i*0.6,20,0.6);
+});
+
+/* ---------- 10 · Cierre (62.5–68.5) ---------- */
+scene('#s10',62.5,69.2);
+A('#s10bg',[{t:62.5,transform:'scale(1.04)'},{t:68.5,transform:'scale(1.12)'}]);
+inn('#s10logo',62.9); inn('#s10sub',63.4,24);
+[['Funciona sin señal','<path d="M2 20h2M7 20v-3M12 20v-7M17 20V9"/><path d="M4 4l16 16" stroke="#D64541"/>'],['Sin instalar apps','<rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10 18h4"/>'],['Dashcam doble','<rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/>'],['Actualización remota 4G','<path d="M20 12a8 8 0 0 1-14 5.3M4 12a8 8 0 0 1 14-5.3"/><path d="M18 3v4h-4M6 21v-4h4"/>']].forEach(([t,svg],i)=>{
+  const b=div(`<div style="width:370px;background:rgba(255,255,255,.07);border-radius:26px;padding:34px 24px;text-align:center;position:relative;opacity:0"><svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#FF8A3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${svg}</svg><div style="font-size:29px;font-weight:700;margin-top:18px">${t}</div><span class="check" style="position:absolute;right:18px;top:18px">${ICON.ok}</span></div>`,'#s10row');
+  inn(b,64.0+i*0.3,40);
+});
+inn('#s10team',65.6,20);
+
+/* ---------- API de render ---------- */
+window.seek = function(t){ for(const a of anims){ a.currentTime=Math.min(t,T-0.001)*1000; } for(const f of ticks) f(t); };
+window.TOTAL = T;
+window.ready = Promise.all([document.fonts.ready, ...Array.from(document.images).map(i=>i.complete?Promise.resolve():new Promise(r=>{i.onload=r;i.onerror=r;})), ...['../../imagenes/ia/01-porta-bajo-retrovisor.png'].map(s=>new Promise(r=>{const im=new Image();im.onload=r;im.onerror=r;im.src=s;}))]);
+window.seek(0);
+</script>
+</body>
+</html>

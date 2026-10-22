@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>PORTA · concepto de montaje</title>
+<style>
+*{margin:0;box-sizing:border-box}
+body{width:1920px;height:1080px;overflow:hidden;background:#1C2126;font-family:Inter,sans-serif;color:#fff}
+.wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:110px 40px 40px;height:100%}
+.p{position:relative;border-radius:18px;overflow:hidden;background:#000}
+canvas{display:block;width:100%;height:100%}
+.tag{position:absolute;left:22px;top:20px;background:rgba(28,33,38,.82);padding:12px 16px;border-radius:12px}
+.tag b{display:block;font-size:22px}
+.tag span{font-size:15px;color:#c3cbd2}
+h1{position:absolute;left:44px;top:30px;font-size:34px;letter-spacing:-.01em}
+h1 em{font-style:normal;color:#FF8A3D}
+.dim{position:absolute;right:44px;top:40px;font-size:18px;color:#c3cbd2}
+.dim b{color:#fff}
+</style>
+<script type="importmap">
+{ "imports": { "three": "./node_modules/three/build/three.module.js", "three/addons/": "./node_modules/three/examples/jsm/" } }
+</script>
+</head>
+<body>
+<h1>PORTA · <em>concepto de montaje</em> para validar</h1>
+<div class="dim">Tamaño aprox.: <b>7 × 4 × 3 cm</b> · abrazado al pie del retrovisor</div>
+<div class="wrap">
+  <div class="p"><canvas id="cIn"></canvas><div class="tag"><b>Desde la cabina</b><span>NFC “acerca tu teléfono” + cámara interior</span></div></div>
+  <div class="p"><canvas id="cOut"></canvas><div class="tag"><b>Desde afuera, a través del vidrio</b><span>Código QR + cámara frontal</span></div></div>
+</div>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+const qr = await (await fetch('qr.json')).json();
+const NARANJO = 0xF26B1D, GRAFITO = 0x2A3138;
+const TH = THREE.MathUtils.degToRad(32);           // inclinación del parabrisas respecto de la vertical
+const U = new THREE.Vector3(0, Math.cos(TH), Math.sin(TH));   // dirección "hacia arriba" sobre el vidrio
+const N = new THREE.Vector3(0, -Math.sin(TH), Math.cos(TH));  // normal del vidrio hacia la cabina
+
+/* ---------- texturas dibujadas ---------- */
+function tex(w, h, draw) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  draw(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
+}
+const rr = (g, x, y, w, h, r) => { g.beginPath(); g.roundRect(x, y, w, h, r); };
+// cara de cabina: zona NFC naranja + texto
+const texCabina = tex(1400, 740, (g, w, h) => {
+  g.fillStyle = '#2A3138'; g.fillRect(0, 0, w, h);
+  rr(g, 520, 70, 820, 600, 70); g.fillStyle = '#F26B1D'; g.fill();
+  g.strokeStyle = '#fff'; g.lineWidth = 26; g.lineCap = 'round';
+  const cx = 800, cy = 330;
+  g.beginPath(); g.arc(cx - 60, cy, 18, 0, Math.PI * 2); g.fillStyle = '#fff'; g.fill();
+  for (const r of [70, 130, 190]) { g.beginPath(); g.arc(cx - 60, cy, r, -0.85, 0.85); g.stroke(); }
+  g.fillStyle = '#fff'; g.font = '700 64px Inter'; g.textAlign = 'center';
+  g.fillText('Acerca tu', 1150, 300); g.fillText('teléfono', 1150, 380);
+  g.font = '800 52px Inter'; g.fillStyle = 'rgba(255,255,255,.9)'; g.fillText('P O R T A', 930, 610);
+  g.font = '600 32px Inter'; g.fillStyle = '#aab3bc'; g.textAlign = 'center'; g.fillText('CÁMARA INTERIOR', 260, 650);
+});
+// cara al vidrio: QR + cámara frontal
+const texVidrio = tex(1400, 740, (g, w, h) => {
+  g.fillStyle = '#2A3138'; g.fillRect(0, 0, w, h);
+  rr(g, 640, 30, 700, 680, 46); g.fillStyle = '#fff'; g.fill();
+  const n = qr.size, s = 520 / n, ox = 730, oy = 60;
+  g.fillStyle = '#111';
+  for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) if (qr.data[i * n + j]) g.fillRect(ox + j * s, oy + i * s, s + .5, s + .5);
+  g.fillStyle = '#F26B1D'; g.font = '800 44px Inter'; g.textAlign = 'center'; g.fillText('PORTA', 990, 630);
+  g.fillStyle = '#555'; g.font = '600 28px Inter'; g.fillText('Escanea para conectarte', 990, 675);
+  g.fillStyle = '#aab3bc'; g.font = '600 32px Inter'; g.fillText('CÁMARA FRONTAL', 300, 640);
+});
+// polvo y reflejo sutil sobre el parabrisas (para que el vidrio se lea)
+const texPolvo = tex(1024, 512, (g, w, h) => {
+  const gr = g.createLinearGradient(0, 0, w, h); gr.addColorStop(0, 'rgba(255,255,255,.35)'); gr.addColorStop(.5, 'rgba(255,255,255,.06)'); gr.addColorStop(1, 'rgba(255,255,255,.22)');
+  g.fillStyle = gr; g.fillRect(0, 0, w, h);
+  for (let i = 0; i < 1800; i++) { g.fillStyle = `rgba(235,225,205,${Math.random() * .25})`; g.beginPath(); g.arc(Math.random() * w, Math.random() * h, Math.random() * .7 + .2, 0, 7); g.fill(); }
+  for (let y = 0; y < 26; y += 4) for (let x = 0; x < w; x += 7) { g.fillStyle = `rgba(10,10,10,${.9 - y / 30})`; g.beginPath(); g.arc(x + (y % 8 ? 3 : 0), h * .78 - 26 + y, 2.4 - y / 14, 0, 7); g.fill(); }
+});
+// paisaje del desierto (fondo exterior)
+const texDesierto = tex(2048, 1024, (g, w, h) => {
+  const sky = g.createLinearGradient(0, 0, 0, h * .6); sky.addColorStop(0, '#7fa6c9'); sky.addColorStop(1, '#e7d8bf');
+  g.fillStyle = sky; g.fillRect(0, 0, w, h);
+  g.filter = 'blur(10px)';
+  g.fillStyle = '#b48f6c'; g.beginPath(); g.moveTo(0, 560);
+  for (let x = 0; x <= w; x += 64) g.lineTo(x, 520 - 70 * Math.sin(x / 260) - 40 * Math.sin(x / 90)); g.lineTo(w, h); g.lineTo(0, h); g.fill();
+  g.fillStyle = '#d5b48c'; g.fillRect(0, 640, w, h);
+  g.fillStyle = '#c4a27a'; g.beginPath(); g.moveTo(w * .45, 640); g.lineTo(w * .55, 640); g.lineTo(w * .9, h); g.lineTo(w * .1, h); g.fill();
+});
+// cabina vista desde afuera (fondo oscuro con asientos)
+const texCabinaFondo = tex(1024, 512, (g, w, h) => {
+  g.fillStyle = '#26292c'; g.fillRect(0, 0, w, h);
+  g.filter = 'blur(14px)'; g.fillStyle = '#4a4d50';
+  rr(g, 150, 140, 260, 420, 60); g.fill(); rr(g, 620, 140, 260, 420, 60); g.fill();
+  g.fillStyle = '#3a3d40'; rr(g, 200, 60, 160, 120, 40); g.fill(); rr(g, 670, 60, 160, 120, 40); g.fill();
+});
+
+/* ---------- escena ---------- */
+const scene = new THREE.Scene();
+const mat = (c, r = .7, m = 0) => new THREE.MeshStandardMaterial({ color: c, roughness: r, metalness: m });
+const at = (d) => U.clone().multiplyScalar(d);       // punto sobre el vidrio a "d" cm desde la base
+
+// parabrisas
+const glass = new THREE.Mesh(new THREE.PlaneGeometry(160, 70),
+  new THREE.MeshPhysicalMaterial({ color: 0xdfeef2, map: texPolvo, roughness: .08, metalness: 0, transparent: true, opacity: .55, envMapIntensity: 2, side: THREE.DoubleSide, depthWrite: false }));
+glass.position.copy(at(0)); glass.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), N); scene.add(glass);
+// banda cerámica negra superior del vidrio
+const frit = new THREE.Mesh(new THREE.PlaneGeometry(160, 7), mat(0x111111, .6));
+frit.position.copy(at(31.5)).addScaledVector(N, -.02); frit.quaternion.copy(glass.quaternion); scene.add(frit);
+// techo (forro)
+const techo = new THREE.Mesh(new THREE.PlaneGeometry(160, 80), mat(0xb8b0a2, .95));
+techo.rotation.x = Math.PI / 2; techo.position.set(0, at(35).y, at(35).z + 40); scene.add(techo);
+
+// espejo retrovisor: base pegada al vidrio + brazo + cuerpo
+const espejo = new THREE.Group(); scene.add(espejo);
+const baseE = new THREE.Mesh(new RoundedBoxGeometry(3.2, 4.5, 1.2, 3, .4), mat(0x1a1a1a, .6));
+baseE.position.copy(at(27)).addScaledVector(N, .6); baseE.quaternion.copy(glass.quaternion); espejo.add(baseE);
+const brazo = new THREE.Mesh(new THREE.CylinderGeometry(.55, .55, 7, 16), mat(0x1a1a1a, .5));
+const pIni = baseE.position.clone(), pFin = pIni.clone().add(new THREE.Vector3(0, -3, 3.2));
+brazo.position.copy(pIni).lerp(pFin, .5); brazo.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), pFin.clone().sub(pIni).normalize()); espejo.add(brazo);
+const cuerpoE = new THREE.Mesh(new RoundedBoxGeometry(26, 7.2, 3.2, 6, 1.4), mat(0x1c1c1c, .45));
+cuerpoE.position.copy(pFin).add(new THREE.Vector3(0, -1.2, 1.4)); espejo.add(cuerpoE);
+const cristalE = new THREE.Mesh(new RoundedBoxGeometry(24.6, 6, .2, 4, .9), new THREE.MeshStandardMaterial({ color: 0x9aa3ab, roughness: .03, metalness: 1 }));
+cristalE.position.copy(cuerpoE.position).add(new THREE.Vector3(0, 0, 1.55)); espejo.add(cristalE);
+
+// PORTA: caja compacta abrazada al pie del espejo, colgando justo bajo el retrovisor
+const porta = new THREE.Group(); scene.add(porta);
+const W = 7, H = 4, D = 2.8;
+const cuerpo = new THREE.Mesh(new RoundedBoxGeometry(W, H, D, 6, .55), new THREE.MeshPhysicalMaterial({ color: GRAFITO, roughness: .55, clearcoat: .15 }));
+porta.add(cuerpo);
+// cara a la cabina: NFC naranjo + cámara interior
+const caraIn = new THREE.Mesh(new THREE.PlaneGeometry(W - .6, H - .6), new THREE.MeshStandardMaterial({ map: texCabina, roughness: .5 }));
+caraIn.position.z = D / 2 + .005; porta.add(caraIn);
+const lente = (r) => { const g = new THREE.Group();
+  const aro = new THREE.Mesh(new THREE.CylinderGeometry(r, r, .3, 40), mat(0x0b0b0b, .25, .4)); aro.rotation.x = Math.PI / 2; g.add(aro);
+  const vid = new THREE.Mesh(new THREE.SphereGeometry(r * .62, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshPhysicalMaterial({ color: 0x1b2a44, roughness: .02, metalness: .2, clearcoat: 1 }));
+  vid.rotation.x = Math.PI / 2; vid.position.z = .15; g.add(vid); return g; };
+const lIn = lente(.6); lIn.position.set(-2.15, .15, D / 2 + .1); porta.add(lIn);
+for (let i = 0; i < 6; i++) { const a = i / 6 * Math.PI * 2;
+  const led = new THREE.Mesh(new THREE.SphereGeometry(.08, 12, 8), new THREE.MeshStandardMaterial({ color: 0x401010, emissive: 0x7a1010, emissiveIntensity: .8 }));
+  led.position.set(-2.15 + Math.cos(a) * .9, .15 + Math.sin(a) * .9, D / 2 + .05); porta.add(led); }
+const ledOk = new THREE.Mesh(new THREE.SphereGeometry(.1, 12, 8), new THREE.MeshStandardMaterial({ color: 0x2E9E5B, emissive: 0x39d47a, emissiveIntensity: 2 }));
+ledOk.position.set(W / 2 - .65, H / 2 - .6, D / 2 + .05); porta.add(ledOk);
+// cara al parabrisas: QR + cámara frontal (se ve desde afuera a través del vidrio)
+const caraOut = new THREE.Mesh(new THREE.PlaneGeometry(W - .6, H - .6), new THREE.MeshStandardMaterial({ map: texVidrio, roughness: .5 }));
+caraOut.position.z = -D / 2 - .005; caraOut.rotation.y = Math.PI; porta.add(caraOut);
+const lOut = lente(.72); lOut.rotation.y = Math.PI; lOut.position.set(2.05, .15, -D / 2 - .1); porta.add(lOut);
+// ubicación: bajo el espejo, a media profundidad del brazo
+const yBase = cuerpoE.position.y - 3.6 - .35 - H / 2;
+const pMed = pIni.clone().lerp(pFin, .55);
+porta.position.set(0, yBase, pMed.z - .6);
+// abrazadera en el brazo + soporte que baja por detrás del espejo
+const graf = new THREE.MeshPhysicalMaterial({ color: GRAFITO, roughness: .5 });
+const abraz = new THREE.Mesh(new THREE.CylinderGeometry(.95, .95, 1.6, 32, 1, true), graf);
+abraz.position.copy(pMed); abraz.quaternion.copy(brazo.quaternion); scene.add(abraz);
+const tapa = new THREE.Mesh(new THREE.TorusGeometry(.95, .12, 10, 32), mat(NARANJO, .5));
+tapa.position.copy(pMed); tapa.quaternion.copy(brazo.quaternion).multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 2)); scene.add(tapa);
+const altoSop = pMed.y - .8 - (yBase + H / 2) + .3;
+const soporte = new THREE.Mesh(new RoundedBoxGeometry(1.5, altoSop, .55, 3, .2), graf);
+soporte.position.set(0, yBase + H / 2 + altoSop / 2 - .2, pMed.z - .6); scene.add(soporte);
+// cable hacia el techo, siguiendo el brazo
+const pCab = new THREE.Vector3(.9, yBase + H / 2 + .1, pMed.z - .9);
+const curva = new THREE.CatmullRomCurve3([pCab, pCab.clone().add(new THREE.Vector3(.1, 2.5, -.3)), pMed.clone().add(new THREE.Vector3(.9, .6, -.8)), pIni.clone().add(new THREE.Vector3(1.9, .5, -.2)), at(34).add(new THREE.Vector3(2.5, 0, 0)).addScaledVector(N, .3)]);
+scene.add(new THREE.Mesh(new THREE.TubeGeometry(curva, 60, .15, 8), mat(0x0a0a0a, .5)));
+
+/* ---------- fondos ---------- */
+const fondoOut = new THREE.Mesh(new THREE.PlaneGeometry(900, 450), new THREE.MeshBasicMaterial({ map: texDesierto }));
+fondoOut.position.set(0, 20, -320); scene.add(fondoOut);
+const fondoIn = new THREE.Mesh(new THREE.PlaneGeometry(300, 150), new THREE.MeshBasicMaterial({ map: texCabinaFondo }));
+fondoIn.position.set(0, -20, 160); fondoIn.rotation.y = Math.PI; scene.add(fondoIn);
+
+/* ---------- render ---------- */
+function vista(canvas, pos, target, fov) {
+  const r = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+  r.setPixelRatio(1.5); r.setSize(canvas.clientWidth, canvas.clientHeight, false);
+  r.toneMapping = THREE.ACESFilmicToneMapping; r.toneMappingExposure = 1.05; r.outputColorSpace = THREE.SRGBColorSpace;
+  scene.environment = new THREE.PMREMGenerator(r).fromScene(new RoomEnvironment(), .04).texture;
+  const cam = new THREE.PerspectiveCamera(fov, canvas.clientWidth / canvas.clientHeight, .5, 2000);
+  cam.position.copy(pos); cam.lookAt(target); r.render(scene, cam);
+}
+const luz = new THREE.DirectionalLight(0xfff1e0, 1.2); luz.position.set(30, 60, -40); scene.add(luz);
+scene.add(new THREE.HemisphereLight(0xdfe8ff, 0x8a7560, .6));
+const centro = porta.position.clone().lerp(cuerpoE.position, .4);
+vista(document.getElementById('cIn'), centro.clone().add(new THREE.Vector3(-34, -10, 44)), centro.clone().add(new THREE.Vector3(0, .5, -1)), 27);
+vista(document.getElementById('cOut'), centro.clone().add(new THREE.Vector3(12, -3, -48)), centro.clone().add(new THREE.Vector3(0, .5, 0)), 28);
+window.ready = true;
+</script>
+</body>
+</html>
