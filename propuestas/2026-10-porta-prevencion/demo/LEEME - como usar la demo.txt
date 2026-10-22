@@ -1,0 +1,79 @@
+PORTA · DEMO PARA LA PRESENTACIÓN
+=================================
+
+CÓMO ABRIRLA
+------------
+1. Descomprime la carpeta completa (no abras los archivos desde dentro del zip).
+2. Haz doble clic en  INICIAR-DEMO.html  (se abre en Chrome o Edge).
+3. Presiona la tecla F (o el botón "Pantalla completa").
+
+No necesita internet ni instalar nada. Funciona en Windows y en Mac.
+Recomendado: Google Chrome o Microsoft Edge actualizados.
+
+QUÉ SE VE EN PANTALLA
+---------------------
+- Izquierda: el equipo PORTA bajo el retrovisor, con los botones para conectar el teléfono (NFC o QR),
+  y la "Guía para presentar", que marca solo cada paso cuando lo hacen.
+- Centro: el teléfono del trabajador (se usa con el mouse, como un celular).
+- Derecha: PORTA Central, el portal que ve el área de prevención en la oficina.
+- Arriba: el interruptor "Sin señal / Con señal 4G" simula que la camioneta entra o sale de una zona sin cobertura.
+
+ATAJOS DE TECLADO (con el mouse fuera del teléfono y de la central)
+  4 = encender/apagar la señal 4G     N = conectar por NFC     Q = conectar por QR
+  C = ampliar la central              F = pantalla completa    R = reiniciar la demo
+
+GUION SUGERIDO (3 a 4 minutos)
+------------------------------
+Paso 1 · Publicar un documento (con señal 4G)
+  Hacer: en PORTA Central > Documentos, arrastrar el PDF "PTS-045 Manejo defensivo en ruta"
+         (está en la carpeta documentos-ejemplo) o hacer clic en "Publicar un procedimiento de ejemplo".
+  Decir: "Prevención publica un procedimiento desde la oficina. PORTA lo recibe por 4G,
+          sin que nadie tenga que ir a la camioneta. Miren: 'Recibido en CH-04'."
+
+Paso 2 · Entrar a terreno (apagar la señal)
+  Hacer: poner el interruptor de arriba en "Sin señal" (tecla 4).
+  Decir: "Ahora la camioneta entra a una zona sin cobertura, como pasa en la mayoría de las faenas."
+
+Paso 3 · Conectar el teléfono
+  Hacer: botón "Escanear QR" (desde afuera) o "Acercar teléfono" (NFC, desde la cabina).
+  Decir: "No hay señal, pero PORTA crea su propia red Wi-Fi. El trabajador escanea el QR del
+          parabrisas o acerca el teléfono, y se abre el menú sin instalar ninguna app."
+
+Paso 4 · Leer el documento sin señal
+  Hacer: en el teléfono, "Entrar al menú" y tocar el aviso naranjo "Nuevo".
+  Decir: "El procedimiento que publicamos hace un minuto ya está aquí, y se lee sin internet."
+
+Paso 5 · Checklist de fatiga
+  Hacer: volver al menú > "Fatiga y somnolencia". Escribir un nombre y responder con sueño
+         (menos de 5 horas, nivel 4, más de 12 horas despierto). Guardar.
+  Decir: "El sistema detecta que no está apto para conducir antes de que salga a la ruta.
+          El registro queda guardado con nombre y hora, pero todavía no llega a la oficina
+          porque no hay señal."
+
+Paso 6 (opcional) · Dashcam
+  Hacer: en el menú, tarjeta Dashcam > "Marcar incidente".
+  Decir: "PORTA también es dashcam: graba la ruta y la cabina, y protege el video de un incidente."
+
+Paso 7 · Vuelve la señal
+  Hacer: interruptor en "Con señal 4G" (tecla 4).
+  Decir: "Apenas la camioneta tiene señal, todo llega solo a la central. Aquí está la alerta:
+          conductor no apto, con sus respuestas, para que el supervisor actúe a tiempo."
+
+Al terminar, la guía muestra "Demo completa". Para repetirla: botón "Reiniciar demo" (tecla R).
+
+PREGUNTAS QUE PODRÍA HACER EL PROFESOR
+--------------------------------------
+- ¿Y si el teléfono es iPhone?  Se usa el código QR (la cámara del iPhone lo reconoce directo).
+- ¿Qué pasa si nunca vuelve la señal?  Todo sigue funcionando en el equipo; los registros se
+  guardan y se envían cuando la camioneta vuelve a la base o a una zona con cobertura.
+- ¿La cámara interior es legal?  Debe informarse a los trabajadores, quedar en el Reglamento
+  Interno (RIOHS) y usarse con fines de seguridad, no como control permanente.
+- ¿Cuánto cuesta armarlo?  Cerca de $230.000 en componentes por equipo (detalle en el PDF).
+
+SI ALGO FALLA
+-------------
+- Si una parte queda en blanco: presiona R (reiniciar) o recarga la página (F5).
+- Si no se ve bien en el proyector: usa la tecla C para ampliar la central y F para pantalla completa.
+- Si el navegador bloquea algo: abre INICIAR-DEMO.html con Chrome (clic derecho > Abrir con > Google Chrome).
+
+Los datos, nombres y documentos de la demo son ficticios.

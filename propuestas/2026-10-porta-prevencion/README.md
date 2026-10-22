@@ -21,6 +21,10 @@ Propuesta de innovación para Prevención de Riesgos. PORTA es un equipo de 7 ×
 | `imagenes/concepto/` | Modelo de concepto aprobado y referencias usadas para generar las fotos IA. |
 | `imagenes/dashcam/` | Cuadro de la cámara interior con los datos de la dashcam. |
 
+## Demo para la presentación
+
+`demo/INICIAR-DEMO.html` se abre con doble clic, sin internet ni instalación. Muestra en una pantalla el equipo PORTA (interruptor de señal 4G, conexión por NFC/QR), el teléfono del trabajador y PORTA Central conectados entre sí, con una guía de 7 pasos. El guion está en `demo/LEEME - como usar la demo.txt` y hay PDFs para arrastrar en `demo/documentos-ejemplo/`.
+
 ## Fuentes
 
 - `fuente/app/index.html`: prototipo navegable de la app del teléfono (`#/bienvenida` es la pantalla que aparece al tocar NFC o escanear el QR).

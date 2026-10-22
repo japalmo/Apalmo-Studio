@@ -1,0 +1,8 @@
+/* Fuentes incluidas para que la demo se vea igual sin internet (Inter y JetBrains Mono, licencia SIL OFL 1.1). */
+@font-face{font-family:Inter;src:url(fuentes/Inter-Regular.otf);font-weight:400}
+@font-face{font-family:Inter;src:url(fuentes/Inter-Medium.otf);font-weight:500}
+@font-face{font-family:Inter;src:url(fuentes/Inter-SemiBold.otf);font-weight:600}
+@font-face{font-family:Inter;src:url(fuentes/Inter-Bold.otf);font-weight:700}
+@font-face{font-family:Inter;src:url(fuentes/Inter-ExtraBold.otf);font-weight:800}
+@font-face{font-family:"JetBrains Mono";src:url(fuentes/JetBrainsMono-Regular.ttf);font-weight:400}
+@font-face{font-family:"JetBrains Mono";src:url(fuentes/JetBrainsMono-Bold.ttf);font-weight:700}
