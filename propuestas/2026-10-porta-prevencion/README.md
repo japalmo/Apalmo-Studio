@@ -25,6 +25,10 @@ Propuesta de innovación para Prevención de Riesgos. PORTA es un equipo de 7 ×
 
 `demo/INICIAR-DEMO.html` se abre con doble clic, sin internet ni instalación. Muestra en una pantalla el equipo PORTA (interruptor de señal 4G, conexión por NFC/QR), el teléfono del trabajador y PORTA Central conectados entre sí, con una guía de 7 pasos. El guion está en `demo/LEEME - como usar la demo.txt` y hay PDFs para arrastrar en `demo/documentos-ejemplo/`.
 
+## Demo en línea (Google Apps Script)
+
+`demo-online/` trae `Code.gs`, `App.html` y `Central.html` para publicarla como aplicación web gratuita (pasos en `demo-online/INSTRUCCIONES.txt`). El proyector abre PORTA Central con un QR; los celulares que lo escanean usan la app del trabajador y todo se sincroniza en vivo.
+
 ## Fuentes
 
 - `fuente/app/index.html`: prototipo navegable de la app del teléfono (`#/bienvenida` es la pantalla que aparece al tocar NFC o escanear el QR).

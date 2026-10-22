@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>PORTA · app del trabajador</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --naranjo:#F26B1D; --naranjo-2:#FF8A3D; --naranjo-suave:#FDE9DC;
+  --grafito:#1C2126; --grafito-2:#2A3138; --gris:#6B7580; --linea:#E4E1DA;
+  --fondo:#F5F3EE; --blanco:#FFFFFF;
+  --ok:#2E9E5B; --ok-suave:#E3F4EA; --alerta:#E0A100; --alerta-suave:#FFF4D6; --peligro:#D64541; --peligro-suave:#FBE5E4;
+  --r:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--fondo);color:var(--grafito);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+body{min-height:100vh}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+.app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+
+/* barra superior */
+.top{background:var(--grafito);color:#fff;padding:14px 18px 18px;position:sticky;top:0;z-index:5}
+.top-row{display:flex;align-items:center;gap:10px}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.14em;font-size:15px}
+.logo i{width:22px;height:22px;border-radius:6px;background:var(--naranjo);display:grid;place-items:center}
+.logo i svg{width:14px;height:14px}
+.pill{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;background:rgba(255,255,255,.08);padding:6px 10px;border-radius:99px;color:#cfd5db}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(46,158,91,.25)}
+.back{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.08);display:grid;place-items:center}
+.back svg{width:18px;height:18px}
+.top h1{font-size:22px;font-weight:700;margin-top:14px;letter-spacing:-.01em}
+.top p{font-size:13px;color:#aab3bc;margin-top:4px}
+
+main{flex:1;padding:16px 16px 28px}
+.sec{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gris);margin:18px 4px 10px}
+.sec:first-child{margin-top:4px}
+
+/* tarjeta de estado */
+.estado{background:#fff;border:1px solid var(--linea);border-radius:var(--r);padding:14px;display:flex;gap:12px;align-items:center}
+.estado .ico{width:42px;height:42px;border-radius:12px;background:var(--naranjo-suave);color:var(--naranjo);display:grid;place-items:center;flex:none}
+.estado b{font-size:14px;display:block}
+.estado span{font-size:12.5px;color:var(--gris)}
+
+/* grilla de módulos */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mod{background:#fff;border:1px solid var(--linea);border-radius:var(--r);padding:14px;min-height:118px;display:flex;flex-direction:column;gap:10px;position:relative;text-align:left}
+.mod .ico{width:38px;height:38px;border-radius:11px;display:grid;place-items:center}
+.mod b{font-size:14.5px;line-height:1.2}
+.mod span{font-size:12px;color:var(--gris);margin-top:-6px}
+.mod .badge{position:absolute;top:12px;right:12px;font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px}
+.mod.ancho{grid-column:span 2;min-height:auto;flex-direction:row;align-items:center}
+.mod.ancho .txt{display:flex;flex-direction:column;gap:2px}
+.mod.ancho span{margin-top:0}
+.c-doc{background:#E8EEF7;color:#2F5D9E}.c-veh{background:var(--naranjo-suave);color:var(--naranjo)}
+.c-fat{background:#EFE7F8;color:#6A3FA0}.c-gen{background:var(--alerta-suave);color:#9A6B00}
+.c-emg{background:var(--peligro-suave);color:var(--peligro)}.c-reg{background:var(--ok-suave);color:var(--ok)}
+.ico svg{width:20px;height:20px}
+
+/* listas */
+.lista{background:#fff;border:1px solid var(--linea);border-radius:var(--r);overflow:hidden}
+.item{display:flex;align-items:center;gap:12px;padding:13px 14px;border-top:1px solid var(--linea);width:100%;text-align:left}
+.item:first-child{border-top:0}
+.item .ico{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;flex:none}
+.item .txt{flex:1;min-width:0}
+.item b{font-size:14px;font-weight:600;display:block}
+.item span{font-size:12px;color:var(--gris)}
+.chev{color:#b5bcc3}
+.chev svg{width:16px;height:16px}
+.buscar{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--linea);border-radius:12px;padding:11px 12px;color:var(--gris);font-size:14px;margin-bottom:6px}
+.buscar svg{width:16px;height:16px}
+.buscar input{border:0;outline:0;font:inherit;flex:1;background:transparent;color:var(--grafito)}
+
+/* visor de documento */
+.doc{background:#fff;border:1px solid var(--linea);border-radius:var(--r);padding:20px 18px;font-size:13.5px;line-height:1.55}
+.doc .meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tag{font-size:11px;font-weight:600;padding:4px 8px;border-radius:6px;background:var(--fondo);color:var(--gris)}
+.doc h2{font-size:17px;margin-bottom:4px}
+.doc h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--naranjo);margin:16px 0 6px}
+.doc ol,.doc ul{padding-left:18px}
+.doc li{margin:4px 0}
+.aviso{display:flex;gap:10px;background:var(--alerta-suave);border-radius:12px;padding:12px;font-size:12.5px;margin-top:14px;color:#6b4c00}
+
+/* checklist */
+.progreso{height:6px;background:var(--linea);border-radius:99px;overflow:hidden;margin:2px 4px 14px}
+.progreso i{display:block;height:100%;background:var(--naranjo);border-radius:99px;transition:width .3s}
+.preg{background:#fff;border:1px solid var(--linea);border-radius:var(--r);padding:14px;margin-bottom:10px}
+.preg .q{display:flex;gap:8px;font-size:14px;font-weight:600;line-height:1.35}
+.preg .q small{display:block;font-weight:500;color:var(--gris);font-size:12px;margin-top:2px}
+.crit{flex:none;font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--peligro);background:var(--peligro-suave);padding:3px 6px;border-radius:5px;height:fit-content}
+.opts{display:flex;gap:8px;margin-top:12px}
+.opt{flex:1;padding:10px 0;border-radius:10px;border:1.5px solid var(--linea);font-weight:600;font-size:13.5px;background:#fff}
+.opt.si.on{background:var(--ok);border-color:var(--ok);color:#fff}
+.opt.no.on{background:var(--peligro);border-color:var(--peligro);color:#fff}
+.opt.na.on{background:var(--gris);border-color:var(--gris);color:#fff}
+.opt.v.on{background:var(--naranjo);border-color:var(--naranjo);color:#fff}
+.escala{display:flex;gap:6px;margin-top:12px}
+.escala .opt{padding:10px 0}
+.campo{margin-top:10px}
+.campo input,.campo select{width:100%;border:1.5px solid var(--linea);border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;background:#fff}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:15px;border-radius:14px;background:var(--naranjo);color:#fff;font-weight:700;font-size:15px;margin-top:6px}
+.btn.sec2{background:#fff;color:var(--grafito);border:1.5px solid var(--linea)}
+.btn[disabled]{opacity:.45}
+.btn svg{width:18px;height:18px}
+
+/* resultado */
+.res{border-radius:20px;padding:22px 18px;text-align:center;color:#fff}
+.res .big{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;margin:0 auto 12px}
+.res .big svg{width:34px;height:34px}
+.res h2{font-size:22px}
+.res p{font-size:13.5px;opacity:.92;margin-top:6px;line-height:1.45}
+.res.ok{background:var(--ok)}.res.alerta{background:#C98F00}.res.mal{background:var(--peligro)}
+.resumen{background:#fff;border:1px solid var(--linea);border-radius:var(--r);padding:4px 14px;margin-top:12px}
+.resumen div{display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid var(--linea);font-size:13px}
+.resumen div:first-child{border-top:0}
+.resumen span{color:var(--gris)}
+.obs{font-size:12.5px;background:var(--peligro-suave);color:#8a2420;border-radius:10px;padding:10px 12px;margin-top:10px}
+
+/* bienvenida (al tocar NFC) */
+.hero{background:var(--grafito);color:#fff;min-height:100vh;display:flex;flex-direction:column;padding:28px 22px}
+.hero .logo{font-size:18px}
+.hero .logo i{width:28px;height:28px}
+.hero .logo i svg{width:17px;height:17px}
+.hero h1{font-size:30px;line-height:1.1;margin-top:auto;letter-spacing:-.02em}
+.hero h1 em{font-style:normal;color:var(--naranjo-2)}
+.hero p{color:#aab3bc;font-size:14.5px;margin-top:10px;line-height:1.5}
+.hero .ondas{width:170px;height:170px;margin:70px auto 0;position:relative}
+.hero .ondas span{position:absolute;inset:0;border-radius:50%;border:2px solid var(--naranjo);opacity:0;animation:onda 2.4s infinite}
+.hero .ondas span:nth-child(1){animation-delay:-.4s}.hero .ondas span:nth-child(2){animation-delay:-1.2s}.hero .ondas span:nth-child(3){animation-delay:-2s}
+.hero .ondas b{position:absolute;inset:52px;border-radius:50%;background:var(--naranjo);display:grid;place-items:center}
+.hero .ondas b svg{width:26px;height:26px}
+@keyframes onda{0%{transform:scale(.4);opacity:.9}100%{transform:scale(1.2);opacity:0}}
+.hero .datos{display:flex;gap:8px;margin:28px 0 18px}
+.hero .datos div{flex:1;background:rgba(255,255,255,.06);border-radius:12px;padding:10px;font-size:11px;color:#aab3bc}
+.hero .datos b{display:block;color:#fff;font-size:15px;margin-top:2px}
+.cam{background:var(--grafito);color:#fff;border-radius:var(--r);padding:14px}
+.cam-top{display:flex;align-items:center;gap:8px;font-size:14px}
+.cam-top span:last-child{margin-left:auto;font-size:11.5px;color:#aab3bc}
+.rec{width:9px;height:9px;border-radius:50%;background:#ff4d4d;box-shadow:0 0 0 4px rgba(255,77,77,.22);animation:rec 1.2s infinite}
+@keyframes rec{50%{opacity:.35}}
+.cam-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0 10px}
+.cam-row div{background:rgba(255,255,255,.06);border-radius:10px;padding:8px 10px}
+.cam-row small{display:block;font-size:10.5px;color:#aab3bc}.cam-row b{font-size:13px}
+.cam .btn.sec2{background:transparent;color:#fff;border-color:rgba(255,255,255,.18);margin-top:0;padding:12px}
+.cam .btn.ok{background:var(--ok);border-color:var(--ok)}
+.pie{font-size:11px;color:var(--gris);text-align:center;padding:6px 0 18px}
+
+/* ===== demo ===== */
+.espera{justify-content:center;text-align:center;gap:0}
+.espera .sb2{position:absolute;top:14px;left:22px;right:22px;display:flex;justify-content:space-between;font-size:12px;color:#aab3bc}
+.espera h1{margin-top:28px}
+.espera p{margin:12px auto 26px;max-width:300px}
+.wifi-busca{width:92px;height:92px;border-radius:28px;background:var(--grafito-2);display:grid;place-items:center;margin:0 auto;animation:busca 1.6s ease-in-out infinite}
+.wifi-busca svg{width:46px;height:46px;opacity:.9}
+@keyframes busca{50%{box-shadow:0 0 0 18px rgba(242,107,29,.12);background:#3a2a20}}
+.hint{font-size:12.5px;color:#aab3bc;border:1px dashed rgba(255,255,255,.2);border-radius:12px;padding:12px}
+.hero{position:relative}
+.nuevo{display:flex;align-items:center;gap:10px;margin-top:10px;background:var(--naranjo);color:#fff;border-radius:14px;padding:12px 14px;font-size:13px}
+.nuevo b{background:rgba(255,255,255,.22);padding:3px 8px;border-radius:99px;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.nuevo span{flex:1;font-weight:600}
+.nuevo svg{width:16px;height:16px}
+body.enmarco .top{padding-top:50px}
+body.enmarco .hero{padding-top:58px}
+body.enmarco .espera .sb2{top:22px;left:34px;right:34px}
+.pdfbox{display:flex;flex-direction:column;gap:10px}
+.pdfbox canvas{width:100%;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.12);background:#fff}
+.cargando{background:#fff;border:1px solid var(--linea);border-radius:var(--r);padding:30px;text-align:center;color:var(--gris)}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+<script>
+/* ===== Íconos ===== */
+const I = {
+  logo:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M5 9a10 10 0 0 1 14 0"/><path d="M8 12.5a5.5 5.5 0 0 1 8 0"/><circle cx="12" cy="17" r="1.6" fill="#fff" stroke="none"/></svg>',
+  back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+  chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>',
+  doc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>',
+  folder:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>',
+  truck:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h11v9H2zM13 10h4l4 3v3h-8"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>',
+  moon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>',
+  bolt:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>',
+  sos:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  warn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 7v6M12 17h.01"/></svg>',
+  list:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg>',
+  sync:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 0 1-14 5.3M4 12a8 8 0 0 1 14-5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>',
+  search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>',
+  nfc:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M8 8.5a5 5 0 0 1 0 7"/><path d="M11.5 6a9 9 0 0 1 0 12"/><path d="M15 3.5a13 13 0 0 1 0 17"/></svg>',
+  user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
+  flag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg>',
+  shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>',
+};
+
+/* ===== Checklists ===== */
+const CHECKLISTS = {
+  vehiculo:{ titulo:'Checklist de vehículo', sub:'Inspección pre-uso · CH-04', ico:'truck', c:'c-veh', tipo:'sino', preguntas:[
+    { q:'Neumáticos en buen estado y con presión correcta', crit:true },
+    { q:'Rueda de repuesto, gata y llave', crit:false },
+    { q:'Frenos y freno de mano operativos', crit:true },
+    { q:'Luces, balizas y alarma de retroceso', crit:true },
+    { q:'Cinturones de seguridad operativos', crit:true },
+    { q:'Extintor con carga vigente', h:'Revisar fecha en la etiqueta', crit:true },
+    { q:'Botiquín, triángulos y cuñas', crit:false },
+    { q:'Niveles de aceite, agua y combustible', crit:false },
+    { q:'Radio de comunicación operativa', crit:true },
+    { q:'Documentos al día', h:'Permiso de circulación, revisión técnica y SOAP', crit:true },
+  ]},
+  fatiga:{ titulo:'Fatiga y somnolencia', sub:'Autoevaluación antes de conducir', ico:'moon', c:'c-fat', tipo:'fatiga', preguntas:[
+    { id:'horas', q:'¿Cuántas horas dormiste en las últimas 24 h?', tipo:'horas' },
+    { id:'escala', q:'¿Cómo te sientes ahora?', h:'1 = muy alerta · 5 = luchando contra el sueño', tipo:'escala' },
+    { id:'alcohol', q:'¿Consumiste alcohol o medicamentos que causen sueño en las últimas 12 h?', tipo:'sino', malo:'si' },
+    { id:'jornada', q:'¿Llevas más de 12 horas despierto o trabajando?', tipo:'sino', malo:'si' },
+    { id:'sintomas', q:'¿Tienes bostezos frecuentes, ojos pesados o te cuesta concentrarte?', tipo:'sino', malo:'si' },
+  ]},
+  generador:{ titulo:'Checklist de generador', sub:'Generador portátil diésel · GEN-07', ico:'bolt', c:'c-gen', tipo:'sino', preguntas:[
+    { q:'Ubicado al aire libre y ventilado', h:'Nunca en espacios cerrados: riesgo de monóxido de carbono', crit:true },
+    { q:'Conexión a tierra instalada', crit:true },
+    { q:'Cables y enchufes sin daños ni empalmes', crit:true },
+    { q:'Protección diferencial operativa', crit:true },
+    { q:'Sin fugas de combustible ni aceite', crit:true },
+    { q:'Nivel de aceite y combustible correcto', crit:false },
+    { q:'Extintor a menos de 10 m', crit:true },
+    { q:'Protector auditivo disponible', crit:false },
+  ]},
+};
+
+
+/* ===== Contenido de ejemplo de los documentos base ===== */
+const CONTENIDO = {
+  'pts-conduccion':`<h2>Conducción en faena</h2><p>Establecer las medidas de control para la conducción segura de vehículos livianos dentro de la faena y en caminos de acceso.</p>
+    <h3>Antes de conducir</h3><ol><li>Realizar el <b>checklist de vehículo</b> pre-uso.</li><li>Completar la autoevaluación de <b>fatiga y somnolencia</b>.</li><li>Verificar comunicación radial con control.</li></ol>
+    <h3>Durante la conducción</h3><ul><li>Velocidad máxima en faena: 40 km/h; en rampas: 30 km/h.</li><li>Mantener distancia mínima de 60 m con equipos de alto tonelaje.</li><li>Uso permanente de cinturón y luces encendidas.</li><li>Pausa obligatoria cada 2 horas de conducción continua.</li></ul>
+    <div class="aviso">${'⚠'} Ante somnolencia: detenerse en zona segura, avisar por radio y esperar relevo.</div>`,
+  'pts-generador':`<h2>Uso de generador portátil</h2><p>Operar generadores portátiles diésel de forma segura en terreno.</p>
+    <h3>Riesgos principales</h3><ul><li>Intoxicación por monóxido de carbono.</li><li>Contacto eléctrico.</li><li>Incendio por derrame de combustible.</li><li>Exposición a ruido.</li></ul>
+    <h3>Medidas de control</h3><ol><li>Instalar siempre al aire libre, lejos de ventanas y tomas de aire.</li><li>Conectar a tierra antes de energizar.</li><li>Cargar combustible con el motor detenido y frío.</li><li>Mantener extintor PQS a menos de 10 m.</li></ol>
+    <div class="aviso">⚠ Completa el checklist de generador en PORTA antes de cada uso.</div>`,
+  'plan-emergencia':`<h2>Plan de emergencia</h2><p>Faena Quebrada Alta · Sector camino de acceso km 0–38.</p>
+    <h3>Contactos</h3><ul><li><b>Control de faena:</b> radio canal 3</li><li><b>Policlínico faena:</b> radio canal 5</li><li><b>Supervisor de turno:</b> radio canal 3, clave “Alfa-2”</li></ul>
+    <h3>Ante un accidente</h3><ol><li>Detener la tarea y asegurar el área.</li><li>Comunicar por radio: ubicación (km), tipo de evento y n.º de lesionados.</li><li>No mover a lesionados salvo riesgo inminente.</li><li>Esperar instrucciones de control.</li></ol>
+    <h3>Punto de encuentro</h3><p>Garita km 0, explanada norte.</p>
+    <div class="aviso">⚠ Sin cobertura celular entre km 6 y km 38: usar siempre la radio.</div>`,
+  _generico: d => `<h2>${d.nombre}</h2><p>Vista previa del documento sincronizado desde la carpeta de Drive. En el equipo real se muestra el PDF original completo (${d.pags} páginas) y se puede descargar al teléfono.</p>
+    <h3>Contenido</h3><ol><li>Objetivo y alcance</li><li>Responsabilidades</li><li>Desarrollo</li><li>Registros y anexos</li></ol>`,
+};
+
+
+/* ===== Evaluación de checklists ===== */
+function evaluar(id){
+  const ck = CHECKLISTS[id], r = S.resp[id]||{};
+  if (ck.tipo==='fatiga'){
+    let pts = 0; const obs=[];
+    if (r.horas==='<5'){pts+=2;obs.push('Menos de 5 horas de sueño');} else if (r.horas==='5'){pts+=1;obs.push('Solo 5 horas de sueño');}
+    if (r.escala>=4){pts+=2;obs.push('Somnolencia alta autodeclarada');} else if (r.escala==3) pts+=1;
+    ['alcohol','jornada','sintomas'].forEach(k=>{ if(r[k]==='si'){ pts+= k==='alcohol'?3:2; obs.push(ck.preguntas.find(p=>p.id===k).q.replace('¿','').replace('?','')); }});
+    if (pts>=3) return {estado:'mal',titulo:'No apto para conducir',texto:'Avisa a tu supervisor por radio antes de operar. Se recomienda descanso y relevo de conductor.',obs,res:'No apto'};
+    if (pts>=1) return {estado:'alerta',titulo:'Apto con precaución',texto:'Haz pausas cada 2 horas, hidrátate y comunica tu estado al supervisor.',obs,res:'Precaución'};
+    return {estado:'ok',titulo:'Apto para conducir',texto:'¡Buen turno! Recuerda hacer pausas activas durante la jornada.',obs,res:'Apto'};
+  }
+  const fallas = ck.preguntas.map((p,i)=>({p,v:r[i]})).filter(x=>x.v==='no');
+  const crit = fallas.filter(x=>x.p.crit);
+  const obs = fallas.map(x=>(x.p.crit?'⚠ ':'')+x.p.q);
+  if (crit.length) return {estado:'mal',titulo:'No operar',texto:'Hay ítems críticos con falla. Informa a tu supervisor y no uses el equipo hasta corregirlos.',obs,res:'No operar'};
+  if (fallas.length) return {estado:'alerta',titulo:'Operar con observaciones',texto:'Sin fallas críticas. Reporta las observaciones para su corrección.',obs,res:'Observado'};
+  return {estado:'ok',titulo:'Apto para operar',texto:'Todos los ítems están conformes. Registro guardado.',obs,res:'Apto para operar'};
+}
+
+/* ===== Estado ===== */
+// Enlace con el servidor de Apps Script: consulta el estado compartido cada pocos segundos.
+const L = (function () {
+  const subs = []; let estado = null, ver = -1;
+  const aplicar = r => { if (r && r.ver !== ver) { ver = r.ver; estado = r; subs.forEach(f => f(estado)); } };
+  const leer = () => google.script.run.withSuccessHandler(aplicar).withFailureHandler(() => {}).leer(ver);
+  leer(); setInterval(leer, 2500);
+  return { enviar: a => google.script.run.withSuccessHandler(aplicar).withFailureHandler(() => {}).accion(a), on: f => { subs.push(f); if (estado) f(estado); } };
+})();
+const hora = () => new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+const PORTA = { hora, CATEGORIAS: [
+  { id: 'pts', nombre: 'Procedimientos de trabajo', desc: 'PTS y estándares', ico: 'doc', c: 'c-doc' },
+  { id: 'contratos', nombre: 'Contrato y reglamento', desc: 'Contrato, anexos, RIOHS', ico: 'user', c: 'c-fat' },
+  { id: 'irl', nombre: 'Información de riesgos (IRL)', desc: 'Riesgos por cargo', ico: 'shield', c: 'c-veh' },
+  { id: 'hds', nombre: 'Hojas de datos de seguridad', desc: 'Sustancias a bordo', ico: 'sos', c: 'c-gen' },
+  { id: 'emergencia', nombre: 'Plan de emergencia', desc: 'Contactos y rutas', ico: 'sos', c: 'c-emg' },
+] };
+let conectado = false; // cada celular se "conecta" al abrir el link (equivale a escanear el QR del parabrisas)
+window.entrar = () => { conectado = true; L.enviar({ t: 'conectar' }); location.hash = '#/'; render(); };
+let E = null;                                  // estado compartido (documentos, registros, señal)
+const S = { resp: {}, nombre: '', ultimo: null }; // estado local del teléfono (respuestas en curso)
+const EQUIPO = { red: 'PORTA-CH04', vehiculo: 'Camioneta CH-04', faena: 'Faena Quebrada Alta' };
+const CATEGORIAS = PORTA.CATEGORIAS;
+const docsEquipo = () => E.docs.filter(d => d.enEquipo);
+
+/* ===== Utilidades de vista ===== */
+const $app = document.getElementById('app');
+const cab = (titulo, sub, volver) => `
+  <header class="top">
+    <div class="top-row">
+      ${volver ? `<a class="back" href="${volver}" aria-label="Volver">${I.back}</a>` : `<div class="logo"><i>${I.logo}</i>PORTA</div>`}
+      <div class="pill"><span class="dot"></span>${EQUIPO.red} · ${E.senal4g ? '4G disponible' : 'sin señal'}</div>
+    </div>
+    ${titulo ? `<h1>${titulo}</h1>` : ''}${sub ? `<p>${sub}</p>` : ''}
+  </header>`;
+const ico = (n, c) => `<div class="ico ${c}">${I[n]}</div>`;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* ===== Vistas ===== */
+const V = {
+  espera() {
+    return `<div class="hero espera">
+      <div class="sb2"><span>${PORTA.hora()}</span><span>Sin servicio</span></div>
+      <div class="wifi-busca">${I.logo}</div>
+      <h1>Buscando la red<br><em>de PORTA…</em></h1>
+      <p>Acerca tu teléfono a la zona <b>NFC</b> del equipo, bajo el retrovisor, o escanea el <b>código QR</b> del parabrisas.</p>
+      ${L.local ? `<button class="btn" onclick="L.enviar({t:'conectar'})">Conectar (simulación)</button>` : `<div class="hint">Usa los botones “NFC” o “QR” del panel del equipo.</div>`}
+    </div>`;
+  },
+
+  bienvenida() {
+    return `<div class="hero">
+      <div class="logo"><i>${I.logo}</i>PORTA</div>
+      <div class="ondas"><span></span><span></span><span></span><b>${I.nfc}</b></div>
+      <h1>Conectado a<br><em>${EQUIPO.vehiculo}</em></h1>
+      <p>Escaneaste el QR de PORTA. Toda la documentación y los checklists de tu faena están aquí mismo, aunque el vehículo no tenga señal.</p>
+      <div class="datos">
+        <div>Documentos<b>${docsEquipo().length}</b></div>
+        <div>Actualizado<b>Hoy ${E.ultimaSync}</b></div>
+      </div>
+      <button class="btn" onclick="entrar()">Entrar al menú ${I.chev}</button>
+    </div>`;
+  },
+
+  inicio() {
+    const nuevos = docsEquipo().filter(d => d.nuevo);
+    const pend = E.registros.filter(r => !r.enviado).length;
+    return cab('Hola 👷 ¿qué necesitas?', `${EQUIPO.faena} · ${EQUIPO.vehiculo}`) + `<main>
+      <div class="estado">${ico('sync', '')}<div><b>Datos actualizados hoy ${E.ultimaSync}</b><span>${docsEquipo().length} documentos · ${E.senal4g ? 'conectado a PORTA Central por 4G' : 'sin señal: todo sigue funcionando aquí'}</span></div></div>
+      ${nuevos.length ? `<a class="nuevo" href="#/doc/${nuevos[0].id}"><b>Nuevo</b><span>${esc(nuevos[0].nombre)}</span>${I.chev}</a>` : ''}
+      <div class="sec">Documentación</div>
+      <div class="grid">
+        <a class="mod ancho" href="#/docs">${ico('folder', 'c-doc')}<div class="txt"><b>Biblioteca de documentos</b><span>Procedimientos, contratos, HDS, IRL</span></div>${nuevos.length ? `<em class="badge" style="position:static;margin-left:auto;background:var(--naranjo);color:#fff">${nuevos.length} nuevo${nuevos.length > 1 ? 's' : ''}</em>` : ''}</a>
+      </div>
+      <div class="sec">Checklists</div>
+      <div class="grid">
+        <a class="mod" href="#/check/vehiculo">${ico('truck', 'c-veh')}<b>Vehículo</b><span>Pre-uso diario</span></a>
+        <a class="mod" href="#/check/fatiga">${ico('moon', 'c-fat')}<b>Fatiga y somnolencia</b><span>Antes de conducir</span></a>
+        <a class="mod" href="#/check/generador">${ico('bolt', 'c-gen')}<b>Generador</b><span>Equipo portátil</span></a>
+        <a class="mod" href="#/registros">${ico('list', 'c-reg')}<b>Registros</b><span>${pend ? pend + ' por enviar' : 'Todo enviado'}</span><em class="badge" style="background:var(--ok-suave);color:var(--ok)">${E.registros.length}</em></a>
+      </div>
+      <div class="sec">Dashcam</div>
+      <div class="cam">
+        <div class="cam-top"><span class="rec"></span><b>Grabando</b><span>Frontal + cabina · 1080p</span></div>
+        <div class="cam-row"><div><small>Frontal</small><b>Ruta</b></div><div><small>Interior</small><b>Cabina (IR)</b></div><div><small>Memoria</small><b>38 h</b></div></div>
+        <button class="btn sec2" onclick="marcar(this)">${I.flag} Marcar incidente</button>
+      </div>
+      <div class="sec">Emergencia</div>
+      <div class="grid">
+        <a class="mod ancho" href="#/doc/plan-emergencia">${ico('sos', 'c-emg')}<div class="txt"><b>Plan de emergencia</b><span>Contactos, punto de encuentro y canal radial</span></div></a>
+      </div>
+    </main><div class="pie">PORTA funciona sin señal · Red Wi-Fi local del vehículo</div>`;
+  },
+
+  docs() {
+    return cab('Biblioteca', `${docsEquipo().length} documentos disponibles sin conexión`, '#/') + `<main>
+      <label class="buscar">${I.search}<input placeholder="Buscar procedimiento, HDS, contrato…" oninput="filtrar(this.value)"></label>
+      <div id="docs-res">${listaCategorias()}</div>
+    </main>`;
+  },
+
+  cat(id) {
+    const c = CATEGORIAS.find(x => x.id === id);
+    return cab(c.nombre, c.desc, '#/docs') + `<main><div class="lista">${docsEquipo().filter(d => d.cat === id).map(itemDoc).join('')}</div></main>`;
+  },
+
+  doc(id) {
+    const d = E.docs.find(x => x.id === id && x.enEquipo);
+    if (!d) return cab('Documento no disponible', 'Todavía no llega a este equipo', '#/docs') + `<main><div class="estado">${ico('sync', '')}<div><b>Se descargará apenas haya señal 4G</b><span>Mientras tanto, revisa los demás documentos.</span></div></div></main>`;
+    const c = CATEGORIAS.find(x => x.id === d.cat);
+    const cuerpo = d.pdfId ? `<div class="pdfbox" id="paginas"><div class="cargando">Abriendo PDF…</div></div>`
+      : `<div class="doc"><div class="meta"><span class="tag">${esc(d.ver)}</span><span class="tag">${d.pags} páginas</span><span class="tag">Copia controlada</span></div>${d.html || CONTENIDO[id] || CONTENIDO._generico(d)}</div>`;
+    return cab(esc(d.nombre), `${c.nombre} · ${esc(d.ver)}`, d.cat === 'emergencia' ? '#/' : `#/docs/${d.cat}`) + `<main>${cuerpo}</main>`;
+  },
+
+  check(id) {
+    const ck = CHECKLISTS[id];
+    S.resp[id] = S.resp[id] || {};
+    const r = S.resp[id];
+    const total = ck.preguntas.length;
+    const hechas = ck.preguntas.filter((p, i) => r[p.id || i] !== undefined && r[p.id || i] !== '').length;
+    const pregs = ck.preguntas.map((p, i) => {
+      const k = p.id || i, v = r[k];
+      let ctrl;
+      if (ck.tipo === 'sino' || p.tipo === 'sino') {
+        ctrl = `<div class="opts">
+          <button class="opt si ${v === 'si' ? 'on' : ''}" onclick="resp('${id}','${k}','si')">Sí</button>
+          <button class="opt no ${v === 'no' ? 'on' : ''}" onclick="resp('${id}','${k}','no')">No</button>
+          ${ck.tipo === 'sino' ? `<button class="opt na ${v === 'na' ? 'on' : ''}" onclick="resp('${id}','${k}','na')">N/A</button>` : ''}
+        </div>`;
+      } else if (p.tipo === 'escala') {
+        ctrl = `<div class="escala">${[1, 2, 3, 4, 5].map(n => `<button class="opt v ${v == n ? 'on' : ''}" onclick="resp('${id}','${k}',${n})">${n}</button>`).join('')}</div>`;
+      } else if (p.tipo === 'horas') {
+        ctrl = `<div class="escala">${['<5', '5', '6', '7', '8+'].map(n => `<button class="opt v ${v === n ? 'on' : ''}" onclick="resp('${id}','${k}','${n}')">${n}</button>`).join('')}</div>`;
+      }
+      return `<div class="preg"><div class="q"><div>${i + 1}. ${p.q}${p.h ? `<small>${p.h}</small>` : ''}</div>${p.crit ? '<span class="crit">CRÍTICO</span>' : ''}</div>${ctrl}</div>`;
+    }).join('');
+    return cab(ck.titulo, ck.sub, '#/') + `<main>
+      <div class="campo" style="margin:0 0 12px"><input id="nombre" placeholder="Tu nombre" value="${esc(S.nombre)}" oninput="S.nombre=this.value"></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--gris);margin:0 4px 6px"><span>Progreso</span><span>${hechas} de ${total}</span></div>
+      <div class="progreso"><i style="width:${hechas / total * 100}%"></i></div>
+      ${pregs}
+      <button class="btn" ${hechas < total ? 'disabled' : ''} onclick="enviar('${id}')">${I.check} Guardar checklist</button>
+    </main>`;
+  },
+
+  resultado(id) {
+    const ck = CHECKLISTS[id], ev = S.ultimo && S.ultimo.tipo === id ? S.ultimo.ev : evaluar(id);
+    const reg = [...E.registros].reverse().find(r => r.tipo === id);
+    const icono = ev.estado === 'ok' ? I.check : ev.estado === 'alerta' ? I.warn : I.x;
+    const envio = !reg ? '—' : reg.enviado ? `<b style="color:var(--ok)">✓ Recibido ${reg.recibido || ''}</b>` : E.senal4g ? '<b style="color:var(--naranjo)">Enviando por 4G…</b>' : '<b>Pendiente · se envía al tener señal</b>';
+    return cab(ck.titulo, 'Resultado guardado en PORTA', '#/') + `<main>
+      <div class="res ${ev.estado}"><div class="big">${icono}</div><h2>${ev.titulo}</h2><p>${ev.texto}</p></div>
+      ${ev.obs.length ? `<div class="obs"><b>Observaciones:</b><br>${ev.obs.join('<br>')}</div>` : ''}
+      <div class="resumen">
+        <div><span>Trabajador</span><b>${esc(reg ? reg.quien : S.nombre || 'Sin nombre')}</b></div>
+        <div><span>Hora</span><b>${reg ? reg.hora : PORTA.hora()}</b></div>
+        <div><span>Equipo</span><b>${EQUIPO.vehiculo}</b></div>
+        <div><span>PORTA Central</span>${envio}</div>
+      </div>
+      <a class="btn" href="#/" style="margin-top:16px">Volver al menú</a>
+      <a class="btn sec2" href="#/registros">Ver registros</a>
+    </main>`;
+  },
+
+  registros() {
+    const pend = E.registros.filter(r => !r.enviado).length;
+    return cab('Registros', 'Guardados en este equipo', '#/') + `<main>
+      <div class="lista">${[...E.registros].reverse().map(r => {
+        const ck = CHECKLISTS[r.tipo] || { ico: 'flag', c: 'c-emg' };
+        const col = r.estado === 'ok' ? 'var(--ok)' : r.estado === 'alerta' ? '#C98F00' : 'var(--peligro)';
+        return `<div class="item">${ico(ck.ico, ck.c)}<div class="txt"><b>${esc(r.titulo)}</b><span>${esc(r.quien)} · ${r.hora} · ${r.enviado ? '✓ enviado' : '⏳ por enviar'}</span></div><b style="font-size:12px;color:${col}">${esc(r.res)}</b></div>`;
+      }).join('')}</div>
+      <div class="estado" style="margin-top:12px">${ico('sync', '')}<div><b>${pend ? pend + ' registro' + (pend > 1 ? 's' : '') + ' por enviar' : 'Todo enviado a PORTA Central'}</b><span>${pend ? (E.senal4g ? 'Enviando por 4G…' : 'Se envían solos apenas el vehículo tenga señal.') : 'Última sincronización hoy ' + E.ultimaSync}</span></div></div>
+    </main>`;
+  },
+};
+
+function listaCategorias() {
+  const nuevos = docsEquipo().filter(d => d.nuevo);
+  return (nuevos.length ? `<div class="sec">Nuevos</div><div class="lista" style="margin-bottom:6px">${nuevos.map(itemDoc).join('')}</div><div class="sec">Carpetas</div>` : '') +
+    `<div class="lista">${CATEGORIAS.map(c => {
+      const n = docsEquipo().filter(d => d.cat === c.id).length;
+      return `<a class="item" href="#/docs/${c.id}">${ico(c.ico, c.c)}<div class="txt"><b>${c.nombre}</b><span>${n} documento${n !== 1 ? 's' : ''} · ${c.desc}</span></div><span class="chev">${I.chev}</span></a>`;
+    }).join('')}</div>`;
+}
+const itemDoc = d => `<a class="item" href="#/doc/${d.id}">${ico('doc', d.nuevo ? 'c-veh' : 'c-doc')}<div class="txt"><b>${esc(d.nombre)}</b><span>${d.nuevo ? '<b style="color:var(--naranjo)">Nuevo</b> · ' : ''}${esc(d.ver)}${d.pdfId ? ' · PDF' : ' · ' + d.pags + ' pág.'}</span></div><span class="chev">${I.chev}</span></a>`;
+window.filtrar = q => {
+  const el = document.getElementById('docs-res');
+  q = q.trim().toLowerCase();
+  el.innerHTML = q ? `<div class="lista">${docsEquipo().filter(d => d.nombre.toLowerCase().includes(q)).map(itemDoc).join('') || '<div class="item"><span>Sin resultados</span></div>'}</div>` : listaCategorias();
+};
+
+/* ===== Acciones ===== */
+window.resp = (id, k, v) => { S.resp[id][k] = v; const y = scrollY; render(); scrollTo(0, y); };
+window.enviar = id => {
+  const ev = evaluar(id), ck = CHECKLISTS[id];
+  S.ultimo = { tipo: id, ev };
+  L.enviar({ t: 'registro', reg: { tipo: id, titulo: ck.titulo, quien: S.nombre || 'Sin nombre', res: ev.res, estado: ev.estado, obs: ev.obs } });
+  S.resp[id] = {};
+  location.hash = `#/check/${id}/resultado`;
+};
+window.marcar = b => {
+  L.enviar({ t: 'registro', reg: { tipo: 'incidente', titulo: 'Incidente marcado en dashcam', quien: S.nombre || 'Conductor', res: 'Video guardado', estado: 'alerta', obs: ['Video del minuto anterior y posterior'] } });
+  b.classList.add('ok'); b.innerHTML = I.check + ' Video guardado: 1 min antes y después';
+  setTimeout(render, 2500);
+};
+
+/* ===== Router ===== */
+let renderPendiente = false; const PDFS = {};
+// Dibuja el PDF publicado desde PORTA Central (pdf.js incluido, funciona sin internet).
+async function mostrarPDF(d) {
+  const cont = document.getElementById('paginas'); if (!cont) return;
+  try {
+    const b64 = PDFS[d.pdfId] || await new Promise((ok, mal) => google.script.run.withSuccessHandler(ok).withFailureHandler(mal).leerPdf(d.pdfId));
+    if (!b64) throw new Error('PDF no disponible');
+    PDFS[d.pdfId] = b64;
+    const bin = atob(b64), arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+    const pdf = await pdfjsLib.getDocument({ data: arr }).promise;
+    cont.innerHTML = '';
+    for (let n = 1; n <= pdf.numPages; n++) {
+      const pag = await pdf.getPage(n);
+      const vp = pag.getViewport({ scale: (cont.clientWidth * 2) / pag.getViewport({ scale: 1 }).width });
+      const c = document.createElement('canvas'); c.width = vp.width; c.height = vp.height;
+      cont.appendChild(c);
+      await pag.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise;
+    }
+  } catch (err) { cont.innerHTML = '<div class="cargando">No se pudo abrir este PDF.</div>'; console.warn(err); }
+}
+function render() {
+  if (!E) return;
+  if (document.activeElement && document.activeElement.tagName === 'INPUT') { renderPendiente = true; return; }
+  renderPendiente = false;
+  const h = (location.hash || '#/').slice(2).split('/');
+  let html;
+  if (!conectado) html = V.bienvenida();
+  else if (h[0] === 'docs' && h[1]) html = V.cat(h[1]);
+  else if (h[0] === 'docs') html = V.docs();
+  else if (h[0] === 'doc') html = V.doc(h[1]);
+  else if (h[0] === 'check' && h[2] === 'resultado') html = V.resultado(h[1]);
+  else if (h[0] === 'check') html = V.check(h[1]);
+  else if (h[0] === 'registros') html = V.registros();
+  else html = V.inicio();
+  $app.innerHTML = html;
+  if (conectado && h[0] === 'doc') {
+    const d = E.docs.find(x => x.id === h[1] && x.enEquipo);
+    if (d) {
+      if (d.nuevo) L.enviar({ t: 'visto', id: d.id });
+      if (d.pdfId) mostrarPDF(d);
+    }
+  }
+}
+document.addEventListener('focusout', () => setTimeout(() => { if (renderPendiente) render(); }, 0));
+addEventListener('hashchange', () => { render(); scrollTo(0, 0); });
+L.on(e => {
+  const antes = E;
+  E = e;
+  // no repintar el visor de PDF ni la vista actual si solo cambió algo irrelevante
+  const h = (location.hash || '').slice(2).split('/');
+  if (antes && h[0] === 'doc' && antes.docs.length === E.docs.length && antes.senal4g === E.senal4g) return;
+  if (antes && h[0] === 'check' && h[2] !== 'resultado') return; // no interrumpir un checklist en curso
+  render();
+});
+
+
+// evitar que un archivo soltado fuera de la zona de carga abra el PDF y saque al navegador de la demo
+['dragover', 'drop'].forEach(t => addEventListener(t, ev => ev.preventDefault()));
+</script>
+</body>
+</html>

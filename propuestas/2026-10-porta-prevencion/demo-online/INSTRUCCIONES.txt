@@ -1,0 +1,52 @@
+PORTA · DEMO EN LÍNEA CON GOOGLE APPS SCRIPT (gratis)
+=====================================================
+
+Resultado: un link público que se abre en cualquier celular y en el computador del proyector.
+- En el proyector se abre PORTA Central, con un QR grande.
+- Quien escanea el QR con su celular abre la app del trabajador.
+- Lo que se hace en los celulares (checklists, incidentes) llega en vivo a la central del proyector.
+Solo necesitas una cuenta de Google (gratis). Toma unos 5 minutos y se hace una sola vez.
+
+PASO 1 · Crear el proyecto
+  1. Entra a  https://script.google.com  con tu cuenta de Google.
+  2. Clic en "Nuevo proyecto". Arriba a la izquierda, cambia el nombre "Proyecto sin título" por  PORTA demo.
+
+PASO 2 · Pegar los 3 archivos (desde un computador)
+  1. En el archivo "Código.gs" que aparece abierto, borra todo y pega el contenido de  Code.gs.
+  2. Al lado de "Archivos", clic en el "+"  >  "HTML". Nómbralo exactamente  App  (sin .html).
+     Borra lo que trae y pega el contenido de  App.html.
+  3. Repite: "+" > "HTML", nómbralo exactamente  Central  y pega el contenido de  Central.html.
+  4. Guarda (ícono de disquete o Ctrl+S).
+
+PASO 3 · Publicar como aplicación web
+  1. Arriba a la derecha: "Implementar"  >  "Nueva implementación".
+  2. En el engranaje de "Seleccionar tipo", elige  "Aplicación web".
+  3. Configura:
+       Descripción:            PORTA demo
+       Ejecutar como:          Yo (tu correo)
+       Quién tiene acceso:     Cualquier usuario
+  4. Clic en "Implementar". Si Google pide autorizar, acepta con tu cuenta
+     (si aparece "Google no verificó esta app": "Configuración avanzada" > "Ir a PORTA demo").
+  5. Copia la "URL de la aplicación web" (termina en /exec). Ese es el link de la demo.
+
+CÓMO USARLA EL DÍA DE LA PRESENTACIÓN
+  - En el computador del proyector abre el link y elige "Abrir PORTA Central".
+    (Link directo: agrega  ?v=central  al final de la URL.)
+  - Los celulares escanean el QR que aparece a la izquierda (o abren la URL con  ?v=app  al final).
+  - El panel de la izquierda tiene el interruptor de señal 4G del vehículo y la guía de 7 pasos:
+      1. Publicar un documento (Documentos: subir un PDF de hasta 3 MB o usar el de ejemplo).
+      2. Apagar la señal 4G.
+      3. Escanear el QR con un celular.
+      4. Abrir el documento nuevo en el celular (se lee sin señal).
+      5. Checklist de fatiga respondiendo con sueño → "No apto".
+      6. (Opcional) Marcar un incidente en la tarjeta Dashcam.
+      7. Encender la señal: la alerta llega sola a la central.
+  - "Reiniciar" deja la demo como nueva para todos. "Ocultar panel" agranda la central.
+
+BUENO SABER
+  - La demo guarda los datos por 6 horas desde el último cambio; después vuelve sola al inicio.
+  - Si cambias el código, publica con "Implementar" > "Gestionar implementaciones" > lápiz >
+    Versión: "Nueva versión" > "Implementar" (así el link se mantiene igual).
+  - En el celular, Google muestra una franja arriba que dice que la app fue creada por un usuario
+    de Apps Script. Es normal.
+  - Si el día de la presentación no hay internet, usen la demo local (carpeta 5-demo, INICIAR-DEMO.html).
