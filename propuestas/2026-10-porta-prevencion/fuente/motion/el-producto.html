@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>PORTA · El producto</title>
+<link rel="stylesheet" href="estilo.css">
+<style>
+#p1{background:#14181c}
+.lbl{position:absolute;transform-origin:50% 50%;background:rgba(28,33,38,.9);border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:14px 22px;font-size:26px;font-weight:700;white-space:nowrap;text-align:center}
+.lbl small{display:block;font-size:20px;font-weight:500;color:#c3cbd2;margin-top:2px}
+.lbl.n{background:var(--n);border-color:var(--n)}
+#lines{position:absolute;inset:0;pointer-events:none}
+.pt{position:absolute;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;background:var(--n);box-shadow:0 0 0 6px rgba(255,255,255,.85),0 0 0 14px rgba(242,107,29,.25)}
+.dim{position:absolute;border-color:#fff;border-style:solid}
+.cap{position:absolute;width:520px;height:440px;text-align:left;display:flex;flex-direction:column;justify-content:center;gap:24px}
+.cap b{font-size:40px;line-height:1.15}
+.cap span{font-size:26px;color:#c3cbd2;line-height:1.4}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-logo" viewBox="0 0 24 24"><g fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M5 9a10 10 0 0 1 14 0"/><path d="M8 12.5a5.5 5.5 0 0 1 8 0"/></g><circle cx="12" cy="17" r="1.8" fill="#fff"/></symbol>
+  <symbol id="i-wifi" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M3 9a13 13 0 0 1 18 0"/><path d="M6.5 12.5a8 8 0 0 1 11 0"/></g><circle cx="12" cy="17" r="1.8" fill="currentColor"/></symbol>
+  <symbol id="i-cam" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/></g></symbol>
+  <symbol id="i-torre" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v12M8 21l4-12 4 12M9.5 16h5"/><path d="M7.5 6.5a6 6 0 0 1 9 0M5 4a9.5 9.5 0 0 1 14 0"/><circle cx="12" cy="9" r="1.3" fill="currentColor"/></g></symbol>
+</svg>
+
+<!-- P1 · apertura -->
+<section class="sc" id="p1">
+  <div class="abs" id="p1l" style="left:660px;top:600px;width:600px;height:4px;background:var(--n);transform-origin:50% 50%"></div>
+  <div class="abs" style="left:0;right:0;top:420px;text-align:center">
+    <div id="p1w" style="font-size:150px;font-weight:800;letter-spacing:.3em;padding-left:.3em">PORTA</div>
+  </div>
+  <div class="abs" id="p1s" style="left:0;right:0;top:640px;text-align:center;font-size:34px;font-weight:600;color:#c3cbd2;letter-spacing:.12em">COMPUTADOR · DASHCAM · SIEMPRE A BORDO</div>
+</section>
+
+<!-- P2 · producto con callouts -->
+<section class="sc" id="p2" style="background:#e9e6e1">
+  <img class="foto" id="p2f" src="../../imagenes/ia/07-producto-estudio.png" style="transform-origin:960px 540px">
+  <div class="velo" id="p2v" style="background:rgba(20,24,28,.18)"></div>
+  <svg id="lines" viewBox="0 0 1920 1080"></svg>
+  <div id="pts"></div>
+  <div class="lbl" id="L1" style="left:400px;top:1000px">Cámara interior <small>infrarroja, también de noche</small></div>
+  <div class="lbl n" id="L2" style="left:800px;top:1000px">Zona NFC <small style="color:#fff">acerca tu teléfono</small></div>
+  <div class="lbl" id="L3" style="left:930px;top:470px">LED de estado</div>
+  <div class="lbl" id="L4" style="left:1170px;top:1000px">Cámara frontal <small>graba la ruta</small></div>
+  <div class="lbl n" id="L5" style="left:1500px;top:1000px">Código QR <small style="color:#fff">se escanea desde afuera</small></div>
+  <div class="lbl" id="L6" style="left:960px;top:110px">Abrazadera al pie del retrovisor</div>
+  <div class="abs" id="p2t1" style="right:60px;top:60px;text-align:right">
+    <div class="k" style="color:#b44c0e">Así es PORTA</div>
+    <div style="font-size:30px;font-weight:700;color:#1C2126;margin-top:8px">Cara a la cabina · Cara al parabrisas</div>
+  </div>
+  <div id="dimgrp">
+    <div class="dim" id="d1" style="left:560px;top:960px;width:560px;height:22px;border-width:0 3px 3px 3px"></div>
+    <div class="lbl" id="d1t" style="left:720px;top:1000px">7 cm</div>
+    <div class="dim" id="d2" style="left:60px;top:58px;width:22px;height:890px;border-width:3px 0 3px 3px"></div>
+  </div>
+  <div class="abs" id="p2t2" style="right:60px;top:56px;text-align:right">
+    <div style="font-size:76px;font-weight:800;color:#1C2126;letter-spacing:-.02em">7 × 4 × 3 cm</div>
+    <div style="font-size:34px;font-weight:600;color:#b44c0e;margin-top:6px">Más pequeño que un teléfono</div>
+  </div>
+</section>
+
+<!-- P3 · montado -->
+<section class="sc" id="p3">
+  <img class="foto" id="p3f" src="../../imagenes/ia/01-porta-bajo-retrovisor.png" style="transform-origin:971px 671px">
+  <div class="velo izq" style="opacity:.9"></div>
+  <div class="abs" style="left:120px;top:330px;width:640px">
+    <div class="k" id="p3k">Montaje</div>
+    <div class="h2" id="p3h" style="margin-top:14px">Abrazado al pie del <em>retrovisor</em></div>
+    <div class="p" id="p3p" style="margin-top:24px">Discreto, firme y siempre al alcance del conductor.</div>
+  </div>
+</section>
+
+<!-- P4 · capacidades -->
+<section class="sc" id="p4">
+  <img class="foto" id="p4f" src="../../imagenes/ia/06-charla-seguridad.png">
+  <div class="velo" style="background:rgba(28,33,38,.78)"></div>
+  <div class="abs" id="p4t" style="left:0;right:0;top:120px;text-align:center"><div class="h2">Tres funciones, <em>un solo equipo</em></div></div>
+  <div class="cap card" id="k1" style="left:120px;top:330px"><div class="ic"><svg viewBox="0 0 24 24"><use href="#i-wifi"/></svg></div><b>Documentos y checklists sin señal</b><span>Crea su propia red Wi-Fi. Se entra con QR o NFC, sin instalar apps.</span></div>
+  <div class="cap card" id="k2" style="left:700px;top:330px"><div class="ic"><svg viewBox="0 0 24 24"><use href="#i-cam"/></svg></div><b>Dashcam doble</b><span>Graba la ruta y la cabina, con fecha, hora y GPS. Un botón guarda los incidentes.</span></div>
+  <div class="cap card" id="k3" style="left:1280px;top:330px"><div class="ic"><svg viewBox="0 0 24 24"><use href="#i-torre"/></svg></div><b>Se actualiza por 4G</b><span>Recibe lo que publica PORTA Central y envía alertas apenas hay señal.</span></div>
+</section>
+
+<!-- P5 · un toque -->
+<section class="sc" id="p5">
+  <img class="foto" id="p5f" src="../../imagenes/ia/03-toque-nfc.png" style="transform-origin:1100px 520px">
+  <div class="velo abajo"></div>
+  <div class="abs" style="left:120px;top:830px;width:1500px">
+    <div class="h2" id="p5h">Un toque y <em>estás dentro.</em></div>
+  </div>
+</section>
+
+<!-- P6 · cierre -->
+<section class="sc" id="p6" style="background:radial-gradient(1100px 700px at 50% 45%,#2c333b 0%,#1C2126 70%)">
+  <div class="abs" id="p6l" style="left:0;right:0;top:330px;display:flex;flex-direction:column;align-items:center">
+    <div class="logo" style="font-size:120px"><div class="mk" style="width:130px;height:130px;border-radius:32px"><svg viewBox="0 0 24 24" style="width:82px"><use href="#i-logo"/></svg></div>PORTA</div>
+    <div id="p6a" style="font-size:46px;font-weight:700;color:var(--n2);margin-top:48px">Siempre a bordo. Aunque no haya señal.</div>
+    <div id="p6b" style="font-size:26px;font-weight:600;color:#aab3bc;margin-top:26px;letter-spacing:.14em">PREVENCIÓN DE RIESGOS · PROPUESTA DE INNOVACIÓN</div>
+  </div>
+</section>
+<div class="abs" id="negro" style="inset:0;background:#000"></div>
+
+<script src="engine.js"></script>
+<script>
+const { tw, scene, kb, rise, tick } = M;
+const TOTAL = 37;
+
+/* P1 · 0–3.2 */
+scene('#p1', 0, 3.2, .01, .5);
+tw('#p1l', .2, 1.1, { s: [0, 1] }, 'io');
+tw('#p1w', .6, 1.6, { o: [0, 1], y: [30, 0], b: [8, 0] });
+rise('#p1s', 1.4, .8, 20);
+
+/* P2 · 2.8–17 · producto con callouts */
+scene('#p2', 2.8, 17, .6, .6);
+const Z0 = 1.0, Z1 = 1.06, ZT0 = 2.8, ZT1 = 17;
+kb('#p2f', ZT0, ZT1, Z0, Z1);
+tw('#p2v', 2.8, 3.4, { o: [0, 1] });
+// puntos en coordenadas de la foto a 1920×1080 (cover)
+const P = { ir: [671, 790], nfc: [900, 800], led: [1042, 695], fcam: [1285, 790], qr: [1562, 790], clL: [812, 275], clR: [1475, 262] };
+// [punto, etiqueta, t entrada, t salida]
+const C = [['ir', 'L1', 4.0, 7.6], ['nfc', 'L2', 4.5, 7.6], ['led', 'L3', 5.0, 7.6],
+           ['fcam', 'L4', 7.9, 10.6], ['qr', 'L5', 8.4, 10.6],
+           ['clL', 'L6', 10.9, 13.0], ['clR', 'L6', 11.1, 13.0]];
+const svg = document.getElementById('lines'), ptsDiv = document.getElementById('pts');
+C.forEach(([p, l, a, b], i) => {
+  const ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  ln.setAttribute('stroke', '#fff'); ln.setAttribute('stroke-width', '3'); ln.id = 'ln' + i; svg.appendChild(ln);
+  const d = document.createElement('div'); d.className = 'pt'; d.id = 'pt' + i; ptsDiv.appendChild(d);
+  tw('#pt' + i, a, a + .4, { o: [0, 1], s: [.2, 1] }, 'back'); tw('#pt' + i, b, b + .35, { o: [1, 0] });
+});
+// etiquetas: centrar horizontalmente sobre su "left" y aparecer
+const centrar = () => ['L1', 'L2', 'L3', 'L4', 'L5', 'L6', 'd1t'].forEach(id => { const el = document.getElementById(id); el.style.marginLeft = (-el.offsetWidth / 2) + 'px'; el.style.marginTop = (-el.offsetHeight / 2) + 'px'; });
+const ent = { L1: [4.2, 7.6], L2: [4.7, 7.6], L3: [5.2, 7.6], L4: [8.1, 10.6], L5: [8.6, 10.6], L6: [11.2, 13.0] };
+for (const id in ent) { const [a, b] = ent[id]; tw('#' + id, a, a + .5, { o: [0, 1], y: [16, 0] }); tw('#' + id, b, b + .35, { o: [1, 0] }); }
+tick(t => {
+  const k = Math.max(0, Math.min(1, (t - ZT0) / (ZT1 - ZT0))), s = Z0 + (Z1 - Z0) * k;
+  C.forEach(([p, l, a, b], i) => {
+    const x = 960 + (P[p][0] - 960) * s, y = 540 + (P[p][1] - 540) * s;
+    const pt = document.getElementById('pt' + i); pt.style.left = x + 'px'; pt.style.top = y + 'px';
+    const L = document.getElementById(l), lx = parseFloat(L.style.left), ly = parseFloat(L.style.top);
+    const ln = document.getElementById('ln' + i);
+    const vis = t > a && t < b + .35 ? Math.min(1, (t - a) / .5) * (t > b ? 1 - (t - b) / .35 : 1) : 0;
+    ln.setAttribute('x1', x); ln.setAttribute('y1', y);
+    ln.setAttribute('x2', x + (lx - x) * vis); ln.setAttribute('y2', y + (ly - y) * vis);
+    ln.style.opacity = vis > 0 ? 1 : 0;
+  });
+});
+tw('#p2t1', 3.6, 4.3, { o: [0, 1], y: [-14, 0] }); tw('#p2t1', 12.6, 13.0, { o: [1, 0] });
+// tamaño
+tw('#d1', 13.2, 13.8, { o: [0, 1], cl: [[0, 50, 0, 50], [0, 0, 0, 0]] }, 'io');
+tw('#d1t', 13.6, 14.1, { o: [0, 1], y: [12, 0] });
+tw('#d2', 13.5, 14.1, { o: [0, 1], cl: [[50, 0, 50, 0], [0, 0, 0, 0]] }, 'io');
+tw('#p2t2', 13.4, 14.2, { o: [0, 1], y: [-16, 0] });
+
+/* P3 · 16.6–22.6 */
+scene('#p3', 16.6, 22.6);
+kb('#p3f', 16.6, 22.6, 1.0, 1.28);
+rise('#p3k', 17.2); rise('#p3h', 17.4); rise('#p3p', 18.0);
+
+/* P4 · 22.2–28.4 */
+scene('#p4', 22.2, 28.4);
+tw('#p4f', 22.2, 28.4, { s: [1.1, 1.0], b: [14, 14] }, 'lin');
+rise('#p4t', 22.6);
+['#k1', '#k2', '#k3'].forEach((k, i) => tw(k, 23.1 + i * .35, 23.9 + i * .35, { o: [0, 1], y: [60, 0] }));
+
+/* P5 · 28–32.6 */
+scene('#p5', 28, 32.6);
+kb('#p5f', 28, 32.6, 1.0, 1.12);
+rise('#p5h', 28.6);
+
+/* P6 · 32.2–37 */
+scene('#p6', 32.2, 37, .5, .01);
+tw('#p6l', 32.5, 33.4, { o: [0, 1], s: [.92, 1] });
+rise('#p6a', 33.2, .7, 16); rise('#p6b', 33.7, .7, 12);
+tw('#negro', 0, .4, { o: [1, 0] }); tw('#negro', 36.3, 37, { o: [0, 1] });
+
+window.TOTAL = TOTAL;
+window.ready = Promise.all([document.fonts.ready.then(centrar), ...Array.from(document.images).map(i => i.complete ? 0 : new Promise(r => { i.onload = r; i.onerror = r; }))]);
+seek(0);
+</script>
+</body>
+</html>

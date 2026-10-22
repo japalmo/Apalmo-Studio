@@ -1,3 +1,6 @@
 prev_*.jpg
 video_silent.mp4
 music.wav
+music-*.wav
+silent-*.mp4
+log*.txt

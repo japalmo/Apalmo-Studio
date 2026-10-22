@@ -15,7 +15,7 @@ canvas{position:absolute;inset:0;width:1920px;height:1080px}
 .marca{position:absolute;left:96px;top:78px}
 .marca .k{font-size:20px;font-weight:800;letter-spacing:.22em;color:#F26B1D}
 .marca h1{font-size:46px;letter-spacing:-.02em;margin-top:8px}
-.fin{position:absolute;left:0;right:0;bottom:120px;text-align:center;font-size:54px;font-weight:800;letter-spacing:-.01em}
+.fin{position:absolute;left:0;right:0;bottom:58px;text-align:center;font-size:54px;font-weight:800;letter-spacing:-.01em}
 .fin em{font-style:normal;color:#F26B1D}
 .fin small{display:block;font-size:24px;font-weight:500;color:#6B7580;margin-top:10px;letter-spacing:0}
 </style>
@@ -234,12 +234,12 @@ const ETQ = [
   ['tapaCabina', V(-1.96, 1.2, .2), 'Tapa hacia la cabina', 'NFC + cámara interior IR', -120, -150],
   ['nfc', V(0, 1.1, 0), 'Etiqueta NFC', 'sin batería', -60, -250],
   ['camIR', V(0, -1.2, 0), 'Cámara interior USB', 'visión nocturna IR', -200, 190],
-  ['sd', V(0, -.7, 0), 'microSD 128 GB', 'video y documentos', 20, 200],
+  ['sd', V(0, -.7, 0), 'microSD 128 GB', 'video y documentos', -90, 170],
   ['pi', V(-1.5, 1.35, .2), 'Raspberry Pi Zero 2 W', '6,5 × 3 cm · Wi-Fi', -80, -330],
-  ['carcasa', V(1.5, H / 2, 0), 'Carcasa impresa en 3D', 'PETG / ASA', 60, -300],
-  ['antena', V(-1.6, .3, 0), 'Antena flexible', '4G y GPS', 120, -200],
+  ['carcasa', V(1.5, H / 2, 0), 'Carcasa impresa en 3D', 'PETG / ASA', -60, 262],
+  ['antena', V(-1.6, .3, 0), 'Antena flexible', '4G y GPS', 180, -130],
   ['lte', V(1.8, -1.0, .2), 'Módulo 4G LTE + GPS', 'con tarjeta nano-SIM', 260, -40],
-  ['supercap', V(0, -.45, 0), 'Supercondensador', 'apagado seguro', -40, 170],
+  ['supercap', V(0, -.45, 0), 'Supercondensador', 'apagado seguro', 40, 170],
   ['camFrontal', V(0, -1.2, 0), 'Cámara frontal', 'Camera Module 3 Wide', 90, 170],
   ['tapaQR', V(-2.5, -1.6, -.2), 'Tapa hacia el parabrisas', 'código QR + cámara frontal', 120, 100],
 ];
@@ -262,7 +262,7 @@ function dibujarEtiquetas(op) {
 const ease = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
 const seg = (t, a, b) => ease((t - a) / (b - a));
 const A0 = THREE.MathUtils.degToRad(32), AE = THREE.MathUtils.degToRad(-57);
-const camArm = { pos: V(0, 6.5, 33), tgt: V(0, 1.6, 0), fov: 28 };
+const camArm = { pos: V(0, 6, 28.5), tgt: V(0, 1.7, 0), fov: 28 };
 const camExp = { pos: V(0, 11, 62), tgt: V(-.5, .6, 0), fov: 26 };
 function aplicarCam(k) {
   cam.position.lerpVectors(camArm.pos, camExp.pos, k); cam.fov = THREE.MathUtils.lerp(camArm.fov, camExp.fov, k);

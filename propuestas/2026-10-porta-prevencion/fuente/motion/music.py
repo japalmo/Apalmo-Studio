@@ -1,6 +1,7 @@
-# Pista sintetizada tranquila (pad + pulso suave + arpegio) para el video PORTA. Genera music.wav
-import numpy as np, wave
-SR=44100; BPM=92; beat=60/BPM; TOTAL=57.0
+# Pista sintetizada tranquila (pad + pulso suave + arpegio) para los videos PORTA.
+# Uso: python3 music.py <duración_s> <salida.wav> [bpm]
+import numpy as np, wave, sys
+SR=44100; TOTAL=float(sys.argv[1]); OUT=sys.argv[2]; BPM=float(sys.argv[3]) if len(sys.argv)>3 else 92; beat=60/BPM
 out=np.zeros(int(SR*TOTAL))
 def f(m): return 440*2**((m-69)/12)
 def add(sig,start):
@@ -40,5 +41,5 @@ out=np.convolve(y,np.ones(5)/5,mode='same')
 fade=np.ones_like(out); nf=int(SR*2); fade[:nf]=np.linspace(0,1,nf); nfo=int(SR*4); fade[-nfo:]=np.linspace(1,0,nfo)
 out=out*fade; out=out/np.max(np.abs(out))*0.55
 st=np.stack([out,np.roll(out,int(SR*0.0007))],axis=1)
-w=wave.open('music.wav','wb'); w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR); w.writeframes((st*32767).astype(np.int16).tobytes()); w.close()
+w=wave.open(OUT,'wb'); w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR); w.writeframes((st*32767).astype(np.int16).tobytes()); w.close()
 print('ok')
