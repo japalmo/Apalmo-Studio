@@ -1,0 +1,5 @@
+{
+  "_como_usar": "Copiar como montaje.json cuando estén los videos en clips/fuente/. Cada parte: [archivo, segundo inicial, segundo final]. Con estos cortes el inserto del teléfono cae en 4,5–6,0 s del inicio y 1,5–3,0 s del cierre (clips/insertos.json).",
+  "inicio": [["inicio-1.mp4", 0.0, 3.0], ["inicio-2.mp4", 0.3, 4.8], ["inicio-3.mp4", 0.5, 2.0], ["inicio-4.mp4", 0.0, 1.0]],
+  "cierre": [["cierre-1.mp4", 0.0, 4.0], ["cierre-2.mp4", 0.5, 3.0], ["cierre-3.mp4", 0.0, 1.5]]
+}

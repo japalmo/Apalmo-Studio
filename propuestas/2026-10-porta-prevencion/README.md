@@ -48,3 +48,15 @@ Para volver a generarlo:
 2. Desde `reel/`: `python3 sfx.py sfx.wav && node render.js reel2.html full silent.mp4 && ffmpeg -i silent.mp4 -i sfx.wav -c:v copy -c:a aac -shortest ../videos/porta-reel-apalmo-studio-sfx.mp4`
 
 Prompts para los clips de inicio y cierre generados con IA: `reel/PROMPTS-VIDEO-IA.md` (referencias en `reel/referencias-ia/`).
+
+## Reel v3 con clips IA (en curso)
+
+`reel/reel3.html` reorganiza el reel: **clip IA de inicio → "Sin señal. Sin problema." → escenas actuales (equipo … la alerta llega sola) → clip IA de cierre → firma**. Se genera desde `reel2.html` (que no se toca) con `python reel/hacer_reel3.py`.
+
+- Clips: dejar los MP4 en `reel/clips/fuente/` y, si vienen en partes, copiar `clips/montaje.ejemplo.json` como `clips/montaje.json`. Luego `python reel/clips/preparar.py` los convierte en cuadros y escribe `clips/clips.js`. Sin videos, genera marcadores con la lista de tomas.
+- Pantallas de celular: insertos gráficos propios (sin servicio / documentos al día), con tiempos en `clips/insertos.json`.
+- Sonido: `python reel/sfx3.py sfx3.wav` (sin música; ambiente de desierto, ripio, ventana, escaneo, motor y polvo).
+- Render (desde `reel/`): `python sfx3.py sfx3.wav && node render.js reel3.html full silent.mp4 && ffmpeg -i silent.mp4 -i sfx3.wav -c:v copy -c:a aac -shortest ../videos/porta-reel-apalmo-studio-sfx.mp4`
+- Cómo generar los clips en Firefly (imagen clave + video por toma): `reel/PROMPTS-FIREFLY.md`.
+
+En un computador local: `cd fuente/3d && npm install` (instala three, qrcode y Playwright). `fuente/3d/pw.js` carga Playwright en la nube o en local y usa el Google Chrome instalado si Playwright no tiene su propio navegador. Las fuentes Inter y JetBrains Mono se cargan desde `demo/comun/fuentes/`.

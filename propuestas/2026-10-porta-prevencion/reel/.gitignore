@@ -3,3 +3,9 @@ musica*.wav
 prev_*.jpg
 tomas3d/
 sfx*.wav
+clips/inicio/
+clips/cierre/
+clips/_*.mp4
+reel3-*.mp4
+tomas3d.log
+*.log

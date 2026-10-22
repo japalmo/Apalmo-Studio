@@ -1,5 +1,5 @@
 // Renderiza las tomas verticales del reel como secuencias JPG: node tomas-reel.js <salida> [preview]
-const { chromium } = require('/opt/node-tools/node_modules/playwright');
+const { chromium } = require('./pw');
 const http = require('http'), fs = require('fs'), path = require('path');
 const ROOT = __dirname, OUT = process.argv[2], PREVIEW = process.argv[3] === 'preview';
 const TOMAS = Object.fromEntries(Object.entries({ entrada: 2.6, explota: 3.4, qr: 2.4, nfc: 2.4, giro: 3.6, medida: 3.2 }).filter(([n]) => !process.argv[4] || process.argv[4].split(',').includes(n)));   // duración en segundos

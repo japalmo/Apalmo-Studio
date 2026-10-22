@@ -1,6 +1,6 @@
 // Renderiza el reel vertical (1080x1920) cuadro a cuadro (Playwright) y la codifica con ffmpeg.
 // Uso: node render.js <archivo.html> preview 3,10,17   |   node render.js <archivo.html> frames <dir> 4,20   |   node render.js <archivo.html> full <salida_sin_audio.mp4>
-const { chromium } = require('/opt/node-tools/node_modules/playwright');
+const { chromium } = require('../fuente/3d/pw');
 const { spawn } = require('child_process');
 const path = require('path');
 (async () => {
