@@ -1,12 +1,13 @@
 # Efectos de sonido sincronizados con reel2.html (sin música, para agregar una canción en la app).
 # Uso: python3 sfx.py <salida.wav>
 import numpy as np, wave, sys
-SR = 44100; TOTAL = 33.0
+SR = 44100; TOTAL = 40.4
 OUT = sys.argv[1] if len(sys.argv) > 1 else 'sfx.wav'
 out = np.zeros(int(SR * TOTAL)); rng = np.random.default_rng(11)
 def T(d): return np.arange(int(SR * d)) / SR
+OFF = 0.0   # desplazamiento para las escenas que vienen después de los datos
 def add(sig, t, v=1.0):
-    i = int(SR * t)
+    i = int(SR * (t + OFF))
     if i >= len(out): return
     e = min(len(out), i + len(sig)); out[i:e] += sig[:e - i] * v
 def suave(x, n): return np.convolve(x, np.ones(n) / n, 'same')
@@ -59,10 +60,22 @@ whoosh(3.2, .6, .7); riser(3.2, 4.1, .35); golpe(4.1, .9); chime(4.15, (784, 117
 # 4 · por dentro
 click(5.8, .3); whoosh(6.2, .9, .35, sube=False)
 for t in (6.6, 6.9, 7.2, 7.5): blip(t, 1500, .06, .2); click(t, .15)
-# 5 · datos
-whoosh(9.2, .5, .6)
-for t in (9.2, 9.7, 10.2, 10.7): golpe(t, .55)
-ticks(9.2, 9.5, .045); ticks(10.7, 11.05, .03)
+# 5 · datos (más lentos: tamaño con regla y cotas, luego 3 datos de 2 s)
+whoosh(9.2, .5, .6); thump(9.35, .4); thump(9.6, .4)
+whoosh(9.75, .35, .3)                                   # entra la regla
+for i in range(8): click(9.9 + i * .6 / 7, .3); blip(9.9 + i * .6 / 7, 700 + i * 90, .03, .08)
+blip(10.5, 1568, .14, .3)                               # 7,0 cm
+click(10.3, .3); barrido_tono(10.3, 10.55, 500, 900, .06)   # cota de alto
+whoosh(11.2, .7, .3, sube=False)                        # gira a 3/4
+click(11.75, .35); thump(11.95, .55)                    # grosor + total
+golpe(12.6, .55); thump(12.75, .4); whoosh(13.15, .25, .35); buzz(13.1, .25, .14)   # 0 apps
+golpe(14.6, .55)
+for i, f in enumerate([880, 740, 620, 520]): blip(14.7 + i * .1, f, .08, .22)        # barras que caen
+chime(15.2, (1319, 1760), .3)                                                          # wifi propio
+golpe(16.6, .55); thump(16.75, .4); ticks(16.8, 17.5, .035, .16)                      # 38 h
+for t in (16.9, 17.57, 18.24): blip(t, 2000, .04, .1)
+
+OFF = 7.4
 # 6 · retrovisor
 obturador(11.2, .45); thump(11.3, .4); thump(11.5, .4); blip(11.85, 990, .1, .2)
 # 7 · QR

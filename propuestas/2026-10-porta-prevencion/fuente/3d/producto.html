@@ -312,10 +312,18 @@ const TOMAS = {
   // cara de la cabina: NFC + cámara IR
   nfc(k) { raiz.rotation.set(.06, lerp(.8, .2, eio(k)), 0);
     ponerCam(lerp(1, 0, k), lerp(3, 2, k), lerp(30, 21, eio(k)), lerp(.3, .6, k), lerp(1.4, .9, k), 0, 30); return { e: 0, piso: 1 }; },
+  // medidas: de frente (ortográfica casi) y luego gira a 3/4 para mostrar el grosor
+  medida(k) { const g = eio((k - .55) / .2);
+    raiz.rotation.set(lerp(0, .1, g), lerp(0, .78, g), 0);
+    ponerCam(0, lerp(0, 9, g) + 2.6, 135, 0, 3.5, 0, 10); return { e: 0, piso: 1 }; },
   // giro continuo para el cierre
   giro(k) { raiz.rotation.set(.12, A0 + k * Math.PI * 2, 0);
     ponerCam(0, 5, 36, 0, 3.6, 0, 30); return { e: 0, piso: 1 }; },
 };
+// proyecta puntos del equipo a píxeles de pantalla (para dibujar cotas encima)
+window.proyectar = pts => pts.map(([x, y, z]) => { const v = raiz.localToWorld(new THREE.Vector3(x, y, z)).project(cam);
+  return [Math.round((v.x + 1) / 2 * 1080), Math.round((1 - v.y) / 2 * 1920)]; });
+window.MEDIDAS = { W, H };
 window.toma = (nombre, k, t) => {
   const r = TOMAS[nombre](k);
   for (const n in partes) { const p = partes[n]; p.obj.position.lerpVectors(p.a, p.e, r.e); }

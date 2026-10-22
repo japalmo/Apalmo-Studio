@@ -2,7 +2,7 @@
 const { chromium } = require('/opt/node-tools/node_modules/playwright');
 const http = require('http'), fs = require('fs'), path = require('path');
 const ROOT = __dirname, OUT = process.argv[2], PREVIEW = process.argv[3] === 'preview';
-const TOMAS = Object.fromEntries(Object.entries({ entrada: 2.6, explota: 3.4, qr: 2.4, nfc: 2.4, giro: 3.6 }).filter(([n]) => !process.argv[4] || process.argv[4].split(',').includes(n)));   // duración en segundos
+const TOMAS = Object.fromEntries(Object.entries({ entrada: 2.6, explota: 3.4, qr: 2.4, nfc: 2.4, giro: 3.6, medida: 3.2 }).filter(([n]) => !process.argv[4] || process.argv[4].split(',').includes(n)));   // duración en segundos
 const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json' };
 const server = http.createServer((q, r) => { const f = path.join(ROOT, decodeURIComponent(q.url.split('?')[0]));
   fs.readFile(f, (e, d) => { if (e) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'Content-Type': MIME[path.extname(f)] || 'application/octet-stream' }); r.end(d); }); });
@@ -21,6 +21,9 @@ const server = http.createServer((q, r) => { const f = path.join(ROOT, decodeURI
       await p.evaluate(([n, k, t]) => window.toma(n, k, t), [n, k, i / 30]);
       await p.screenshot({ path: path.join(dir, String(i).padStart(4, '0') + '.jpg'), type: 'jpeg', quality: 90 });
     }
+    if (n === 'medida') { await p.evaluate(() => window.toma('medida', 0, 0));
+      console.log('cotas frente', JSON.stringify(await p.evaluate(() => { const { W, H } = window.MEDIDAS;
+        return window.proyectar([[-W / 2, -H / 2, 1.45], [W / 2, -H / 2, 1.45], [W / 2, H / 2, 1.45], [-W / 2, H / 2, 1.45]]); }))); }
     console.log(n, frames.length);
   }
   await b.close(); server.close();

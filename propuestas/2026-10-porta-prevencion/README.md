@@ -42,9 +42,9 @@ Regenerar desde `fuente/`: `node tools/capturas.js && node tools/capturas-centra
 
 ## Reel para redes (apalmo studio)
 
-`videos/porta-reel-apalmo-studio-sfx.mp4`: video vertical 1080×1920 de 33 s, solo con efectos de sonido (la música se agrega en la app), presentado como concepto en desarrollo, con tomas 3D verticales, datos animados y firma "Design by apalmo". Fuente en `reel/reel2.html` + `reel/musica2.py` (la versión anterior es `reel.html`).
+`videos/porta-reel-apalmo-studio-sfx.mp4`: video vertical 1080×1920 de 40 s, solo con efectos de sonido (la música se agrega en la app), presentado como concepto en desarrollo, con tomas 3D verticales, datos animados y firma "Design by apalmo". Fuente en `reel/reel2.html` + `reel/musica2.py` (la versión anterior es `reel.html`).
 Para volver a generarlo:
-1. Tomas 3D (desde `fuente/3d/`): `node tomas-reel.js ../../reel/tomas3d`
+1. Tomas 3D (desde `fuente/3d/`): `node tomas-reel.js ../../reel/tomas3d` (incluye la toma `medida` de la escena del tamaño)
 2. Desde `reel/`: `python3 sfx.py sfx.wav && node render.js reel2.html full silent.mp4 && ffmpeg -i silent.mp4 -i sfx.wav -c:v copy -c:a aac -shortest ../videos/porta-reel-apalmo-studio-sfx.mp4`
 
 Prompts para los clips de inicio y cierre generados con IA: `reel/PROMPTS-VIDEO-IA.md` (referencias en `reel/referencias-ia/`).
