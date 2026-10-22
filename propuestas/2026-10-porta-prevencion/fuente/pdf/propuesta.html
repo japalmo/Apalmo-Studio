@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>PORTA – Documentación de faena a bordo, sin señal</title>
+<style>
+@page{size:A4;margin:0}
+:root{--n:#F26B1D;--n2:#FF8A3D;--ns:#FDE9DC;--g:#1C2126;--g2:#2A3138;--gr:#6B7580;--l:#E4E1DA;--f:#F5F3EE;--ok:#2E9E5B;--oks:#E3F4EA;--al:#C98F00;--als:#FFF4D6;--pe:#D64541;--pes:#FBE5E4}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;color:var(--g);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.pg{width:210mm;height:297mm;position:relative;overflow:hidden;background:var(--f);padding:20mm 18mm 18mm;page-break-after:always;display:flex;flex-direction:column}
+.pg:last-child{page-break-after:auto}
+.pie{position:absolute;left:18mm;right:18mm;bottom:9mm;display:flex;justify-content:space-between;font-size:8pt;color:var(--gr)}
+.pie b{color:var(--n);letter-spacing:.18em}
+.k{font-size:8.5pt;font-weight:800;letter-spacing:.2em;color:var(--n);text-transform:uppercase}
+h1{font-size:30pt;line-height:1.05;letter-spacing:-.02em;margin:3mm 0 4mm}
+h2{font-size:13pt;margin:6mm 0 2.5mm}
+p{font-size:10.5pt;line-height:1.55}
+p+p{margin-top:2.5mm}
+.lead{font-size:12.5pt;line-height:1.5;color:#3c444c}
+.muted{color:var(--gr)}
+img.full{width:100%;border-radius:4mm;display:block;object-fit:cover}
+.cap{font-size:8pt;color:var(--gr);margin-top:1.8mm}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:6mm}
+.cols3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4mm}
+.card{background:#fff;border:1px solid var(--l);border-radius:4mm;padding:5mm}
+.card h3{font-size:11pt;margin:2.5mm 0 1.5mm}
+.card p{font-size:9.5pt;line-height:1.5}
+.ic{width:10mm;height:10mm;border-radius:3mm;display:grid;place-items:center;background:var(--ns);color:var(--n)}
+.ic svg{width:5.5mm;height:5.5mm}
+.num{width:9mm;height:9mm;border-radius:50%;background:var(--n);color:#fff;font-weight:800;font-size:11pt;display:grid;place-items:center;flex:none}
+ul.lista{list-style:none;margin-top:2mm}
+ul.lista li{font-size:10pt;line-height:1.45;padding:1.6mm 0 1.6mm 6mm;position:relative}
+ul.lista li:before{content:"";position:absolute;left:0;top:3.4mm;width:2.4mm;height:2.4mm;border-radius:50%;background:var(--n)}
+.cita{border-left:1.2mm solid var(--n);background:#fff;padding:4mm 5mm;border-radius:0 3mm 3mm 0;font-size:11pt;line-height:1.5;margin-top:5mm}
+
+/* portada */
+.portada{padding:0;background:var(--g);color:#fff}
+.portada .foto{position:absolute;inset:0 0 36% 0;background:url(img/01-porta-en-tablero.jpg) 30% center/cover}
+.portada .velo{position:absolute;inset:0;background:linear-gradient(180deg,rgba(28,33,38,.1) 0%,rgba(28,33,38,0) 35%,rgba(28,33,38,.85) 55%,#1C2126 63%)}
+.portada .cont{position:absolute;left:18mm;right:18mm;bottom:22mm}
+.logo{display:flex;align-items:center;gap:3mm;font-weight:800;letter-spacing:.22em;font-size:14pt}
+.logo i{width:9mm;height:9mm;border-radius:2.4mm;background:var(--n);display:grid;place-items:center}
+.logo i svg{width:5.5mm}
+.portada h1{font-size:40pt;margin:8mm 0 5mm}
+.portada h1 em{font-style:normal;color:var(--n2)}
+.portada .lead{color:#c3cbd2;max-width:150mm}
+.portada .meta{display:flex;gap:10mm;margin-top:12mm;padding-top:6mm;border-top:1px solid rgba(255,255,255,.15);font-size:9pt;color:#aab3bc}
+.portada .meta b{display:block;color:#fff;font-size:10.5pt;margin-top:1mm;font-weight:600}
+
+/* pasos */
+.pasos{display:flex;flex-direction:column;gap:3.2mm;margin-top:4mm}
+.paso{display:flex;gap:4mm;align-items:flex-start;background:#fff;border:1px solid var(--l);border-radius:4mm;padding:4mm}
+.paso h3{font-size:11pt;margin-bottom:1mm}
+.paso p{font-size:9.5pt;line-height:1.45}
+.paso .tag{margin-left:auto;font-size:7.5pt;font-weight:700;padding:1.2mm 2.5mm;border-radius:99px;white-space:nowrap;align-self:center}
+.t-base{background:#E8EEF7;color:#2F5D9E}.t-terr{background:var(--ns);color:var(--n)}
+
+/* tablas */
+table{width:100%;border-collapse:collapse;font-size:9pt;background:#fff;border-radius:3mm;overflow:hidden}
+th{background:var(--g);color:#fff;text-align:left;font-weight:600;padding:2.6mm 3mm;font-size:8.5pt}
+td{padding:2.3mm 3mm;border-top:1px solid var(--l);vertical-align:top;line-height:1.35}
+td.p{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+td small{display:block;color:var(--gr);font-size:7.8pt;margin-top:.5mm}
+tr.tot td{background:var(--ns);font-weight:800;font-size:10pt}
+tr.opt td{color:#555}
+.chip{display:inline-block;font-size:7pt;font-weight:700;padding:.6mm 1.8mm;border-radius:99px;background:var(--f);color:var(--gr);margin-left:1mm;vertical-align:middle}
+
+/* stack */
+.capa{display:grid;grid-template-columns:34mm 1fr;gap:4mm;align-items:center;background:#fff;border:1px solid var(--l);border-radius:4mm;padding:3.6mm 4mm;margin-top:2.6mm}
+.capa .n{font-weight:800;font-size:10.5pt;display:flex;align-items:center;gap:2.5mm}
+.capa .n i{width:3mm;height:11mm;border-radius:1mm;background:var(--n)}
+.capa p{font-size:9.4pt;line-height:1.45}
+.capa small{display:block;font-size:7.8pt;color:var(--gr);margin-top:1mm;font-family:"JetBrains Mono",monospace}
+
+.sem{display:flex;gap:3mm;margin-top:3mm}
+.sem div{flex:1;border-radius:3mm;padding:3mm;font-size:8.8pt;line-height:1.35;color:#fff}
+.sem b{display:block;font-size:10pt;margin-bottom:.8mm}
+.oscuro{background:var(--g);color:#fff}
+.oscuro .muted{color:#aab3bc}
+.oscuro .card{background:var(--g2);border-color:#3a434c;color:#fff}
+.oscuro .card p{color:#c3cbd2}
+.anexo{display:flex;gap:3mm;align-items:center;padding:2.6mm 0;border-top:1px solid var(--l);font-size:9.5pt}
+.anexo:first-child{border-top:0}
+.anexo code{font-family:"JetBrains Mono",monospace;font-size:8pt;color:var(--gr);margin-left:auto}
+</style>
+</head>
+<body>
+
+<!-- 1 · PORTADA -->
+<section class="pg portada">
+  <div class="foto"></div><div class="velo"></div>
+  <div class="cont">
+    <div class="logo"><i><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M5 9a10 10 0 0 1 14 0"/><path d="M8 12.5a5.5 5.5 0 0 1 8 0"/><circle cx="12" cy="17" r="1.7" fill="#fff" stroke="none"/></svg></i>PORTA</div>
+    <h1>La documentación de la faena, <em>siempre a bordo.</em><br>Aunque no haya señal.</h1>
+    <p class="lead">Un pequeño computador que viaja en la camioneta, guarda los procedimientos, contratos y hojas de seguridad, y crea su propia red Wi-Fi para que cualquier trabajador los consulte desde su teléfono y complete sus checklists en terreno.</p>
+    <div class="meta">
+      <div>Propuesta de innovación<b>Prevención de Riesgos</b></div>
+      <div>Fecha<b>Octubre 2026</b></div>
+      <div>Integrantes<b>________________________</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 · PROBLEMA -->
+<section class="pg">
+  <div class="k">01 · El problema</div>
+  <h1>En terreno, la información está lejos justo cuando más se necesita</h1>
+  <p class="lead">Gran parte del trabajo en minería, construcción, energía y transporte ocurre en lugares sin cobertura celular. Ahí, la documentación que exige la prevención de riesgos suele estar en una carpeta de papel o en una nube a la que no se puede entrar.</p>
+  <img class="full" src="img/03-charla-seguridad.jpg" style="height:78mm;margin-top:6mm">
+  <div class="cap">Imagen referencial generada con IA: charla de seguridad en una faena sin señal.</div>
+  <div class="cols" style="margin-top:5mm">
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg></div><h3>Documentos que no están</h3><p>Procedimientos desactualizados, carpetas incompletas, contratos y hojas de datos de seguridad (HDS) que quedaron en la oficina.</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 20h.01M7 20v-4M12 20v-8M17 20V8M22 4L2 22"/></svg></div><h3>Sin señal, sin nube</h3><p>Google Drive, correos y apps en línea no funcionan sin internet. El trabajador no puede consultar ni registrar nada.</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg></div><h3>Checklists en papel</h3><p>Se mojan, se pierden, se llenan “al final del día” y llegan tarde a la oficina. Nadie los revisa a tiempo.</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></div><h3>Riesgos que no se detectan</h3><p>Un conductor con fatiga o un equipo con una falla crítica pueden salir a operar sin que nadie lo sepa.</p></div>
+  </div>
+  <div class="pie"><b>PORTA</b><span>2</span></div>
+</section>
+
+<!-- 3 · SOLUCIÓN -->
+<section class="pg">
+  <div class="k">02 · La solución</div>
+  <h1>PORTA: un “pendrive con Wi-Fi propio” para cada vehículo</h1>
+  <p class="lead">PORTA es una cajita del tamaño de un celular grueso que va en el tablero de la camioneta (o en una faena, contenedor o bodega). Por dentro tiene un mini computador <b>Raspberry Pi</b> y una carcasa hecha con <b>impresión 3D</b>.</p>
+  <img class="full" src="img/render-hero.jpg" style="height:92mm;margin-top:6mm;background:#e9e6df">
+  <div class="cap">Render 3D del equipo armado.</div>
+  <div class="cols3" style="margin-top:5mm">
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 0 1-14 5.3M4 12a8 8 0 0 1 14-5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg></div><h3>Se actualiza solo</h3><p>Cuando tiene internet en la base, copia la carpeta oficial de Google Drive.</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 9a13 13 0 0 1 18 0"/><path d="M6.5 12.5a8 8 0 0 1 11 0"/><circle cx="12" cy="17" r="1.6" fill="currentColor" stroke="none"/></svg></div><h3>Crea su propia red</h3><p>En terreno enciende un Wi-Fi local. No usa datos ni necesita señal.</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg></div><h3>Desde cualquier teléfono</h3><p>Se abre en el navegador. No hay que instalar ninguna aplicación.</p></div>
+  </div>
+  <div class="pie"><b>PORTA</b><span>3</span></div>
+</section>
+
+<!-- 4 · CÓMO FUNCIONA -->
+<section class="pg">
+  <div class="k">03 · Cómo funciona</div>
+  <h1>Cinco pasos, de la oficina al terreno y de vuelta</h1>
+  <div class="pasos">
+    <div class="paso"><div class="num">1</div><div><h3>En la base se sincroniza</h3><p>PORTA se conecta al Wi-Fi de la oficina y descarga la última versión de la carpeta de Drive que mantiene el área de prevención: procedimientos, contratos, IRL, HDS y plan de emergencia.</p></div><span class="tag t-base">CON INTERNET</span></div>
+    <div class="paso"><div class="num">2</div><div><h3>En terreno se convierte en “router”</h3><p>Al perder la red de la oficina, PORTA enciende su propia red Wi-Fi (por ejemplo <b>PORTA-CH04</b>). Funciona con la batería de la camioneta.</p></div><span class="tag t-terr">SIN SEÑAL</span></div>
+    <div class="paso"><div class="num">3</div><div><h3>El trabajador acerca su teléfono</h3><p>En la tapa hay una etiqueta <b>NFC</b> (como la de las tarjetas de pago sin contacto). Al acercar el teléfono aparece “¿Conectarse a PORTA?”. También hay un <b>código QR</b> para los teléfonos que no leen NFC.</p></div><span class="tag t-terr">SIN SEÑAL</span></div>
+    <div class="paso"><div class="num">4</div><div><h3>Se abre el menú en el navegador</h3><p>Igual que el Wi-Fi de un aeropuerto, se abre solo una página con la documentación y los checklists. Todo queda guardado con nombre, fecha y hora.</p></div><span class="tag t-terr">SIN SEÑAL</span></div>
+    <div class="paso"><div class="num">5</div><div><h3>Al volver, los registros suben solos</h3><p>Cuando la camioneta regresa a la base, PORTA envía los checklists completados a la carpeta de Drive y descarga los documentos nuevos. El supervisor los ve sin papeles.</p></div><span class="tag t-base">CON INTERNET</span></div>
+  </div>
+  <img class="full" src="img/02-conexion-nfc.jpg" style="height:62mm;margin-top:5mm;object-position:center 60%">
+  <div class="cap">Imagen referencial generada con IA: conexión acercando el teléfono a la etiqueta NFC de PORTA.</div>
+  <div class="pie"><b>PORTA</b><span>4</span></div>
+</section>
+
+<!-- 5 · MENÚ -->
+<section class="pg">
+  <div class="k">04 · El menú</div>
+  <h1>Lo que ve el trabajador en su teléfono</h1>
+  <p class="lead">Una página simple, con botones grandes y pensada para usar con guantes y al sol. Arriba siempre indica que funciona <b>sin internet</b>.</p>
+  <img class="full" src="img/composicion-menu.jpg" style="margin-top:6mm">
+  <div class="cap">Mockup de la interfaz (diseño funcional, ya programado como prototipo).</div>
+  <div class="cols" style="margin-top:5mm">
+    <div class="card"><h3>📁 Biblioteca de documentos</h3><p>Organizada por carpetas igual que en Drive, con buscador: procedimientos de trabajo seguro (PTS), contrato y reglamento interno (RIOHS), información de riesgos laborales (IRL), hojas de datos de seguridad (HDS) y plan de emergencia.</p></div>
+    <div class="card"><h3>✅ Checklists y registros</h3><p>Formularios digitales que reemplazan al papel. El sistema evalúa las respuestas y muestra al instante si se puede operar. Los registros quedan en el equipo hasta volver a la base.</p></div>
+  </div>
+  <div class="pie"><b>PORTA</b><span>5</span></div>
+</section>
+
+<!-- 6 · CHECKLISTS -->
+<section class="pg">
+  <div class="k">05 · Checklists incluidos</div>
+  <h1>Detectar el riesgo antes de salir a operar</h1>
+  <img class="full" src="img/composicion-checklists.jpg">
+  <div class="cols3" style="margin-top:5mm">
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h11v9H2zM13 10h4l4 3v3h-8"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg></div><h3>Vehículo (pre-uso)</h3><p>Neumáticos, frenos, luces y baliza, cinturones, extintor vigente, botiquín, radio y documentos (permiso de circulación, revisión técnica, SOAP).</p></div>
+    <div class="card"><div class="ic" style="background:#EFE7F8;color:#6A3FA0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></div><h3>Fatiga y somnolencia</h3><p>Horas de sueño, cómo se siente, consumo de alcohol o medicamentos, horas despierto y síntomas. Se responde antes de conducir.</p></div>
+    <div class="card"><div class="ic" style="background:var(--als);color:#9A6B00"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></div><h3>Equipo: generador</h3><p>Ventilación (monóxido de carbono), conexión a tierra, cables, protección diferencial, fugas, extintor cercano y protección auditiva.</p></div>
+  </div>
+  <h2>Resultado tipo semáforo</h2>
+  <div class="sem">
+    <div style="background:var(--ok)"><b>Apto</b>Todo conforme. Se guarda el registro y se puede operar.</div>
+    <div style="background:var(--al)"><b>Con observaciones</b>Fallas no críticas. Operar con precaución y reportar.</div>
+    <div style="background:var(--pe)"><b>No apto / No operar</b>Falla en un ítem crítico o fatiga alta: avisar al supervisor.</div>
+  </div>
+  <p class="muted" style="font-size:9pt;margin-top:3mm">Los ítems marcados como <b>críticos</b> y los criterios de fatiga los define el área de prevención de cada empresa; los de esta propuesta son un ejemplo. Se pueden agregar más checklists (por ejemplo, trabajo en altura o herramientas eléctricas).</p>
+  <div class="pie"><b>PORTA</b><span>6</span></div>
+</section>
+
+<!-- 7 · LISTA DE COMPRAS -->
+<section class="pg">
+  <div class="k">06 · Qué hay que comprar</div>
+  <h1>Lista de materiales para un equipo</h1>
+  <p class="lead" style="font-size:11pt">Todos los componentes se consiguen en tiendas de electrónica en Chile o en línea. Precios referenciales a octubre de 2026, en pesos chilenos, pueden variar.</p>
+  <table style="margin-top:5mm">
+    <tr><th style="width:42%">Componente</th><th>¿Para qué sirve?</th><th style="text-align:right">Precio aprox.</th></tr>
+    <tr><td><b>Raspberry Pi 5 (4 GB)</b><small>El “cerebro”. Trae Wi-Fi incorporado.</small></td><td>Es el computador que guarda los documentos y muestra el menú.</td><td class="p">$90.000</td></tr>
+    <tr><td><b>Tarjeta microSD 64 GB (clase A2)</b></td><td>El “disco duro”: sistema y documentos.</td><td class="p">$12.000</td></tr>
+    <tr><td><b>Ventilador activo oficial (Active Cooler)</b></td><td>Evita el sobrecalentamiento en la cabina.</td><td class="p">$7.000</td></tr>
+    <tr><td><b>Batería para reloj (RTC) de Raspberry Pi 5</b></td><td>Mantiene la hora correcta sin internet: los registros quedan con fecha y hora reales.</td><td class="p">$6.000</td></tr>
+    <tr><td><b>Cargador de auto USB-C (12 V → 5 V / 3 A o más)</b></td><td>Alimenta PORTA desde el encendedor de la camioneta.</td><td class="p">$12.000</td></tr>
+    <tr><td><b>Fuente oficial USB-C 27 W</b></td><td>Para usarlo enchufado en oficina o contenedor.</td><td class="p">$14.000</td></tr>
+    <tr><td><b>Pantalla OLED 0,96" (I2C)</b></td><td>Muestra el nombre de la red y si está sincronizado.</td><td class="p">$5.000</td></tr>
+    <tr><td><b>Etiquetas NFC NTAG215 (pack de 10)</b></td><td>Al acercar el teléfono, se conecta a la red. No usa batería.</td><td class="p">$4.000</td></tr>
+    <tr><td><b>Pulsador, LED y cables Dupont</b></td><td>Botón para forzar sincronización y luz de estado.</td><td class="p">$3.000</td></tr>
+    <tr><td><b>Carcasa impresa en 3D (PETG o ASA)</b><small>~90 g de material + servicio de impresión</small></td><td>Protege el equipo del polvo, golpes y calor.</td><td class="p">$15.000</td></tr>
+    <tr><td><b>Tornillos M2.5, insertos térmicos y velcro industrial</b></td><td>Armado y fijación al tablero.</td><td class="p">$8.000</td></tr>
+    <tr class="tot"><td>Total por equipo</td><td></td><td class="p">≈ $176.000</td></tr>
+    <tr class="opt"><td><b>Opcional: batería externa 20.000 mAh (USB-C PD)</b></td><td>Para llevar PORTA fuera del vehículo (charla, bodega) unas 8 a 10 horas.</td><td class="p">$25.000</td></tr>
+  </table>
+  <div class="cita"><b>Versión económica:</b> para un piloto que solo muestre documentos se puede usar una <b>Raspberry Pi Zero 2 W</b> (≈ $25.000) en lugar de la Pi 5, sin ventilador ni batería de reloj, bajando el total a cerca de <b>$100.000</b>. La Pi 5 es más rápida y aguanta más usuarios conectados al mismo tiempo.</div>
+  <div class="pie"><b>PORTA</b><span>7</span></div>
+</section>
+
+<!-- 8 · CARCASA 3D -->
+<section class="pg">
+  <div class="k">07 · La carcasa impresa en 3D</div>
+  <h1>Diseñada para la cabina de una camioneta</h1>
+  <img class="full" src="img/render-explosionado.jpg" style="height:100mm;background:#e9e6df">
+  <div class="cap">Vista explosionada: tapa con NFC y pantalla, Raspberry Pi 5, ventilador y cuerpo de la carcasa.</div>
+  <div class="cols" style="margin-top:5mm">
+    <div>
+      <h2 style="margin-top:0">Características</h2>
+      <ul class="lista">
+        <li><b>Tamaño:</b> aprox. 12 × 8 × 3,6 cm.</li>
+        <li><b>Color naranjo de seguridad</b>, fácil de ubicar en el vehículo.</li>
+        <li><b>Etiqueta NFC</b> pegada bajo la tapa, marcada con el símbolo “acercar aquí”.</li>
+        <li><b>Ranuras de ventilación</b> laterales y salida de aire del ventilador.</li>
+        <li>Acceso al puerto <b>USB-C</b> y botón de sincronización.</li>
+        <li>Fijación con <b>velcro industrial</b> o tornillos al tablero.</li>
+      </ul>
+    </div>
+    <div>
+      <h2 style="margin-top:0">¿Por qué PETG y no PLA?</h2>
+      <p>Dentro de una camioneta estacionada al sol, el tablero puede superar los 60 °C. El <b>PLA</b> (el plástico más común de impresión 3D) se ablanda cerca de esa temperatura y la carcasa se deforma.</p>
+      <p>El <b>PETG</b> o el <b>ASA</b> resisten más calor y radiación UV, por eso son los recomendados. El archivo del modelo se puede imprimir en cualquier impresora 3D doméstica o en un servicio de impresión.</p>
+    </div>
+  </div>
+  <div class="pie"><b>PORTA</b><span>8</span></div>
+</section>
+
+<!-- 9 · STACK -->
+<section class="pg">
+  <div class="k">08 · Cómo está construido (el “stack”)</div>
+  <h1>Las capas de PORTA, explicadas en simple</h1>
+  <p class="lead" style="font-size:11pt">Todo el software es gratuito y de código abierto. En gris va el nombre técnico para quien quiera profundizar.</p>
+  <div class="capa"><div class="n"><i></i>Hardware</div><p>El mini computador, la tarjeta de memoria, la pantallita, la etiqueta NFC y la carcasa.<small>Raspberry Pi 5 · microSD · OLED SSD1306 · NFC NTAG215 · carcasa PETG</small></p></div>
+  <div class="capa"><div class="n"><i></i>Sistema</div><p>El “Windows” del equipo, pero liviano y gratuito. Arranca solo al enchufarlo, sin teclado ni pantalla.<small>Raspberry Pi OS Lite (Linux) · servicios systemd</small></p></div>
+  <div class="capa"><div class="n"><i></i>Sincronización</div><p>Un programa que copia la carpeta de Google Drive al equipo cuando hay internet y sube los registros de vuelta. Solo descarga lo que cambió.<small>rclone sync (Google Drive API) · tarea programada</small></p></div>
+  <div class="capa"><div class="n"><i></i>Red Wi-Fi</div><p>Detecta si está en la base o en terreno. En terreno enciende su red propia con contraseña y hace que el menú se abra solo al conectarse.<small>NetworkManager (modo punto de acceso) · dnsmasq · portal cautivo</small></p></div>
+  <div class="capa"><div class="n"><i></i>Conexión rápida</div><p>La etiqueta NFC y el código QR guardan el nombre y la clave de la red: el teléfono se conecta sin escribir nada.<small>Registro NDEF “WiFi Simple Configuration” · QR “WIFI:S:…;T:WPA;P:…;;”</small></p></div>
+  <div class="capa"><div class="n"><i></i>Aplicación</div><p>La página web con el menú, el visor de documentos y los checklists. Guarda las respuestas en una pequeña base de datos dentro del equipo.<small>Servidor web (Python + Flask) · HTML/CSS/JS · base de datos SQLite · exportación PDF/CSV</small></p></div>
+  <div class="capa"><div class="n"><i></i>Estado</div><p>La pantalla y el LED muestran si está sincronizando, en modo terreno y cuántas personas están conectadas.<small>script Python · I2C / GPIO</small></p></div>
+  <div class="pie"><b>PORTA</b><span>9</span></div>
+</section>
+
+<!-- 10 · BENEFICIOS -->
+<section class="pg">
+  <div class="k">09 · Por qué importa en prevención</div>
+  <h1>Beneficios y alcances</h1>
+  <div class="cols">
+    <div>
+      <h2 style="margin-top:0">Beneficios</h2>
+      <ul class="lista">
+        <li><b>Documentación vigente en terreno:</b> siempre la última versión aprobada, no una fotocopia antigua.</li>
+        <li><b>Apoya el deber de informar:</b> el trabajador puede consultar su IRL, procedimientos y reglamento cuando lo necesite (Ley 16.744, DS 44 y art. 184 del Código del Trabajo).</li>
+        <li><b>Prevención de la fatiga:</b> la autoevaluación antes de conducir permite detener a tiempo a un conductor no apto.</li>
+        <li><b>Trazabilidad:</b> cada checklist queda con nombre, fecha, hora y equipo; útil para auditorías e investigaciones.</li>
+        <li><b>Menos papel</b> y menos carpetas perdidas o deterioradas.</li>
+        <li><b>Bajo costo:</b> menos de $200.000 por vehículo, sin planes de datos ni licencias.</li>
+      </ul>
+    </div>
+    <div>
+      <h2 style="margin-top:0">Consideraciones</h2>
+      <ul class="lista">
+        <li><b>iPhone y NFC:</b> los iPhone no se conectan a Wi-Fi solo con NFC; para ellos se usa el código QR impreso en la tapa (la cámara lo reconoce directo).</li>
+        <li><b>No reemplaza la radio</b> ni los sistemas de emergencia: es una herramienta de consulta y registro.</li>
+        <li><b>Seguridad:</b> red con contraseña y documentos solo de lectura; los contratos personales pueden protegerse con clave.</li>
+        <li><b>Mantención:</b> alguien del área debe mantener ordenada la carpeta de Drive (lo que está ahí es lo que se ve en terreno).</li>
+      </ul>
+      <h2>Próximos pasos</h2>
+      <ul class="lista">
+        <li>Demo funcionando en un computador para la presentación.</li>
+        <li>Prototipo físico en una camioneta (piloto de 1 mes).</li>
+        <li>Medir: checklists completados, tiempos y observaciones detectadas.</li>
+      </ul>
+    </div>
+  </div>
+  <img class="full" src="img/05-checklist-fatiga.jpg" style="height:66mm;margin-top:6mm">
+  <div class="cap">Imagen referencial generada con IA: autoevaluación de fatiga antes de iniciar la conducción.</div>
+  <div class="pie"><b>PORTA</b><span>10</span></div>
+</section>
+
+<!-- 11 · ANEXOS -->
+<section class="pg oscuro">
+  <div class="k">10 · Anexos para la presentación</div>
+  <h1>Material visual incluido</h1>
+  <p class="lead muted" style="font-size:11pt">Archivos que acompañan este documento, listos para usar en diapositivas.</p>
+  <div class="cols" style="margin-top:6mm">
+    <img class="full" src="img/04-checklist-generador.jpg" style="height:52mm">
+    <img class="full" src="img/06-sincronizando-en-base.jpg" style="height:52mm">
+  </div>
+  <div class="card" style="margin-top:6mm">
+    <div class="anexo"><b>🎬 Video: Cómo funciona PORTA</b><span class="muted">motion graphics, ~1 min</span><code>videos/porta-como-funciona.mp4</code></div>
+    <div class="anexo"><b>🎬 Video: Modelo 3D</b><span class="muted">giro 360° y vista explosionada</span><code>videos/porta-3d-giro.mp4</code></div>
+    <div class="anexo"><b>🧊 Renders 3D</b><span class="muted">equipo armado y explosionado</span><code>imagenes/renders-3d/</code></div>
+    <div class="anexo"><b>📱 Mockups del menú</b><span class="muted">pantallas en teléfono y composiciones</span><code>imagenes/mockups/</code></div>
+    <div class="anexo"><b>📸 Imágenes en terreno (IA)</b><span class="muted">6 escenas de uso</span><code>imagenes/ia/</code></div>
+    <div class="anexo"><b>💻 Prototipo de la interfaz</b><span class="muted">se abre en cualquier navegador</span><code>fuente/app/index.html</code></div>
+  </div>
+  <p class="muted" style="font-size:8.5pt;margin-top:6mm">Las fotografías de personas son ilustraciones generadas con inteligencia artificial con fines referenciales; no corresponden a personas, empresas ni faenas reales. Los documentos, nombres y datos que aparecen en las pantallas son ejemplos.</p>
+  <div class="pie" style="color:#aab3bc"><b>PORTA</b><span>11</span></div>
+</section>
+
+</body>
+</html>
