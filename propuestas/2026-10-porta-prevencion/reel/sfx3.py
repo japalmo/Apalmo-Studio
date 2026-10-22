@@ -185,7 +185,7 @@ for k in range(3): paso_ripio(K + 6.2 + k * .5, .12)
 whoosh(29.6 + O, .6, .55); thump(29.75 + O, .5); chime(30.45 + O, (784, 1175, 1568), .2)
 
 y = np.tanh(out[:int(SR * TOTAL)] * 1.2)
-y = y / np.max(np.abs(y)) * .85
+y = y / np.max(np.abs(y)) * .75
 st = np.stack([y, np.roll(y, int(SR * .0005))], axis=1)
 w = wave.open(OUT, 'wb'); w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR)
 w.writeframes((st * 32767).astype(np.int16).tobytes()); w.close(); print('ok', OUT, f'{TOTAL:.2f} s')
