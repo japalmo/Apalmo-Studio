@@ -39,3 +39,7 @@ Propuesta de innovación para Prevención de Riesgos. PORTA es un equipo de 7 ×
 - `fuente/tools/`: capturas, mockups, PDF y overlay de la dashcam.
 
 Regenerar desde `fuente/`: `node tools/capturas.js && node tools/capturas-central.js && node tools/mockups.js && node tools/mockups-central.js && node tools/pdf.js`
+
+## Reel para redes (apalmo studio)
+
+`videos/porta-reel-apalmo-studio.mp4`: video vertical 1080×1920 de 37 s, presentado como concepto en desarrollo. Fuente en `reel/` (`reel.html` + `musica.py`). Para volver a generarlo, desde `reel/`: `python3 musica.py musica.wav && node render.js reel.html full silent.mp4 && ffmpeg -i silent.mp4 -i musica.wav -c:v copy -c:a aac -shortest ../videos/porta-reel-apalmo-studio.mp4`
