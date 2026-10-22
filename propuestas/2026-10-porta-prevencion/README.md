@@ -1,27 +1,33 @@
-# PORTA — documentación de faena a bordo, sin señal
+# PORTA — documentación, checklists y dashcam a bordo, sin señal
 
-Propuesta de innovación para Prevención de Riesgos: un mini computador (Raspberry Pi + carcasa impresa en 3D) que viaja en el vehículo, sincroniza una carpeta de Google Drive cuando tiene internet y, en terreno, crea su propia red Wi-Fi con un menú web de documentación y checklists (vehículo, fatiga y somnolencia, generador). Conexión rápida por etiqueta NFC o código QR.
+Propuesta de innovación para Prevención de Riesgos. PORTA es un equipo de 7 × 4 × 3 cm (Raspberry Pi Zero 2 W + 4G con SIM y GPS + dos cámaras) que va abrazado al pie del espejo retrovisor:
+
+- **Hacia la cabina:** zona NFC “Acerca tu teléfono”, cámara interior infrarroja y LED de estado.
+- **Hacia el parabrisas:** código QR, que se escanea desde afuera del vehículo, y cámara frontal.
+- **Sin señal:** crea su propia red Wi-Fi con un menú web de documentos y checklists (vehículo, fatiga y somnolencia, generador).
+- **Con señal (4G):** recibe los documentos publicados en **PORTA Central** y envía checklists, alertas y videos marcados. Nunca hay que sacarlo del vehículo.
 
 ## Entregables
 
 | Archivo | Qué es |
 |---|---|
-| `PORTA-propuesta.pdf` | Documento de 11 páginas, no técnico: problema, solución, funcionamiento, menú, checklists, lista de compras con precios, carcasa 3D, stack explicado en simple, beneficios y anexos. |
-| `videos/porta-como-funciona.mp4` | Motion graphics explicativo (1920×1080). |
-| `videos/porta-3d-giro.mp4` | Animación 3D: giro 360° y vista explosionada. |
-| `imagenes/renders-3d/` | Renders del equipo armado y explosionado. |
-| `imagenes/mockups/` | Pantallas del menú en marco de teléfono (PNG transparente) y composiciones 16:9 para diapositivas. |
-| `imagenes/ia/` | Escenas de uso en terreno generadas con IA (referenciales, sin marcas reales). |
-| `imagenes/motion-fotogramas/` | Fotogramas del video explicativo. |
+| `PORTA-propuesta.pdf` | Documento de 14 páginas, no técnico: problema, solución, funcionamiento, equipo, menú, checklists, PORTA Central, dashcam, lista de materiales, carcasa 3D, stack, beneficios y anexos. |
+| `videos/porta-como-funciona.mp4` | Motion graphics explicativo (~1 min). |
+| `videos/porta-el-producto.mp4` | Spot del producto (~35 s). |
+| `videos/porta-3d-giro.mp4` | Modelo 3D: giro 360° y vista explosionada. |
+| `imagenes/ia/` | Fotos IA del modelo aprobado (referenciales, sin marcas reales). |
+| `imagenes/renders-3d/` | Renders del modelo 3D (armado y explosionado). |
+| `imagenes/mockups/` | App en teléfono y PORTA Central en notebook, sueltos (PNG transparente) y en composiciones 16:9. |
+| `imagenes/concepto/` | Modelo de concepto aprobado y referencias usadas para generar las fotos IA. |
+| `imagenes/dashcam/` | Cuadro de la cámara interior con los datos de la dashcam. |
 
 ## Fuentes
 
-- `fuente/app/index.html` — prototipo funcional de la interfaz (abrir en cualquier navegador; `#/bienvenida` es la pantalla que aparece al tocar NFC). Base para la demo local.
-- `fuente/capturas/` — capturas 390×844 @3x de la app.
-- `fuente/tools/capturas.js` → capturas · `fuente/tools/mockups.js` → mockups · `fuente/tools/pdf.js` → PDF.
-- `fuente/pdf/propuesta.html` — fuente del PDF.
-- `fuente/3d/` — escena three.js y render de imágenes/video 3D.
-- `fuente/motion/` — animación HTML del video explicativo y su render.
-- Imágenes IA: archivo Figma «PORTA – imágenes IA presentación» (https://www.figma.com/design/DD44XnA5PNoMebLEiwrHP9).
+- `fuente/app/index.html`: prototipo navegable de la app del teléfono (`#/bienvenida` es la pantalla que aparece al tocar NFC o escanear el QR).
+- `fuente/central/index.html`: prototipo navegable de PORTA Central.
+- `fuente/3d/`: escenas three.js (`concepto.html` es el modelo aprobado) y sus scripts de render.
+- `fuente/motion/`: animaciones HTML de los videos y su render.
+- `fuente/pdf/propuesta.html`: fuente del PDF.
+- `fuente/tools/`: capturas, mockups, PDF y overlay de la dashcam.
 
-Regenerar (desde `fuente/`): `node tools/capturas.js && node tools/mockups.js && node tools/pdf.js`
+Regenerar desde `fuente/`: `node tools/capturas.js && node tools/capturas-central.js && node tools/mockups.js && node tools/mockups-central.js && node tools/pdf.js`
