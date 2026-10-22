@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>PORTA – Documentación de faena a bordo, sin señal</title>
+<title>PORTA – Documentación, checklists y dashcam a bordo</title>
 <style>
 @page{size:A4;margin:0}
 :root{--n:#F26B1D;--n2:#FF8A3D;--ns:#FDE9DC;--g:#1C2126;--g2:#2A3138;--gr:#6B7580;--l:#E4E1DA;--f:#F5F3EE;--ok:#2E9E5B;--oks:#E3F4EA;--al:#C98F00;--als:#FFF4D6;--pe:#D64541;--pes:#FBE5E4}
@@ -86,14 +86,31 @@ tr.opt td{color:#555}
 </style>
 </head>
 <body>
+<style>
+.ph{background:#e9e6df}
+.stack .capa{margin-top:2mm;padding:2.6mm 4mm}
+.stack .capa p{font-size:9pt;line-height:1.38}
+.stack .capa .n i{height:9mm}
+.stack h1{margin-bottom:2mm}
+.cols4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:3.5mm}
+.cols4 .card{padding:4mm}
+.cols4 .card h3{font-size:10pt}
+.cols4 .card p{font-size:8.8pt}
+.lado{display:grid;grid-template-columns:1fr 1fr;gap:4mm;margin-top:4mm}
+.lado .card{padding:4mm}
+.lado .card h3{display:flex;align-items:center;gap:2mm;margin-top:0}
+.lado .card h3 span{font-size:7.5pt;font-weight:700;padding:.8mm 2.2mm;border-radius:99px;background:var(--ns);color:var(--n)}
+.mini{font-size:8.5pt!important;color:var(--gr)}
+.recur td{background:#fff7f1}
+</style>
 
 <!-- 1 · PORTADA -->
 <section class="pg portada">
-  <div class="foto"></div><div class="velo"></div>
+  <div class="foto" style="background-image:url(img/01-porta-bajo-retrovisor.jpg);background-position:center 40%"></div><div class="velo"></div>
   <div class="cont">
     <div class="logo"><i><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M5 9a10 10 0 0 1 14 0"/><path d="M8 12.5a5.5 5.5 0 0 1 8 0"/><circle cx="12" cy="17" r="1.7" fill="#fff" stroke="none"/></svg></i>PORTA</div>
-    <h1>La documentación de la faena, <em>siempre a bordo.</em><br>Aunque no haya señal.</h1>
-    <p class="lead">Un pequeño computador que viaja en la camioneta, guarda los procedimientos, contratos y hojas de seguridad, y crea su propia red Wi-Fi para que cualquier trabajador los consulte desde su teléfono y complete sus checklists en terreno.</p>
+    <h1>Documentación, checklists y dashcam. <em>Siempre a bordo,</em> aunque no haya señal.</h1>
+    <p class="lead">Un equipo más pequeño que un teléfono que va bajo el espejo retrovisor. Guarda los procedimientos y contratos, crea su propia red Wi-Fi para consultarlos desde cualquier celular, graba la ruta y la cabina, y se actualiza solo por 4G desde la oficina.</p>
     <div class="meta">
       <div>Propuesta de innovación<b>Prevención de Riesgos</b></div>
       <div>Fecha<b>Octubre 2026</b></div>
@@ -106,14 +123,14 @@ tr.opt td{color:#555}
 <section class="pg">
   <div class="k">01 · El problema</div>
   <h1>En terreno, la información está lejos justo cuando más se necesita</h1>
-  <p class="lead">Gran parte del trabajo en minería, construcción, energía y transporte ocurre en lugares sin cobertura celular. Ahí, la documentación que exige la prevención de riesgos suele estar en una carpeta de papel o en una nube a la que no se puede entrar.</p>
-  <img class="full" src="img/03-charla-seguridad.jpg" style="height:78mm;margin-top:6mm">
-  <div class="cap">Imagen referencial generada con IA: charla de seguridad en una faena sin señal.</div>
+  <p class="lead">Gran parte del trabajo en minería, construcción, energía y transporte ocurre donde no hay cobertura celular. Ahí, la documentación que exige la prevención de riesgos suele estar en una carpeta de papel o en una nube a la que no se puede entrar.</p>
+  <img class="full" src="img/04-checklist-generador.jpg" style="height:76mm;margin-top:6mm">
+  <div class="cap">Imagen referencial generada con IA: inspección de un generador en una faena sin señal.</div>
   <div class="cols" style="margin-top:5mm">
     <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg></div><h3>Documentos que no están</h3><p>Procedimientos desactualizados, carpetas incompletas, contratos y hojas de datos de seguridad (HDS) que quedaron en la oficina.</p></div>
     <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 20h.01M7 20v-4M12 20v-8M17 20V8M22 4L2 22"/></svg></div><h3>Sin señal, sin nube</h3><p>Google Drive, correos y apps en línea no funcionan sin internet. El trabajador no puede consultar ni registrar nada.</p></div>
     <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg></div><h3>Checklists en papel</h3><p>Se mojan, se pierden, se llenan “al final del día” y llegan tarde a la oficina. Nadie los revisa a tiempo.</p></div>
-    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></div><h3>Riesgos que no se detectan</h3><p>Un conductor con fatiga o un equipo con una falla crítica pueden salir a operar sin que nadie lo sepa.</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></div><h3>Riesgos e incidentes sin registro</h3><p>Un conductor con fatiga sale igual a la ruta, y cuando ocurre un incidente no hay imágenes para investigar qué pasó.</p></div>
   </div>
   <div class="pie"><b>PORTA</b><span>2</span></div>
 </section>
@@ -121,14 +138,15 @@ tr.opt td{color:#555}
 <!-- 3 · SOLUCIÓN -->
 <section class="pg">
   <div class="k">02 · La solución</div>
-  <h1>PORTA: un “pendrive con Wi-Fi propio” para cada vehículo</h1>
-  <p class="lead">PORTA es una cajita del tamaño de un celular grueso que va en el tablero de la camioneta (o en una faena, contenedor o bodega). Por dentro tiene un mini computador <b>Raspberry Pi</b> y una carcasa hecha con <b>impresión 3D</b>.</p>
-  <img class="full" src="img/render-hero.jpg" style="height:92mm;margin-top:6mm;background:#e9e6df">
-  <div class="cap">Render 3D del equipo armado.</div>
-  <div class="cols3" style="margin-top:5mm">
-    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 0 1-14 5.3M4 12a8 8 0 0 1 14-5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg></div><h3>Se actualiza solo</h3><p>Cuando tiene internet en la base, copia la carpeta oficial de Google Drive.</p></div>
-    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 9a13 13 0 0 1 18 0"/><path d="M6.5 12.5a8 8 0 0 1 11 0"/><circle cx="12" cy="17" r="1.6" fill="currentColor" stroke="none"/></svg></div><h3>Crea su propia red</h3><p>En terreno enciende un Wi-Fi local. No usa datos ni necesita señal.</p></div>
-    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg></div><h3>Desde cualquier teléfono</h3><p>Se abre en el navegador. No hay que instalar ninguna aplicación.</p></div>
+  <h1>PORTA: computador y dashcam en un equipo más pequeño que un teléfono</h1>
+  <p class="lead">PORTA va pegado al parabrisas, justo bajo el espejo retrovisor, como una dashcam. Por dentro tiene un mini computador <b>Raspberry Pi</b>, dos cámaras y un chip <b>4G</b>. La carcasa se fabrica con <b>impresión 3D</b>.</p>
+  <img class="full ph" src="img/render-contexto.jpg" style="height:84mm;margin-top:5mm">
+  <div class="cap">Render 3D: PORTA montado bajo el espejo retrovisor.</div>
+  <div class="cols4" style="margin-top:5mm">
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 0 1-14 5.3M4 12a8 8 0 0 1 14-5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg></div><h3>Se actualiza solo</h3><p>Por 4G recibe lo que se publica en la oficina. Nunca hay que sacarlo del vehículo.</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 9a13 13 0 0 1 18 0"/><path d="M6.5 12.5a8 8 0 0 1 11 0"/><circle cx="12" cy="17" r="1.6" fill="currentColor" stroke="none"/></svg></div><h3>Funciona sin señal</h3><p>En terreno crea su propia red Wi-Fi con los documentos y checklists.</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg></div><h3>QR y NFC</h3><p>QR hacia afuera, NFC hacia adentro: se entra desde el navegador sin instalar nada.</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/></svg></div><h3>Dashcam doble</h3><p>Graba la ruta y la cabina. Un botón guarda el video de un incidente.</p></div>
   </div>
   <div class="pie"><b>PORTA</b><span>3</span></div>
 </section>
@@ -136,36 +154,60 @@ tr.opt td{color:#555}
 <!-- 4 · CÓMO FUNCIONA -->
 <section class="pg">
   <div class="k">03 · Cómo funciona</div>
-  <h1>Cinco pasos, de la oficina al terreno y de vuelta</h1>
+  <h1>De la oficina al terreno, sin sacar nunca el equipo</h1>
   <div class="pasos">
-    <div class="paso"><div class="num">1</div><div><h3>En la base se sincroniza</h3><p>PORTA se conecta al Wi-Fi de la oficina y descarga la última versión de la carpeta de Drive que mantiene el área de prevención: procedimientos, contratos, IRL, HDS y plan de emergencia.</p></div><span class="tag t-base">CON INTERNET</span></div>
-    <div class="paso"><div class="num">2</div><div><h3>En terreno se convierte en “router”</h3><p>Al perder la red de la oficina, PORTA enciende su propia red Wi-Fi (por ejemplo <b>PORTA-CH04</b>). Funciona con la batería de la camioneta.</p></div><span class="tag t-terr">SIN SEÑAL</span></div>
-    <div class="paso"><div class="num">3</div><div><h3>El trabajador acerca su teléfono</h3><p>En la tapa hay una etiqueta <b>NFC</b> (como la de las tarjetas de pago sin contacto). Al acercar el teléfono aparece “¿Conectarse a PORTA?”. También hay un <b>código QR</b> para los teléfonos que no leen NFC.</p></div><span class="tag t-terr">SIN SEÑAL</span></div>
-    <div class="paso"><div class="num">4</div><div><h3>Se abre el menú en el navegador</h3><p>Igual que el Wi-Fi de un aeropuerto, se abre solo una página con la documentación y los checklists. Todo queda guardado con nombre, fecha y hora.</p></div><span class="tag t-terr">SIN SEÑAL</span></div>
-    <div class="paso"><div class="num">5</div><div><h3>Al volver, los registros suben solos</h3><p>Cuando la camioneta regresa a la base, PORTA envía los checklists completados a la carpeta de Drive y descarga los documentos nuevos. El supervisor los ve sin papeles.</p></div><span class="tag t-base">CON INTERNET</span></div>
+    <div class="paso"><div class="num">1</div><div><h3>Prevención publica desde la oficina</h3><p>En el portal <b>PORTA Central</b> se sube un procedimiento, un contrato o una HDS, y se elige a qué vehículos va: toda la flota, una faena o uno solo.</p></div><span class="tag t-base">CON SEÑAL</span></div>
+    <div class="paso"><div class="num">2</div><div><h3>PORTA lo recibe por 4G</h3><p>Cada equipo tiene una SIM con datos. Apenas tiene cobertura, descarga lo nuevo; si está en terreno sin señal, lo hará en cuanto se conecte.</p></div><span class="tag t-base">CON SEÑAL</span></div>
+    <div class="paso"><div class="num">3</div><div><h3>En terreno se convierte en “router”</h3><p>PORTA enciende su propia red Wi-Fi (por ejemplo <b>PORTA-CH04</b>). Funciona con la batería del vehículo, aunque no haya ninguna señal.</p></div><span class="tag t-terr">SIN SEÑAL</span></div>
+    <div class="paso"><div class="num">4</div><div><h3>Se entra con QR o NFC</h3><p><b>Desde afuera</b>, se escanea el código QR a través del parabrisas. <b>Desde adentro</b>, se acerca el teléfono a la zona NFC. El menú se abre solo en el navegador.</p></div><span class="tag t-terr">SIN SEÑAL</span></div>
+    <div class="paso"><div class="num">5</div><div><h3>Se consulta, se registra y se graba</h3><p>El trabajador lee procedimientos y completa sus checklists. Mientras tanto, la dashcam graba la ruta y la cabina.</p></div><span class="tag t-terr">SIN SEÑAL</span></div>
+    <div class="paso"><div class="num">6</div><div><h3>Apenas hay señal, todo llega a la central</h3><p>Checklists, alertas (“no apto”, “no operar”) y videos de incidentes suben solos por 4G. El supervisor los ve en PORTA Central.</p></div><span class="tag t-base">CON SEÑAL</span></div>
   </div>
-  <img class="full" src="img/02-conexion-nfc.jpg" style="height:62mm;margin-top:5mm;object-position:center 60%">
-  <div class="cap">Imagen referencial generada con IA: conexión acercando el teléfono a la etiqueta NFC de PORTA.</div>
+  <img class="full" src="img/02-escaneo-qr-exterior.jpg" style="height:50mm;margin-top:4mm;object-position:center 45%">
+  <div class="cap">Imagen referencial generada con IA: escaneo del código QR de PORTA desde afuera del vehículo.</div>
   <div class="pie"><b>PORTA</b><span>4</span></div>
 </section>
 
-<!-- 5 · MENÚ -->
+<!-- 5 · EL EQUIPO -->
 <section class="pg">
-  <div class="k">04 · El menú</div>
-  <h1>Lo que ve el trabajador en su teléfono</h1>
-  <p class="lead">Una página simple, con botones grandes y pensada para usar con guantes y al sol. Arriba siempre indica que funciona <b>sin internet</b>.</p>
-  <img class="full" src="img/composicion-menu.jpg" style="margin-top:6mm">
-  <div class="cap">Mockup de la interfaz (diseño funcional, ya programado como prototipo).</div>
-  <div class="cols" style="margin-top:5mm">
-    <div class="card"><h3>📁 Biblioteca de documentos</h3><p>Organizada por carpetas igual que en Drive, con buscador: procedimientos de trabajo seguro (PTS), contrato y reglamento interno (RIOHS), información de riesgos laborales (IRL), hojas de datos de seguridad (HDS) y plan de emergencia.</p></div>
-    <div class="card"><h3>✅ Checklists y registros</h3><p>Formularios digitales que reemplazan al papel. El sistema evalúa las respuestas y muestra al instante si se puede operar. Los registros quedan en el equipo hasta volver a la base.</p></div>
+  <div class="k">04 · El equipo</div>
+  <h1>Dos caras: una mira al camino y la otra a la cabina</h1>
+  <div class="cols" style="margin-top:3mm">
+    <img class="full ph" src="img/render-frontal.jpg" style="height:62mm">
+    <img class="full ph" src="img/render-cabina.jpg" style="height:62mm">
   </div>
+  <div class="lado">
+    <div class="card"><h3>Cara al parabrisas <span>HACIA AFUERA</span></h3><ul class="lista">
+      <li><b>Cámara frontal</b> gran angular: graba la ruta.</li>
+      <li><b>Código QR</b> visible desde fuera del vehículo: cualquiera que llegue a la camioneta se conecta sin abrir la puerta (por ejemplo, en una charla de seguridad).</li></ul></div>
+    <div class="card"><h3>Cara a la cabina <span>HACIA ADENTRO</span></h3><ul class="lista">
+      <li><b>Zona NFC</b> “Acerca tu teléfono”: conexión con un toque.</li>
+      <li><b>Cámara interior</b> con luz infrarroja: graba también de noche.</li>
+      <li><b>Mini pantalla</b> con el nombre de la red y el estado de grabación.</li></ul></div>
+  </div>
+  <img class="full ph" src="img/render-tamano.jpg" style="height:62mm;margin-top:5mm">
+  <div class="cap">Comparación de tamaño: PORTA mide aprox. 8,6 × 5,2 × 3 cm, más pequeño que un teléfono.</div>
   <div class="pie"><b>PORTA</b><span>5</span></div>
 </section>
 
-<!-- 6 · CHECKLISTS -->
+<!-- 6 · MENÚ -->
 <section class="pg">
-  <div class="k">05 · Checklists incluidos</div>
+  <div class="k">05 · Lo que ve el trabajador</div>
+  <h1>Un menú simple en el navegador del teléfono</h1>
+  <p class="lead">Botones grandes, pensado para usar con guantes y al sol. No hay que instalar ninguna aplicación ni gastar datos.</p>
+  <img class="full" src="img/composicion-menu.jpg" style="margin-top:5mm">
+  <div class="cap">Mockup de la interfaz (prototipo funcional ya programado).</div>
+  <div class="cols3" style="margin-top:5mm">
+    <div class="card"><h3>📁 Documentos</h3><p>Procedimientos (PTS), contrato y reglamento interno (RIOHS), información de riesgos (IRL), hojas de seguridad (HDS) y plan de emergencia, con buscador.</p></div>
+    <div class="card"><h3>✅ Checklists</h3><p>Vehículo, fatiga y somnolencia, y generador. El resultado aparece al instante y queda guardado con nombre, fecha y hora.</p></div>
+    <div class="card"><h3>🎥 Dashcam</h3><p>Muestra que está grabando y tiene un botón “Marcar incidente”, que guarda el video del minuto anterior y posterior.</p></div>
+  </div>
+  <div class="pie"><b>PORTA</b><span>6</span></div>
+</section>
+
+<!-- 7 · CHECKLISTS -->
+<section class="pg">
+  <div class="k">06 · Checklists incluidos</div>
   <h1>Detectar el riesgo antes de salir a operar</h1>
   <img class="full" src="img/composicion-checklists.jpg">
   <div class="cols3" style="margin-top:5mm">
@@ -177,135 +219,183 @@ tr.opt td{color:#555}
   <div class="sem">
     <div style="background:var(--ok)"><b>Apto</b>Todo conforme. Se guarda el registro y se puede operar.</div>
     <div style="background:var(--al)"><b>Con observaciones</b>Fallas no críticas. Operar con precaución y reportar.</div>
-    <div style="background:var(--pe)"><b>No apto / No operar</b>Falla en un ítem crítico o fatiga alta: avisar al supervisor.</div>
+    <div style="background:var(--pe)"><b>No apto / No operar</b>Ítem crítico con falla o fatiga alta: se avisa al supervisor.</div>
   </div>
-  <p class="muted" style="font-size:9pt;margin-top:3mm">Los ítems marcados como <b>críticos</b> y los criterios de fatiga los define el área de prevención de cada empresa; los de esta propuesta son un ejemplo. Se pueden agregar más checklists (por ejemplo, trabajo en altura o herramientas eléctricas).</p>
-  <div class="pie"><b>PORTA</b><span>6</span></div>
-</section>
-
-<!-- 7 · LISTA DE COMPRAS -->
-<section class="pg">
-  <div class="k">06 · Qué hay que comprar</div>
-  <h1>Lista de materiales para un equipo</h1>
-  <p class="lead" style="font-size:11pt">Todos los componentes se consiguen en tiendas de electrónica en Chile o en línea. Precios referenciales a octubre de 2026, en pesos chilenos, pueden variar.</p>
-  <table style="margin-top:5mm">
-    <tr><th style="width:42%">Componente</th><th>¿Para qué sirve?</th><th style="text-align:right">Precio aprox.</th></tr>
-    <tr><td><b>Raspberry Pi 5 (4 GB)</b><small>El “cerebro”. Trae Wi-Fi incorporado.</small></td><td>Es el computador que guarda los documentos y muestra el menú.</td><td class="p">$90.000</td></tr>
-    <tr><td><b>Tarjeta microSD 64 GB (clase A2)</b></td><td>El “disco duro”: sistema y documentos.</td><td class="p">$12.000</td></tr>
-    <tr><td><b>Ventilador activo oficial (Active Cooler)</b></td><td>Evita el sobrecalentamiento en la cabina.</td><td class="p">$7.000</td></tr>
-    <tr><td><b>Batería para reloj (RTC) de Raspberry Pi 5</b></td><td>Mantiene la hora correcta sin internet: los registros quedan con fecha y hora reales.</td><td class="p">$6.000</td></tr>
-    <tr><td><b>Cargador de auto USB-C (12 V → 5 V / 3 A o más)</b></td><td>Alimenta PORTA desde el encendedor de la camioneta.</td><td class="p">$12.000</td></tr>
-    <tr><td><b>Fuente oficial USB-C 27 W</b></td><td>Para usarlo enchufado en oficina o contenedor.</td><td class="p">$14.000</td></tr>
-    <tr><td><b>Pantalla OLED 0,96" (I2C)</b></td><td>Muestra el nombre de la red y si está sincronizado.</td><td class="p">$5.000</td></tr>
-    <tr><td><b>Etiquetas NFC NTAG215 (pack de 10)</b></td><td>Al acercar el teléfono, se conecta a la red. No usa batería.</td><td class="p">$4.000</td></tr>
-    <tr><td><b>Pulsador, LED y cables Dupont</b></td><td>Botón para forzar sincronización y luz de estado.</td><td class="p">$3.000</td></tr>
-    <tr><td><b>Carcasa impresa en 3D (PETG o ASA)</b><small>~90 g de material + servicio de impresión</small></td><td>Protege el equipo del polvo, golpes y calor.</td><td class="p">$15.000</td></tr>
-    <tr><td><b>Tornillos M2.5, insertos térmicos y velcro industrial</b></td><td>Armado y fijación al tablero.</td><td class="p">$8.000</td></tr>
-    <tr class="tot"><td>Total por equipo</td><td></td><td class="p">≈ $176.000</td></tr>
-    <tr class="opt"><td><b>Opcional: batería externa 20.000 mAh (USB-C PD)</b></td><td>Para llevar PORTA fuera del vehículo (charla, bodega) unas 8 a 10 horas.</td><td class="p">$25.000</td></tr>
-  </table>
-  <div class="cita"><b>Versión económica:</b> para un piloto que solo muestre documentos se puede usar una <b>Raspberry Pi Zero 2 W</b> (≈ $25.000) en lugar de la Pi 5, sin ventilador ni batería de reloj, bajando el total a cerca de <b>$100.000</b>. La Pi 5 es más rápida y aguanta más usuarios conectados al mismo tiempo.</div>
+  <p class="muted" style="font-size:9pt;margin-top:3mm">Los ítems críticos y los criterios de fatiga los define el área de prevención de cada empresa desde PORTA Central; los de esta propuesta son un ejemplo. Se pueden agregar más checklists (trabajo en altura, herramientas eléctricas, etc.).</p>
   <div class="pie"><b>PORTA</b><span>7</span></div>
 </section>
 
-<!-- 8 · CARCASA 3D -->
+<!-- 8 · PORTA CENTRAL -->
 <section class="pg">
-  <div class="k">07 · La carcasa impresa en 3D</div>
-  <h1>Diseñada para la cabina de una camioneta</h1>
-  <img class="full" src="img/render-explosionado.jpg" style="height:100mm;background:#e9e6df">
-  <div class="cap">Vista explosionada: tapa con NFC y pantalla, Raspberry Pi 5, ventilador y cuerpo de la carcasa.</div>
-  <div class="cols" style="margin-top:5mm">
-    <div>
-      <h2 style="margin-top:0">Características</h2>
-      <ul class="lista">
-        <li><b>Tamaño:</b> aprox. 12 × 8 × 3,6 cm.</li>
-        <li><b>Color naranjo de seguridad</b>, fácil de ubicar en el vehículo.</li>
-        <li><b>Etiqueta NFC</b> pegada bajo la tapa, marcada con el símbolo “acercar aquí”.</li>
-        <li><b>Ranuras de ventilación</b> laterales y salida de aire del ventilador.</li>
-        <li>Acceso al puerto <b>USB-C</b> y botón de sincronización.</li>
-        <li>Fijación con <b>velcro industrial</b> o tornillos al tablero.</li>
-      </ul>
-    </div>
-    <div>
-      <h2 style="margin-top:0">¿Por qué PETG y no PLA?</h2>
-      <p>Dentro de una camioneta estacionada al sol, el tablero puede superar los 60 °C. El <b>PLA</b> (el plástico más común de impresión 3D) se ablanda cerca de esa temperatura y la carcasa se deforma.</p>
-      <p>El <b>PETG</b> o el <b>ASA</b> resisten más calor y radiación UV, por eso son los recomendados. El archivo del modelo se puede imprimir en cualquier impresora 3D doméstica o en un servicio de impresión.</p>
-    </div>
+  <div class="k">07 · PORTA Central</div>
+  <h1>El portal de administración de la flota</h1>
+  <p class="lead">Desde un computador en la oficina, el área de prevención ve todos los equipos y les envía información por 4G.</p>
+  <img class="full" src="img/composicion-central-flota.jpg" style="margin-top:5mm">
+  <div class="cap">Mockup de PORTA Central: lista de equipos, conexión, versión de documentos, dashcam y alertas.</div>
+  <div class="cols" style="margin-top:4mm">
+    <img class="full" src="img/composicion-central-documentos.jpg">
+    <img class="full" src="img/composicion-central-alertas.jpg">
+  </div>
+  <div class="cols3" style="margin-top:4mm">
+    <div class="card"><h3>Flota</h3><p>Cada vehículo con su equipo: en línea por 4G, en terreno sin señal o en base. Si tiene los documentos al día y cuántos checklists hizo hoy.</p></div>
+    <div class="card"><h3>Documentos</h3><p>Se arrastra un PDF, se elige el destino y se publica. Se ve cuántos equipos ya lo recibieron (por ejemplo, 11 de 18).</p></div>
+    <div class="card"><h3>Alertas</h3><p>Un “no apto para conducir” llega apenas el vehículo tiene señal, con las respuestas y el botón para contactar al supervisor.</p></div>
   </div>
   <div class="pie"><b>PORTA</b><span>8</span></div>
 </section>
 
-<!-- 9 · STACK -->
+<!-- 9 · DASHCAM -->
 <section class="pg">
-  <div class="k">08 · Cómo está construido (el “stack”)</div>
-  <h1>Las capas de PORTA, explicadas en simple</h1>
-  <p class="lead" style="font-size:11pt">Todo el software es gratuito y de código abierto. En gris va el nombre técnico para quien quiera profundizar.</p>
-  <div class="capa"><div class="n"><i></i>Hardware</div><p>El mini computador, la tarjeta de memoria, la pantallita, la etiqueta NFC y la carcasa.<small>Raspberry Pi 5 · microSD · OLED SSD1306 · NFC NTAG215 · carcasa PETG</small></p></div>
-  <div class="capa"><div class="n"><i></i>Sistema</div><p>El “Windows” del equipo, pero liviano y gratuito. Arranca solo al enchufarlo, sin teclado ni pantalla.<small>Raspberry Pi OS Lite (Linux) · servicios systemd</small></p></div>
-  <div class="capa"><div class="n"><i></i>Sincronización</div><p>Un programa que copia la carpeta de Google Drive al equipo cuando hay internet y sube los registros de vuelta. Solo descarga lo que cambió.<small>rclone sync (Google Drive API) · tarea programada</small></p></div>
-  <div class="capa"><div class="n"><i></i>Red Wi-Fi</div><p>Detecta si está en la base o en terreno. En terreno enciende su red propia con contraseña y hace que el menú se abra solo al conectarse.<small>NetworkManager (modo punto de acceso) · dnsmasq · portal cautivo</small></p></div>
-  <div class="capa"><div class="n"><i></i>Conexión rápida</div><p>La etiqueta NFC y el código QR guardan el nombre y la clave de la red: el teléfono se conecta sin escribir nada.<small>Registro NDEF “WiFi Simple Configuration” · QR “WIFI:S:…;T:WPA;P:…;;”</small></p></div>
-  <div class="capa"><div class="n"><i></i>Aplicación</div><p>La página web con el menú, el visor de documentos y los checklists. Guarda las respuestas en una pequeña base de datos dentro del equipo.<small>Servidor web (Python + Flask) · HTML/CSS/JS · base de datos SQLite · exportación PDF/CSV</small></p></div>
-  <div class="capa"><div class="n"><i></i>Estado</div><p>La pantalla y el LED muestran si está sincronizando, en modo terreno y cuántas personas están conectadas.<small>script Python · I2C / GPIO</small></p></div>
+  <div class="k">08 · Dashcam doble</div>
+  <h1>Graba la ruta y la cabina, y ayuda a investigar incidentes</h1>
+  <img class="full" src="img/composicion-central-vehiculo.jpg">
+  <div class="cap">Mockup: detalle de un vehículo con cámara frontal, cámara de cabina (infrarroja), recorrido GPS y actividad del día.</div>
+  <div class="cols" style="margin-top:5mm">
+    <div>
+      <h2 style="margin-top:0">Qué hace</h2>
+      <ul class="lista">
+        <li>Graba <b>en bucle</b>: cuando la memoria se llena, borra lo más antiguo (unas 38 horas).</li>
+        <li><b>Marcar incidente</b> (botón físico o desde el teléfono) protege el video de ese momento.</li>
+        <li>Detecta <b>frenadas bruscas</b> y guarda fecha, hora, velocidad y <b>posición GPS</b>.</li>
+        <li>Los videos marcados se envían a PORTA Central por 4G; el resto se queda en el equipo.</li>
+      </ul>
+    </div>
+    <div>
+      <h2 style="margin-top:0">Cámara interior: cómo usarla bien</h2>
+      <p style="font-size:9.6pt">Grabar a las personas exige cumplir reglas. La cámara de cabina debe estar <b>informada a los trabajadores</b> e incluida en el <b>Reglamento Interno (RIOHS)</b>, con fines de <b>seguridad</b> (fatiga, incidentes) y no como control permanente de la persona, de acuerdo a lo que ha señalado la Dirección del Trabajo. El acceso a los videos debe ser limitado y respetar la ley de protección de datos personales.</p>
+      <p class="mini" style="margin-top:2mm">Futuro: usar la cámara interior para detectar somnolencia en forma automática (requiere una versión con más capacidad de cómputo).</p>
+    </div>
+  </div>
   <div class="pie"><b>PORTA</b><span>9</span></div>
 </section>
 
-<!-- 10 · BENEFICIOS -->
+<!-- 10 · LISTA DE COMPRAS -->
 <section class="pg">
-  <div class="k">09 · Por qué importa en prevención</div>
+  <div class="k">09 · Qué hay que comprar</div>
+  <h1>Lista de materiales para un equipo</h1>
+  <p class="lead" style="font-size:10.5pt">Componentes disponibles en tiendas de electrónica en Chile o en línea. Precios referenciales a octubre de 2026, en pesos chilenos; pueden variar.</p>
+  <table style="margin-top:4mm">
+    <tr><th style="width:44%">Componente</th><th>¿Para qué sirve?</th><th style="text-align:right">Precio aprox.</th></tr>
+    <tr><td><b>Raspberry Pi Zero 2 W</b> (con pines)<small>El “cerebro”: 6,5 × 3 cm, con Wi-Fi incorporado.</small></td><td>Guarda los documentos, crea la red y muestra el menú.</td><td class="p">$28.000</td></tr>
+    <tr><td><b>Cámara frontal: Camera Module 3 Wide</b></td><td>Graba la ruta en gran angular.</td><td class="p">$45.000</td></tr>
+    <tr><td><b>Cámara interior USB con luz infrarroja</b></td><td>Graba la cabina, también de noche.</td><td class="p">$20.000</td></tr>
+    <tr><td><b>Módulo 4G LTE con GPS</b> + antena flexible<small>Con ranura para tarjeta SIM (nano).</small></td><td>Recibe documentos y envía registros sin sacar el equipo; da la ubicación.</td><td class="p">$40.000</td></tr>
+    <tr><td><b>Placa hub USB para Pi Zero</b></td><td>Conecta la cámara interior y el 4G.</td><td class="p">$12.000</td></tr>
+    <tr><td><b>microSD 128 GB “High Endurance”</b></td><td>Memoria resistente a grabación continua de video.</td><td class="p">$22.000</td></tr>
+    <tr><td><b>Kit de conexión 12 V → 5 V 3 A</b> (a la caja de fusibles)</td><td>Alimentación oculta por el techo, se enciende con el vehículo.</td><td class="p">$12.000</td></tr>
+    <tr><td><b>Supercondensador / mini UPS</b></td><td>Al apagar el motor, da tiempo para guardar el video sin dañar la memoria.</td><td class="p">$15.000</td></tr>
+    <tr><td><b>Reloj RTC DS3231</b></td><td>Fecha y hora correctas aunque no haya señal.</td><td class="p">$4.000</td></tr>
+    <tr><td><b>Mini pantalla OLED 0,91", LED y pulsador</b></td><td>Estado, red Wi-Fi y botón “marcar incidente”.</td><td class="p">$6.000</td></tr>
+    <tr><td><b>Etiquetas NFC NTAG215 + QR en vinilo</b></td><td>Conexión rápida desde adentro (NFC) y desde afuera (QR).</td><td class="p">$6.000</td></tr>
+    <tr><td><b>Carcasa impresa en 3D (PETG o ASA) + soporte con rótula y adhesivo 3M</b></td><td>Protege el equipo y lo fija bajo el retrovisor.</td><td class="p">$15.000</td></tr>
+    <tr><td><b>Cable flex de cámara, tornillos e insertos</b></td><td>Armado.</td><td class="p">$5.000</td></tr>
+    <tr class="tot"><td>Total por equipo</td><td></td><td class="p">≈ $230.000</td></tr>
+    <tr class="recur"><td><b>Plan de datos SIM (IoT / M2M)</b><small>Costo mensual por equipo</small></td><td>Unos pocos GB al mes bastan para documentos, registros y videos marcados.</td><td class="p">$3.000–6.000/mes</td></tr>
+    <tr class="recur"><td><b>Servidor de PORTA Central</b><small>Costo mensual para toda la flota</small></td><td>Portal web y almacenamiento en la nube.</td><td class="p">≈ $10.000/mes</td></tr>
+  </table>
+  <p class="muted" style="font-size:8.5pt;margin-top:3mm">Para una versión comercial se puede diseñar una placa a medida (por ejemplo, basada en un Raspberry Pi Compute Module) que integre todo y reduzca aún más el tamaño y el costo por unidad.</p>
+  <div class="pie"><b>PORTA</b><span>10</span></div>
+</section>
+
+<!-- 11 · CARCASA 3D -->
+<section class="pg">
+  <div class="k">10 · La carcasa impresa en 3D</div>
+  <h1>Diseñada para ir bajo el retrovisor</h1>
+  <img class="full ph" src="img/render-explosionado.jpg" style="height:96mm">
+  <div class="cap">Vista explosionada: carcasa, Raspberry Pi Zero 2 W, cámaras, módulo 4G, memoria y etiqueta NFC.</div>
+  <div class="cols" style="margin-top:5mm">
+    <div>
+      <h2 style="margin-top:0">Características</h2>
+      <ul class="lista">
+        <li><b>Tamaño:</b> aprox. 8,6 × 5,2 × 3 cm.</li>
+        <li><b>Soporte con rótula</b> y adhesivo 3M al parabrisas, como una dashcam. No tapa la visión del conductor.</li>
+        <li><b>QR</b> en la cara del parabrisas y <b>NFC</b> en la cara de la cabina.</li>
+        <li><b>Ventilación</b> lateral, ranura para SIM y memoria, y botón de incidente.</li>
+        <li>Cable de energía oculto por el techo hasta la caja de fusibles.</li>
+        <li>Color <b>naranjo de seguridad</b>: fácil de ver y de identificar.</li>
+      </ul>
+    </div>
+    <div>
+      <h2 style="margin-top:0">¿Por qué PETG o ASA y no PLA?</h2>
+      <p>Pegado al parabrisas, a pleno sol, el equipo puede superar los 60 °C. El <b>PLA</b> (el plástico más común de impresión 3D) se ablanda cerca de esa temperatura y la carcasa se deforma.</p>
+      <p>El <b>PETG</b> o el <b>ASA</b> resisten más calor y radiación UV. El archivo se puede imprimir en cualquier impresora 3D doméstica o en un servicio de impresión.</p>
+    </div>
+  </div>
+  <div class="pie"><b>PORTA</b><span>11</span></div>
+</section>
+
+<!-- 12 · STACK -->
+<section class="pg stack">
+  <div class="k">11 · Cómo está construido (el “stack”)</div>
+  <h1>Las capas de PORTA, explicadas en simple</h1>
+  <p class="lead" style="font-size:10.5pt">Todo el software del equipo es gratuito y de código abierto. En gris, el nombre técnico para quien quiera profundizar.</p>
+  <div class="capa"><div class="n"><i></i>Hardware</div><p>Mini computador, dos cámaras, módulo 4G con GPS, memoria, pantallita, NFC y carcasa.<small>Raspberry Pi Zero 2 W · Camera Module 3 Wide · cámara USB IR · LTE Cat-1 + GNSS · microSD · RTC · OLED · NTAG215</small></p></div>
+  <div class="capa"><div class="n"><i></i>Sistema</div><p>El “Windows” del equipo, liviano y gratuito. Arranca solo al encender el vehículo, sin teclado ni pantalla.<small>Raspberry Pi OS Lite (Linux) · servicios systemd</small></p></div>
+  <div class="capa"><div class="n"><i></i>Conexión 4G</div><p>Usa la SIM para conectarse a internet cuando hay cobertura, y reporta la ubicación por GPS.<small>ModemManager · gpsd</small></p></div>
+  <div class="capa"><div class="n"><i></i>Sincronización</div><p>Un pequeño programa revisa si hay documentos nuevos en PORTA Central y los descarga; luego sube los checklists y alertas pendientes. Solo transfiere lo que cambió.<small>agente Python · API HTTPS · rclone / rsync</small></p></div>
+  <div class="capa"><div class="n"><i></i>Red Wi-Fi local</div><p>En terreno enciende su propia red con contraseña y hace que el menú se abra solo al conectarse (como el Wi-Fi de un aeropuerto).<small>NetworkManager (punto de acceso) · dnsmasq · portal cautivo</small></p></div>
+  <div class="capa"><div class="n"><i></i>QR y NFC</div><p>Guardan el nombre y la clave de la red: el teléfono se conecta sin escribir nada.<small>QR “WIFI:S:…;T:WPA;P:…;;” · NFC NDEF “WiFi Simple Configuration”</small></p></div>
+  <div class="capa"><div class="n"><i></i>Dashcam</div><p>Graba ambas cámaras en bucle, protege los videos marcados y les agrega fecha, hora y GPS.<small>rpicam-vid (H.264 por hardware) · ffmpeg · segmentos de 1 min</small></p></div>
+  <div class="capa"><div class="n"><i></i>Aplicación</div><p>La página del menú, los documentos y los checklists, con una base de datos dentro del equipo.<small>Python + Flask · HTML/CSS/JS · SQLite</small></p></div>
+  <div class="capa"><div class="n"><i></i>PORTA Central</div><p>El portal web de la oficina: flota, documentos, alertas y videos. Vive en un servidor en la nube.<small>aplicación web · base de datos · almacenamiento de archivos (puede integrarse con Google Drive)</small></p></div>
+  <div class="pie"><b>PORTA</b><span>12</span></div>
+</section>
+
+<!-- 13 · BENEFICIOS -->
+<section class="pg">
+  <div class="k">12 · Por qué importa en prevención</div>
   <h1>Beneficios y alcances</h1>
   <div class="cols">
     <div>
       <h2 style="margin-top:0">Beneficios</h2>
       <ul class="lista">
-        <li><b>Documentación vigente en terreno:</b> siempre la última versión aprobada, no una fotocopia antigua.</li>
+        <li><b>Documentación vigente en terreno:</b> siempre la última versión aprobada, publicada a distancia.</li>
         <li><b>Apoya el deber de informar:</b> el trabajador puede consultar su IRL, procedimientos y reglamento cuando lo necesite (Ley 16.744, DS 44 y art. 184 del Código del Trabajo).</li>
-        <li><b>Prevención de la fatiga:</b> la autoevaluación antes de conducir permite detener a tiempo a un conductor no apto.</li>
-        <li><b>Trazabilidad:</b> cada checklist queda con nombre, fecha, hora y equipo; útil para auditorías e investigaciones.</li>
-        <li><b>Menos papel</b> y menos carpetas perdidas o deterioradas.</li>
-        <li><b>Bajo costo:</b> menos de $200.000 por vehículo, sin planes de datos ni licencias.</li>
+        <li><b>Prevención de la fatiga:</b> la autoevaluación antes de conducir permite detener a tiempo a un conductor no apto, y la alerta llega a la central.</li>
+        <li><b>Investigación de incidentes:</b> video de la ruta y la cabina con fecha, hora y GPS.</li>
+        <li><b>Trazabilidad:</b> cada checklist queda con nombre, fecha, hora y vehículo; útil para auditorías.</li>
+        <li><b>Cero logística:</b> nunca hay que retirar el equipo para actualizarlo.</li>
       </ul>
     </div>
     <div>
       <h2 style="margin-top:0">Consideraciones</h2>
       <ul class="lista">
-        <li><b>iPhone y NFC:</b> los iPhone no se conectan a Wi-Fi solo con NFC; para ellos se usa el código QR impreso en la tapa (la cámara lo reconoce directo).</li>
-        <li><b>No reemplaza la radio</b> ni los sistemas de emergencia: es una herramienta de consulta y registro.</li>
-        <li><b>Seguridad:</b> red con contraseña y documentos solo de lectura; los contratos personales pueden protegerse con clave.</li>
-        <li><b>Mantención:</b> alguien del área debe mantener ordenada la carpeta de Drive (lo que está ahí es lo que se ve en terreno).</li>
+        <li><b>iPhone y NFC:</b> los iPhone no se conectan a Wi-Fi solo con NFC; para ellos está el código QR (la cámara lo reconoce directamente).</li>
+        <li><b>Privacidad:</b> la cámara interior debe informarse y regularse en el RIOHS, con fines de seguridad.</li>
+        <li><b>No reemplaza la radio</b> ni los sistemas de emergencia.</li>
+        <li><b>Seguridad:</b> red con contraseña, documentos de solo lectura y contratos protegidos por trabajador.</li>
+        <li><b>Costos mensuales</b> bajos: plan de datos por equipo y servidor de la central.</li>
       </ul>
       <h2>Próximos pasos</h2>
       <ul class="lista">
         <li>Demo funcionando en un computador para la presentación.</li>
         <li>Prototipo físico en una camioneta (piloto de 1 mes).</li>
-        <li>Medir: checklists completados, tiempos y observaciones detectadas.</li>
+        <li>Medir: checklists completados, alertas detectadas y tiempos de respuesta.</li>
       </ul>
     </div>
   </div>
-  <img class="full" src="img/05-checklist-fatiga.jpg" style="height:66mm;margin-top:6mm">
-  <div class="cap">Imagen referencial generada con IA: autoevaluación de fatiga antes de iniciar la conducción.</div>
-  <div class="pie"><b>PORTA</b><span>10</span></div>
+  <div class="pie"><b>PORTA</b><span>13</span></div>
 </section>
 
-<!-- 11 · ANEXOS -->
+<!-- 14 · ANEXOS -->
 <section class="pg oscuro">
-  <div class="k">10 · Anexos para la presentación</div>
+  <div class="k">13 · Anexos para la presentación</div>
   <h1>Material visual incluido</h1>
   <p class="lead muted" style="font-size:11pt">Archivos que acompañan este documento, listos para usar en diapositivas.</p>
   <div class="cols" style="margin-top:6mm">
-    <img class="full" src="img/04-checklist-generador.jpg" style="height:52mm">
-    <img class="full" src="img/06-sincronizando-en-base.jpg" style="height:52mm">
+    <img class="full" src="img/01-porta-bajo-retrovisor.jpg" style="height:52mm">
+    <img class="full" src="img/02-escaneo-qr-exterior.jpg" style="height:52mm">
   </div>
   <div class="card" style="margin-top:6mm">
     <div class="anexo"><b>🎬 Video: Cómo funciona PORTA</b><span class="muted">motion graphics, ~1 min</span><code>videos/porta-como-funciona.mp4</code></div>
     <div class="anexo"><b>🎬 Video: Modelo 3D</b><span class="muted">giro 360° y vista explosionada</span><code>videos/porta-3d-giro.mp4</code></div>
-    <div class="anexo"><b>🧊 Renders 3D</b><span class="muted">equipo armado y explosionado</span><code>imagenes/renders-3d/</code></div>
-    <div class="anexo"><b>📱 Mockups del menú</b><span class="muted">pantallas en teléfono y composiciones</span><code>imagenes/mockups/</code></div>
-    <div class="anexo"><b>📸 Imágenes en terreno (IA)</b><span class="muted">6 escenas de uso</span><code>imagenes/ia/</code></div>
-    <div class="anexo"><b>💻 Prototipo de la interfaz</b><span class="muted">se abre en cualquier navegador</span><code>fuente/app/index.html</code></div>
+    <div class="anexo"><b>🧊 Renders 3D</b><span class="muted">equipo, montaje y explosionado</span><code>imagenes/renders-3d/</code></div>
+    <div class="anexo"><b>📱 Mockups app y PORTA Central</b><span class="muted">teléfono, notebook y composiciones</span><code>imagenes/mockups/</code></div>
+    <div class="anexo"><b>📸 Imágenes en terreno (IA)</b><span class="muted">escenas de uso</span><code>imagenes/ia/</code></div>
+    <div class="anexo"><b>💻 Prototipos navegables</b><span class="muted">app del teléfono y portal</span><code>fuente/app · fuente/central</code></div>
   </div>
   <p class="muted" style="font-size:8.5pt;margin-top:6mm">Las fotografías de personas son ilustraciones generadas con inteligencia artificial con fines referenciales; no corresponden a personas, empresas ni faenas reales. Los documentos, nombres y datos que aparecen en las pantallas son ejemplos.</p>
-  <div class="pie" style="color:#aab3bc"><b>PORTA</b><span>11</span></div>
+  <div class="pie" style="color:#aab3bc"><b>PORTA</b><span>14</span></div>
 </section>
 
 </body>

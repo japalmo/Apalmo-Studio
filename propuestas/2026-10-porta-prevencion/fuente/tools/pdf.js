@@ -10,7 +10,7 @@ const path = require('path');
   if (process.argv[2] === 'prev') {
     await p.setViewportSize({ width: 794, height: 1123 });
     const n = await p.locator('.pg').count();
-    for (let i = 0; i < n; i++) await p.locator('.pg').nth(i).screenshot({ path: `/tmp/claude-0/-home-user-Apalmo-Studio/47611e4c-8ff3-5f73-85aa-b76bc7b75285/scratchpad/pg${i + 1}.png` });
+    for (let i = 0; i < n; i++) if (!process.argv[3] || process.argv[3].split(",").includes(String(i + 1))) await p.locator('.pg').nth(i).screenshot({ path: `/tmp/claude-0/-home-user-Apalmo-Studio/47611e4c-8ff3-5f73-85aa-b76bc7b75285/scratchpad/pg${i + 1}.png` });
   }
   await b.close();
 })();
