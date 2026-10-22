@@ -42,4 +42,7 @@ Regenerar desde `fuente/`: `node tools/capturas.js && node tools/capturas-centra
 
 ## Reel para redes (apalmo studio)
 
-`videos/porta-reel-apalmo-studio.mp4`: video vertical 1080×1920 de 37 s, presentado como concepto en desarrollo. Fuente en `reel/` (`reel.html` + `musica.py`). Para volver a generarlo, desde `reel/`: `python3 musica.py musica.wav && node render.js reel.html full silent.mp4 && ffmpeg -i silent.mp4 -i musica.wav -c:v copy -c:a aac -shortest ../videos/porta-reel-apalmo-studio.mp4`
+`videos/porta-reel-apalmo-studio.mp4`: video vertical 1080×1920 de 33 s, presentado como concepto en desarrollo, con tomas 3D verticales, datos animados y firma "Design by apalmo". Fuente en `reel/reel2.html` + `reel/musica2.py` (la versión anterior es `reel.html`).
+Para volver a generarlo:
+1. Tomas 3D (desde `fuente/3d/`): `node tomas-reel.js ../../reel/tomas3d`
+2. Desde `reel/`: `python3 musica2.py musica2.wav && node render.js reel2.html full silent.mp4 && ffmpeg -i silent.mp4 -i musica2.wav -c:v copy -c:a aac -shortest ../videos/porta-reel-apalmo-studio.mp4`

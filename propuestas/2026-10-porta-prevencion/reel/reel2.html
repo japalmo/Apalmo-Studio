@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>PORTA · reel v2</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#0d0f11}
+body{font-family:Inter,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+.esc{position:absolute;inset:0;overflow:hidden}
+.full{position:absolute;inset:0;width:100%;height:100%}
+.n{color:#FF7A2E}.v{color:#3ce07f}.r{color:#ff5a4f}
+.t{position:absolute;left:60px;right:60px;font-weight:800;letter-spacing:-.035em;line-height:.98;text-align:center}
+.w{display:inline-block}
+.k{font-size:30px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#FF7A2E}
+.sombra{text-shadow:0 8px 40px rgba(0,0,0,.6)}
+.card{position:absolute;border-radius:34px;overflow:hidden;box-shadow:0 50px 90px -20px rgba(0,0,0,.75),0 0 0 2px rgba(255,255,255,.08)}
+.card img{width:100%;height:100%;object-fit:cover;display:block}
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:90px 90px}
+.glow{position:absolute;border-radius:50%;filter:blur(90px);background:#F26B1D;opacity:.35}
+/* barras de señal */
+.bars{position:absolute;left:0;right:0;top:760px;display:flex;justify-content:center;align-items:flex-end;gap:30px;height:300px}
+.bars span{width:80px;border-radius:18px;background:#fff}
+/* callouts */
+.co{position:absolute;display:flex;align-items:center;gap:14px;padding:16px 24px;border-radius:18px;background:rgba(20,24,28,.82);border:1.5px solid rgba(255,255,255,.14);backdrop-filter:blur(8px);font-size:32px;font-weight:700;white-space:nowrap}
+.co i{width:16px;height:16px;border-radius:50%;background:#FF7A2E;box-shadow:0 0 0 7px rgba(255,122,46,.25);flex:none}
+.co small{display:block;font-size:22px;font-weight:500;color:#aab3bc;margin-top:3px}
+/* datos */
+.dato{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.dato b{font-size:400px;font-weight:800;letter-spacing:-.06em;line-height:.85}
+.dato span{font-size:62px;font-weight:700;letter-spacing:-.02em;margin-top:30px}
+/* escaneo QR */
+.bracket{position:absolute;border:8px solid #FF7A2E;border-radius:26px;clip-path:polygon(0 0,28% 0,28% 8%,8% 8%,8% 28%,0 28%,0 72%,8% 72%,8% 92%,28% 92%,28% 100%,72% 100%,72% 92%,92% 92%,92% 72%,100% 72%,100% 28%,92% 28%,92% 8%,72% 8%,72% 0,100% 0,100% 100%,0 100%)}
+.scan{position:absolute;height:6px;border-radius:6px;background:#FF7A2E;box-shadow:0 0 30px 6px rgba(255,122,46,.7)}
+.ring{position:absolute;border-radius:50%;border:6px solid #FF7A2E}
+.pill{position:absolute;display:inline-flex;align-items:center;gap:16px;padding:20px 34px;border-radius:99px;font-size:38px;font-weight:800;white-space:nowrap}
+.tel{position:absolute;filter:drop-shadow(0 50px 70px rgba(0,0,0,.7))}
+.sello{position:absolute;padding:18px 40px;border:10px solid #ff4d4d;border-radius:22px;color:#ff4d4d;font-size:96px;font-weight:900;letter-spacing:.02em;background:rgba(255,77,77,.08)}
+.rec{position:absolute;display:flex;align-items:center;gap:12px;font-family:"JetBrains Mono",monospace;font-weight:700;font-size:26px;text-shadow:0 2px 6px #000}
+.rec i{width:18px;height:18px;border-radius:50%;background:#ff3b3b}
+.caja{position:absolute;border:5px solid #ff4d4d;border-radius:14px}
+.sw{position:absolute;width:420px;height:150px;border-radius:99px;background:#3a2622}
+.sw i{position:absolute;top:15px;left:15px;width:120px;height:120px;border-radius:50%;background:#ff5a4f}
+.pk{position:absolute;width:26px;height:26px;border-radius:50%;background:#3ce07f;box-shadow:0 0 22px 4px rgba(60,224,127,.6)}
+.toast{position:absolute;left:90px;right:90px;background:#fff;color:#1C2126;border-radius:28px;padding:30px 36px;border-left:18px solid #D64541;box-shadow:0 40px 80px rgba(0,0,0,.55)}
+.toast b{display:block;font-size:42px;color:#D64541}
+.toast span{font-size:32px;color:#5b6570}
+.tag{position:absolute;top:64px;left:0;right:0;margin:0 auto;width:fit-content;display:flex;align-items:center;gap:12px;padding:12px 22px;border-radius:99px;background:rgba(13,15,17,.6);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.14);font-size:24px;font-weight:600;white-space:nowrap;z-index:50}
+.flash{position:absolute;inset:0;background:#fff;z-index:40;opacity:0}
+.wipe{position:absolute;left:-10%;width:120%;height:2200px;top:-140px;background:#F26B1D;z-index:39;transform-origin:center}
+.grano{position:absolute;inset:-50%;z-index:45;opacity:.05;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>")}
+.prog{position:absolute;left:0;bottom:0;height:10px;background:#FF7A2E;z-index:60;width:0}
+.firma{font-family:"JetBrains Mono",monospace;font-size:28px;letter-spacing:.06em;color:#9aa4ad;font-weight:400}
+</style>
+</head>
+<body>
+
+<!-- 1 · gancho -->
+<div class="esc" id="e1" style="background:#0d0f11">
+  <div class="t" style="top:330px;font-size:150px"><span class="w" id="h1a">En faena</span></div>
+  <div class="bars" id="bars"><span id="b1" style="height:90px"></span><span id="b2" style="height:160px"></span><span id="b3" style="height:230px"></span><span id="b4" style="height:300px"></span></div>
+  <div class="t" style="top:1180px;font-size:150px"><span class="w" id="h1b">no hay</span> <span class="w r" id="h1c" style="margin-left:.08em">señal.</span></div>
+</div>
+
+<!-- 2 · procedimientos -->
+<div class="esc" id="e2" style="background:#14181c">
+  <div class="grid"></div>
+  <div class="t" style="top:300px;font-size:116px"><span class="w" id="h2a">¿Y los</span><br><span class="w" id="h2b">procedimientos?</span></div>
+  <div class="card" id="c2" style="left:70px;top:820px;width:940px;height:627px"><img src="../imagenes/ia/00-problema-generador.png"></div>
+  <div class="pill" id="x2" style="left:330px;top:1380px;background:#ff4d4d">✕ sin acceso</div>
+</div>
+
+<!-- 3 · entra el equipo (3D) -->
+<div class="esc" id="e3">
+  <img class="full" id="s3" alt="">
+  <div style="position:absolute;left:0;right:0;top:1480px;text-align:center" id="lg3"><img src="../marca/porta-logotipo-blanco.png" style="height:130px"></div>
+  <div class="t" style="top:1650px;font-size:52px;font-weight:600;letter-spacing:-.01em;color:#c3cbd2" id="h3">computador <span class="n">+</span> dashcam</div>
+</div>
+
+<!-- 4 · por dentro (3D) -->
+<div class="esc" id="e4">
+  <img class="full" id="s4" alt="">
+  <div class="t k" style="top:230px;letter-spacing:.3em" id="k4">Por dentro</div>
+  <div class="co" id="co1" style="left:60px;top:420px"><i></i><div>Raspberry Pi Zero 2 W<small>el cerebro</small></div></div>
+  <div class="co" id="co2" style="right:60px;top:640px"><i></i><div>4G + GPS<small>se actualiza solo</small></div></div>
+  <div class="co" id="co3" style="left:60px;top:1500px"><i></i><div>2 cámaras<small>ruta + cabina (IR)</small></div></div>
+  <div class="co" id="co4" style="right:60px;top:1640px"><i></i><div>NFC + QR<small>conexión en 1 toque</small></div></div>
+</div>
+
+<!-- 5 · datos -->
+<div class="esc" id="e5a" style="background:#F26B1D"><div class="dato"><b id="d1n">7</b><span id="d1t">cm de ancho</span></div></div>
+<div class="esc" id="e5b" style="background:#0d0f11"><div class="dato"><b class="n">0</b><span>apps que instalar</span></div></div>
+<div class="esc" id="e5c" style="background:#F5F3EE;color:#1C2126"><div class="dato"><b>0</b><span>señal necesaria</span></div></div>
+<div class="esc" id="e5d" style="background:#0d0f11"><div class="dato"><b id="d4n">38</b><span>horas de video <span class="n">en bucle</span></span></div></div>
+
+<!-- 6 · bajo el retrovisor -->
+<div class="esc" id="e6" style="background:#14181c">
+  <div class="glow" style="width:700px;height:700px;left:190px;top:700px"></div>
+  <div class="t" style="top:300px;font-size:110px"><span class="w" id="h6a">Va bajo el</span><br><span class="w n" id="h6b">retrovisor.</span></div>
+  <div class="card" id="c6" style="left:40px;top:760px;width:1000px;height:667px"><img id="i6" src="../imagenes/ia/01-porta-bajo-retrovisor.png"></div>
+  <div class="ring" id="r6" style="left:440px;top:1000px;width:200px;height:200px"></div>
+</div>
+
+<!-- 7 · QR (3D) -->
+<div class="esc" id="e7">
+  <img class="full" id="s7" alt="">
+  <div class="velo-b" style="position:absolute;left:0;right:0;bottom:0;height:560px;background:linear-gradient(180deg,transparent,rgba(13,15,17,.92) 55%)"></div>
+  <div class="t" style="top:1500px;font-size:140px"><span class="w" id="h7a">QR</span> <span class="w n" id="h7b">afuera.</span></div>
+  <div class="t" style="top:1670px;font-size:44px;font-weight:600;letter-spacing:-.01em;color:#c3cbd2" id="h7c">se escanea a través del parabrisas</div>
+  <div class="bracket" id="br7" style="left:470px;top:840px;width:595px;height:640px"></div>
+  <div class="scan" id="sc7" style="left:500px;width:535px;top:880px"></div>
+</div>
+
+<!-- 8 · NFC (3D) -->
+<div class="esc" id="e8">
+  <img class="full" id="s8" alt="">
+  <div style="position:absolute;left:0;right:0;bottom:0;height:560px;background:linear-gradient(180deg,transparent,rgba(13,15,17,.92) 55%)"></div>
+  <div class="t" style="top:1500px;font-size:140px"><span class="w" id="h8a">NFC</span> <span class="w n" id="h8b">adentro.</span></div>
+  <div class="t" style="top:1670px;font-size:44px;font-weight:600;letter-spacing:-.01em;color:#c3cbd2" id="h8c">acerca el celular y listo</div>
+  <div class="ring" id="rg1" style="left:575px;top:1000px;width:300px;height:300px"></div>
+  <div class="ring" id="rg2" style="left:575px;top:1000px;width:300px;height:300px"></div>
+  <div class="ring" id="rg3" style="left:575px;top:1000px;width:300px;height:300px"></div>
+  <img class="tel" id="tel8" src="../imagenes/mockups/telefono-01-bienvenida.png" style="width:330px;left:690px;top:760px">
+</div>
+
+<!-- 9 · checklists -->
+<div class="esc" id="e9" style="background:radial-gradient(900px 900px at 50% 60%,#2b323a,#0d0f11)">
+  <div class="t" style="top:220px;font-size:112px"><span class="w" id="h9a">Checklists</span><br><span class="w n" id="h9b">sin señal.</span></div>
+  <img class="tel" id="t9a" src="../imagenes/mockups/telefono-06-checklist-fatiga.png" style="width:470px;left:90px;top:620px">
+  <img class="tel" id="t9b" src="../imagenes/mockups/telefono-08-resultado-fatiga.png" style="width:470px;left:520px;top:700px">
+  <div class="sello" id="se9" style="left:200px;top:1560px">NO APTO</div>
+</div>
+
+<!-- 10 · dashcam -->
+<div class="esc" id="e10" style="background:#0d0f11">
+  <div class="t" style="top:300px;font-size:120px"><span class="w" id="h10a">Y también es</span><br><span class="w n" id="h10b">dashcam.</span></div>
+  <div class="card" id="c10" style="left:40px;top:760px;width:1000px;height:563px"><img src="../imagenes/ia/08-dashcam-cabina-ir.png" style="filter:contrast(1.05)">
+    <div class="rec" style="left:28px;top:24px"><i id="led10"></i>REC · CABINA IR</div>
+    <div class="rec" id="ts10" style="left:28px;bottom:22px;font-weight:400;font-size:24px">05:41:17 · 63 km/h · GPS ✓</div>
+    <div class="caja" id="cj10" style="left:430px;top:80px;width:240px;height:270px"></div>
+  </div>
+  <div class="pill" id="p10" style="left:250px;top:1400px;background:#ff4d4d">⚠ posible somnolencia</div>
+</div>
+
+<!-- 11 · vuelve la señal -->
+<div class="esc" id="e11" style="background:#14181c">
+  <div class="grid"></div>
+  <div class="t" style="top:220px;font-size:104px"><span class="w" id="h11a">Vuelve la señal…</span><br><span class="w n" id="h11b">la alerta llega sola.</span></div>
+  <div class="sw" id="sw11" style="left:330px;top:560px"><i id="kn11"></i></div>
+  <div class="t" style="top:740px;font-size:44px;font-weight:700" id="lb11"><span class="r" id="lb11a">SIN SEÑAL</span></div>
+  <img id="nb11" src="../imagenes/mockups/notebook-central-04-alertas.png" style="position:absolute;width:1000px;left:40px;top:1080px;filter:drop-shadow(0 40px 60px rgba(0,0,0,.6))">
+  <div class="pk" id="pk1" style="left:527px;top:830px"></div><div class="pk" id="pk2" style="left:527px;top:830px"></div><div class="pk" id="pk3" style="left:527px;top:830px"></div>
+  <div class="toast" id="to11" style="top:1260px"><b>⚠ Alerta recibida por 4G</b><span>Fatiga y somnolencia · CH-04 · No apto</span></div>
+</div>
+
+<!-- 12 · logo (3D girando) -->
+<div class="esc" id="e12">
+  <img class="full" id="s12" alt="">
+  <div style="position:absolute;left:0;right:0;top:250px;text-align:center" id="lg12"><img src="../marca/porta-logotipo-blanco.png" style="height:120px"></div>
+  <div class="t" style="top:1590px;font-size:80px"><span class="w" id="h12a">Siempre a bordo.</span><br><span class="w n" id="h12b">Aunque no haya señal.</span></div>
+</div>
+
+<!-- 13 · firma -->
+<div class="esc" id="e13" style="background:#0d0f11">
+  <div style="position:absolute;left:0;right:0;top:380px;text-align:center" id="iso13"><img src="../marca/porta-isotipo.png" style="height:200px;border-radius:48px;box-shadow:0 0 0 3px rgba(255,255,255,.12)"></div>
+  <div class="t" style="top:680px"><span class="pill" id="c13" style="position:static;background:#FF7A2E;font-size:32px">● CONCEPTO EN DESARROLLO</span></div>
+  <div class="t firma" style="top:880px;font-size:32px;color:#c3cbd2" id="by13">DESIGN BY</div>
+  <div style="position:absolute;left:0;right:0;top:940px;text-align:center" id="ap13"><img src="../marca/apalmo/apalmo-logo-crema-1200px.png" style="width:620px"></div>
+  <div class="t" style="top:1200px;font-size:46px;font-weight:600;letter-spacing:-.01em;color:#c3cbd2" id="p13">Un proyecto en curso. Pronto más.</div>
+  <div class="t firma" style="top:1680px" id="d13">prototipo conceptual · imágenes referenciales</div>
+</div>
+
+<div class="tag" id="tag"><img src="../marca/porta-isotipo.png" style="height:34px;border-radius:9px"><b>PORTA</b> by <img src="../marca/apalmo/apalmo-logo-blanco-1200px.png" style="height:28px;margin-top:-3px"> · concepto en desarrollo</div>
+<div class="wipe" id="wipe"></div>
+<div class="flash" id="flash"></div>
+<div class="grano" id="grano"></div>
+<div class="prog" id="prog"></div>
+
+<script src="engine.js"></script>
+<script>
+const { tw, scene, kb, tick } = M;
+const TOTAL = 33;
+window.TOTAL = TOTAL;
+const $ = id => document.getElementById(id);
+const corte = (id, t0, t1) => scene('#' + id, t0, t1, .04, .04);
+const pop = (id, t, d = .3) => tw('#' + id, t, t + d, { o: [0, 1], s: [1.5, 1], y: [30, 0] }, 'back');
+const sube = (id, t, d = .35) => tw('#' + id, t, t + d, { o: [0, 1], y: [70, 0] }, 'out');
+tw('#flash', 0, 0, { o: [0, 0] });
+const flash = (t, a = .8) => { tw('#flash', t - .001, t, { o: [0, a] }, 'lin'); tw('#flash', t, t + .18, { o: [a, 0] }, 'out'); };
+// barrido naranja que cruza la pantalla en diagonal (transición)
+tw('#wipe', 0, 0, { y: [2400, 2400], r: [-12, -12] });
+const barrido = t => tw('#wipe', t - .22, t + .22, { y: [2300, -2500] }, 'io');
+// entrada con "latigazo" (desenfoque de movimiento)
+const latigo = (id, t, dx = 1080) => tw('#' + id, t, t + .28, { x: [dx, 0], b: [18, 0] }, 'out');
+
+// secuencias 3D: cambia la imagen según el tiempo y espera a que se decodifique
+const SEQ = [];
+function seq(id, carpeta, t0, n) { SEQ.push({ el: $(id), carpeta, t0, n, f: -1 }); }
+let pend = [];
+tick(t => { for (const s of SEQ) {
+  const f = Math.max(0, Math.min(s.n - 1, Math.floor((t - s.t0) * 30)));
+  if (f !== s.f && t >= s.t0 - .1 && t <= s.t0 + s.n / 30 + .1) { s.f = f; s.el.src = `tomas3d/${s.carpeta}/${String(f).padStart(4, '0')}.jpg`; pend.push(s.el.decode().catch(() => {})); }
+} });
+
+// 1 · gancho (0 – 1.8)
+corte('e1', 0, 1.8);
+pop('h1a', .05); pop('h1b', .7); pop('h1c', .95);
+['b4', 'b3', 'b2', 'b1'].forEach((b, i) => tw('#' + b, .3 + i * .12, .4 + i * .12, { o: [1, .12], s: [1, .9] }, 'out'));
+tw('#bars', .75, .95, { x: [0, -18] }, 'lin'); tw('#bars', .95, 1.1, { x: [-18, 14] }, 'lin'); tw('#bars', 1.1, 1.2, { x: [14, 0] }, 'lin');
+tw('#e1', 1.4, 1.8, { s: [1, 1.12], b: [0, 6] }, 'in');
+
+// 2 · procedimientos (1.8 – 3.2)
+corte('e2', 1.8, 3.2);
+pop('h2a', 1.85); pop('h2b', 2.05);
+tw('#c2', 1.85, 2.25, { o: [0, 1], y: [500, 0], r: [8, -3] }, 'out'); tw('#c2', 2.25, 3.2, { r: [-3, -1], s: [1, 1.04] }, 'lin');
+tw('#x2', 2.5, 2.75, { o: [0, 1], s: [2, 1], r: [-10, -6] }, 'back');
+
+// 3 · entra el equipo (3.2 – 5.8)
+barrido(3.2); corte('e3', 3.2, 5.8); seq('s3', 'entrada', 3.2, 78);
+tw('#lg3', 4.1, 4.45, { o: [0, 1], s: [1.8, 1], b: [10, 0] }, 'back'); flash(4.1, .35);
+sube('h3', 4.5);
+
+// 4 · por dentro (5.8 – 9.2)
+corte('e4', 5.8, 9.2); seq('s4', 'explota', 5.8, 102);
+sube('k4', 5.9);
+[['co1', 6.6, -1], ['co2', 6.9, 1], ['co3', 7.2, -1], ['co4', 7.5, 1]].forEach(([id, t, d]) => tw('#' + id, t, t + .32, { o: [0, 1], x: [d * 300, 0] }, 'out'));
+
+// 5 · datos (9.2 – 11.2), 0,5 s cada uno
+barrido(9.2);
+corte('e5a', 9.2, 9.7); corte('e5b', 9.7, 10.2); corte('e5c', 10.2, 10.7); corte('e5d', 10.7, 11.2);
+['e5a', 'e5b', 'e5c', 'e5d'].forEach((id, i) => tw(`#${id} .dato`, 9.2 + i * .5, 9.2 + i * .5 + .25, { s: [1.6, 1], b: [8, 0] }, 'out'));
+tick(t => { $('d1n').textContent = Math.round(Math.min(1, Math.max(0, (t - 9.2) / .3)) * 7); $('d4n').textContent = Math.round(Math.min(1, Math.max(0, (t - 10.7) / .35)) * 38); });
+
+// 6 · bajo el retrovisor (11.2 – 13.4)
+corte('e6', 11.2, 13.4); flash(11.2, .5);
+pop('h6a', 11.3); pop('h6b', 11.5);
+tw('#c6', 11.2, 11.55, { o: [0, 1], s: [.7, 1], r: [-6, 0] }, 'back'); tw('#i6', 11.2, 13.4, { s: [1, 1.18] }, 'lin');
+tw('#r6', 11.8, 12.3, { o: [0, 1], s: [2.2, 1] }, 'back'); tw('#r6', 12.3, 13.4, { s: [1, 1.15] }, 'io');
+
+// 7 · QR (13.4 – 15.8)
+barrido(13.4); corte('e7', 13.4, 15.8); seq('s7', 'qr', 13.4, 72);
+pop('h7a', 13.5); pop('h7b', 13.7); sube('h7c', 13.95);
+tw('#br7', 14.5, 14.8, { o: [0, 1], s: [1.25, 1] }, 'back');
+tw('#sc7', 14.7, 14.8, { o: [0, 1] }, 'lin'); tw('#sc7', 14.8, 15.6, { y: [0, 540] }, 'io'); tw('#sc7', 15.55, 15.7, { o: [1, 0] }, 'lin');
+
+// 8 · NFC (15.8 – 18.2)
+corte('e8', 15.8, 18.2); seq('s8', 'nfc', 15.8, 72); flash(15.8, .4);
+pop('h8a', 15.9); pop('h8b', 16.1); sube('h8c', 16.35);
+['rg1', 'rg2', 'rg3'].forEach((id, i) => { for (let c = 0; c < 2; c++) { const t = 16.6 + i * .3 + c * .9; tw('#' + id, t, t + .9, { o: [.9, 0], s: [.3, 1.6] }, 'out'); } });
+tw('#tel8', 16.4, 16.85, { o: [0, 1], y: [700, 0], r: [12, -8] }, 'out');
+
+// 9 · checklists (18.2 – 20.6)
+latigo('e9', 18.2); corte('e9', 18.2, 20.6);
+pop('h9a', 18.3); pop('h9b', 18.5);
+tw('#t9a', 18.3, 18.7, { o: [0, 1], y: [900, 0], r: [-14, -6] }, 'out');
+tw('#t9b', 18.6, 19.0, { o: [0, 1], y: [900, 0], r: [14, 6] }, 'out');
+tw('#se9', 19.5, 19.75, { o: [0, 1], s: [2.6, 1], r: [-16, -8] }, 'back'); flash(19.5, .3);
+
+// 10 · dashcam (20.6 – 23)
+corte('e10', 20.6, 23); flash(20.6, .5);
+pop('h10a', 20.7); pop('h10b', 20.95);
+tw('#c10', 20.65, 21.0, { o: [0, 1], s: [1.25, 1] }, 'out');
+tw('#cj10', 21.3, 21.6, { o: [0, 1], s: [1.6, 1] }, 'back');
+tw('#p10', 21.8, 22.1, { o: [0, 1], y: [80, 0] }, 'back');
+tick(t => { $('led10').style.opacity = Math.floor(t * 3) % 2 ? .2 : 1; $('ts10').textContent = `05:41:${String(17 + Math.max(0, Math.floor((t - 20.6) * 2))).padStart(2, '0')} · 63 km/h · GPS ✓`; });
+
+// 11 · vuelve la señal (23 – 26)
+barrido(23); corte('e11', 23, 26);
+pop('h11a', 23.1); pop('h11b', 23.9);
+tw('#kn11', 23.6, 23.85, { x: [0, 270] }, 'back');
+tick(t => { const on = t >= 23.7; $('sw11').style.background = on ? '#1f3a2b' : '#3a2622'; $('kn11').style.background = on ? '#3ce07f' : '#ff5a4f';
+  $('lb11a').textContent = on ? 'SEÑAL 4G' : 'SIN SEÑAL'; $('lb11a').className = on ? 'v' : 'r'; });
+tw('#nb11', 23.1, 23.5, { o: [0, 1], y: [300, 0] }, 'out');
+['pk1', 'pk2', 'pk3'].forEach((id, i) => { const t = 23.9 + i * .15; tw('#' + id, t, t + .45, { o: [1, 1], y: [0, 520], x: [0, (i - 1) * 140] }, 'in'); tw('#' + id, t + .45, t + .5, { o: [1, 0] }, 'lin'); });
+tw('#to11', 24.5, 24.85, { o: [0, 1], y: [-160, 0], s: [.9, 1] }, 'back'); flash(24.5, .25);
+
+// 12 · logo + 3D girando (26 – 29.6)
+corte('e12', 26, 29.6); seq('s12', 'giro', 26, 108);
+tw('#lg12', 26.2, 26.55, { o: [0, 1], s: [1.7, 1], b: [10, 0] }, 'back');
+sube('h12a', 27.1); sube('h12b', 27.45);
+
+// 13 · firma (29.6 – 33)
+barrido(29.6); scene('#e13', 29.6, 33, .05, .01);
+tw('#iso13', 29.75, 30.1, { o: [0, 1], s: [.5, 1], r: [-20, 0] }, 'back');
+tw('#c13', 30.0, 30.3, { o: [0, 1], s: [1.4, 1] }, 'back');
+sube('by13', 30.3); tw('#ap13', 30.45, 30.85, { o: [0, 1], s: [.8, 1] }, 'back'); sube('p13', 30.9); sube('d13', 31.2);
+
+// etiqueta fija, grano y barra de avance
+tw('#tag', 3.4, 3.8, { o: [0, 1], y: [-40, 0] }, 'out'); tw('#tag', 29.4, 29.6, { o: [1, 0] }, 'io');
+tick(t => { $('prog').style.width = (t / TOTAL * 100) + '%'; $('grano').style.transform = `translate(${(t * 977) % 37}px,${(t * 613) % 41}px)`; });
+
+// seek que espera a que las imágenes 3D estén listas
+const seek0 = window.seek;
+window.seek = t => { pend = []; seek0(t); return Promise.all(pend); };
+window.ready = Promise.all([...document.images].filter(i => i.src).map(i => i.decode().catch(() => {}))).then(() => window.seek(0));
+</script>
+</body>
+</html>
