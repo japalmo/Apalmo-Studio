@@ -102,6 +102,23 @@ tr.opt td{color:#555}
 .lado .card h3 span{font-size:7.5pt;font-weight:700;padding:.8mm 2.2mm;border-radius:99px;background:var(--ns);color:var(--n)}
 .mini{font-size:8.5pt!important;color:var(--gr)}
 .recur td{background:#fff7f1}
+.precios{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4mm;margin-top:5mm}
+.pc{background:#fff;border:1px solid var(--l);border-radius:4mm;padding:5mm;display:flex;flex-direction:column}
+.pc.dest{background:var(--g);color:#fff;border-color:var(--g)}
+.pc small{font-size:8pt;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--n)}
+.pc .v{font-size:22pt;font-weight:800;letter-spacing:-.02em;margin:2.5mm 0 .5mm}
+.pc .u{font-size:8.5pt;color:var(--gr)}
+.pc.dest .u,.pc.dest li{color:#c3cbd2}
+.pc ul{list-style:none;margin-top:3mm;font-size:8.8pt;line-height:1.45}
+.pc li{padding:1mm 0 1mm 4.5mm;position:relative;color:#3c444c}
+.pc li:before{content:"✓";position:absolute;left:0;color:var(--n);font-weight:800}
+.vent{display:grid;grid-template-columns:1fr 1fr;gap:3.5mm;margin-top:5mm}
+.vent .card{padding:4mm 4.5mm;display:grid;grid-template-columns:10mm 1fr;gap:1mm 3.5mm;align-items:start}
+.vent .card .ic{grid-row:span 2}
+.vent .card h3{margin:0;font-size:10.5pt;display:flex;align-items:center;gap:2mm;flex-wrap:wrap}
+.vent .card p{font-size:8.9pt;line-height:1.42}
+.fase{font-size:6.8pt;font-weight:800;letter-spacing:.08em;padding:.6mm 2mm;border-radius:99px}
+.f-antes{background:var(--oks);color:var(--ok)}.f-durante{background:var(--ns);color:var(--n)}.f-despues{background:var(--azs,#E8EEF7);color:#2F5D9E}
 </style>
 
 <!-- 1 · PORTADA -->
@@ -291,9 +308,39 @@ tr.opt td{color:#555}
   <div class="pie"><b>PORTA</b><span>10</span></div>
 </section>
 
+<!-- PRECIO -->
+<section class="pg">
+  <div class="k">10 · Precio</div>
+  <h1>Precio estándar aproximado</h1>
+  <p class="lead" style="font-size:10.5pt">Valores referenciales por vehículo, en pesos chilenos, más IVA. Consideran el costo de los componentes (≈ $230.000), el armado, la instalación, la garantía y la operación de PORTA Central.</p>
+  <div class="precios">
+    <div class="pc"><small>Equipo</small><div class="v">$390.000</div><div class="u">pago único por vehículo</div>
+      <ul><li>Equipo PORTA armado y probado</li><li>Instalación en el retrovisor</li><li>Garantía de 12 meses</li><li>Configuración de checklists</li></ul></div>
+    <div class="pc"><small>Suscripción</small><div class="v">$14.990</div><div class="u">al mes por vehículo</div>
+      <ul><li>SIM con datos 4G</li><li>Acceso a PORTA Central</li><li>Actualizaciones remotas</li><li>Respaldo de registros y videos marcados</li><li>Soporte técnico</li></ul></div>
+    <div class="pc dest"><small>Arriendo todo incluido</small><div class="v">$29.990</div><div class="u">al mes por vehículo · contrato de 24 meses</div>
+      <ul><li>Sin pago inicial</li><li>Equipo + suscripción</li><li>Reemplazo del equipo en caso de falla</li><li>Ideal para flotas que crecen</li></ul></div>
+  </div>
+  <h2>Ejemplo: flota de 20 vehículos</h2>
+  <table>
+    <tr><th>Modalidad</th><th style="text-align:right">Pago inicial</th><th style="text-align:right">Pago mensual</th><th style="text-align:right">Total primer año</th></tr>
+    <tr><td><b>Compra + suscripción</b></td><td class="p">$7.800.000</td><td class="p">$299.800</td><td class="p">$11.397.600</td></tr>
+    <tr><td><b>Arriendo todo incluido</b></td><td class="p">$0</td><td class="p">$599.800</td><td class="p">$7.197.600</td></tr>
+  </table>
+  <p class="muted" style="font-size:8.5pt;margin-top:2mm">Por vehículo, el arriendo equivale a menos de $1.000 diarios.</p>
+  <div class="cols" style="margin-top:5mm">
+    <div class="card"><h3 style="margin-top:0">Hoy, por separado</h3><ul class="lista">
+      <li>Dashcam comercial y su tarjeta de memoria.</li><li>Rastreo GPS con plan mensual.</li><li>Carpetas impresas en cada vehículo, que hay que reemplazar a mano.</li><li>Checklists en papel que llegan tarde y se pierden.</li></ul></div>
+    <div class="card" style="border-color:var(--n)"><h3 style="margin-top:0">Con PORTA, en un solo equipo</h3><ul class="lista">
+      <li>Dashcam doble + GPS + documentos + checklists.</li><li>Actualización a distancia, sin mover el vehículo.</li><li>Alertas en la central apenas hay señal.</li><li>Un solo proveedor y un solo panel.</li></ul></div>
+  </div>
+  <p class="muted" style="font-size:8.5pt;margin-top:4mm">Precios estimados para la propuesta; los valores finales dependen del volumen, la región y los planes de datos disponibles.</p>
+  <div class="pie"><b>PORTA</b><span>11</span></div>
+</section>
+
 <!-- 11 · CARCASA 3D -->
 <section class="pg">
-  <div class="k">10 · La carcasa impresa en 3D</div>
+  <div class="k">11 · La carcasa impresa en 3D</div>
   <h1>Diseñada para ir bajo el retrovisor</h1>
   <img class="full ph" src="img/render-explosionado.jpg" style="height:96mm">
   <div class="cap">Vista explosionada: carcasa, Raspberry Pi Zero 2 W, cámaras, módulo 4G, memoria y etiqueta NFC.</div>
@@ -315,12 +362,12 @@ tr.opt td{color:#555}
       <p>El <b>PETG</b> o el <b>ASA</b> resisten más calor y radiación UV. El archivo se puede imprimir en cualquier impresora 3D doméstica o en un servicio de impresión.</p>
     </div>
   </div>
-  <div class="pie"><b>PORTA</b><span>11</span></div>
+  <div class="pie"><b>PORTA</b><span>12</span></div>
 </section>
 
 <!-- 12 · STACK -->
 <section class="pg stack">
-  <div class="k">11 · Cómo está construido (el “stack”)</div>
+  <div class="k">12 · Cómo está construido (el “stack”)</div>
   <h1>Las capas de PORTA, explicadas en simple</h1>
   <p class="lead" style="font-size:10.5pt">Todo el software del equipo es gratuito y de código abierto. En gris, el nombre técnico para quien quiera profundizar.</p>
   <div class="capa"><div class="n"><i></i>Hardware</div><p>Mini computador, dos cámaras, módulo 4G con GPS, memoria, pantallita, NFC y carcasa.<small>Raspberry Pi Zero 2 W · Camera Module 3 Wide · cámara USB IR · LTE Cat-1 + GNSS · microSD · RTC · OLED · NTAG215</small></p></div>
@@ -332,50 +379,62 @@ tr.opt td{color:#555}
   <div class="capa"><div class="n"><i></i>Dashcam</div><p>Graba ambas cámaras en bucle, protege los videos marcados y les agrega fecha, hora y GPS.<small>rpicam-vid (H.264 por hardware) · ffmpeg · segmentos de 1 min</small></p></div>
   <div class="capa"><div class="n"><i></i>Aplicación</div><p>La página del menú, los documentos y los checklists, con una base de datos dentro del equipo.<small>Python + Flask · HTML/CSS/JS · SQLite</small></p></div>
   <div class="capa"><div class="n"><i></i>PORTA Central</div><p>El portal web de la oficina: flota, documentos, alertas y videos. Vive en un servidor en la nube.<small>aplicación web · base de datos · almacenamiento de archivos (puede integrarse con Google Drive)</small></p></div>
-  <div class="pie"><b>PORTA</b><span>12</span></div>
+  <div class="pie"><b>PORTA</b><span>13</span></div>
 </section>
 
-<!-- 13 · BENEFICIOS -->
+<!-- VENTAJAS SEGURIDAD -->
 <section class="pg">
-  <div class="k">12 · Por qué importa en prevención</div>
-  <h1>Beneficios y alcances</h1>
+  <div class="k">13 · Ventajas para la seguridad</div>
+  <h1>Antes, durante y después de cada turno</h1>
+  <p class="lead" style="font-size:10.5pt">PORTA no solo guarda documentos: ayuda a evitar que un riesgo conocido termine en accidente, y a aprender de cada incidente.</p>
+  <div class="vent">
+    <div class="card"><div class="ic" style="background:#EFE7F8;color:#6A3FA0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></div><h3>Detecta la fatiga a tiempo <span class="fase f-antes">ANTES</span></h3><p>Cada conductor se autoevalúa antes de salir. Un “no apto” se ve en pantalla y llega como alerta al supervisor: se puede relevar al conductor antes de que ocurra algo.</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8z"/><path d="M8 12h8"/></svg></div><h3>Ningún vehículo sale con fallas críticas <span class="fase f-antes">ANTES</span></h3><p>Si falla un ítem crítico (frenos, luces, extintor), el resultado es “No operar”. El vehículo o equipo no se usa hasta corregirlo.</p></div>
+    <div class="card"><div class="ic" style="background:#E8EEF7;color:#2F5D9E"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></div><h3>El trabajador sabe a qué se expone <span class="fase f-antes">ANTES</span></h3><p>Su IRL, los procedimientos y el reglamento interno, en su teléfono y siempre en la versión vigente. Apoya el deber de informar (DS 44).</p></div>
+    <div class="card"><div class="ic" style="background:var(--pes);color:var(--pe)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17h.01"/></svg></div><h3>Información clave en una emergencia <span class="fase f-durante">DURANTE</span></h3><p>Plan de emergencia, contactos por radio y hojas de datos de seguridad (HDS) disponibles al instante, aunque no haya señal: por ejemplo, ante un derrame.</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 4 6"/></svg></div><h3>Charlas de seguridad más efectivas <span class="fase f-durante">DURANTE</span></h3><p>En la charla de 5 minutos, todos escanean el QR y ven el mismo procedimiento en su teléfono. Queda registro de quién participó.</p></div>
+    <div class="card"><div class="ic" style="background:var(--als);color:#9A6B00"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg></div><h3>Respuesta más rápida <span class="fase f-despues">DESPUÉS</span></h3><p>Checklists, alertas y videos marcados llegan solos a PORTA Central por 4G. No hay que esperar a que vuelva el vehículo ni a que alguien entregue el papel.</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/></svg></div><h3>Investigación de incidentes con evidencia <span class="fase f-despues">DESPUÉS</span></h3><p>Video de la ruta y de la cabina con fecha, hora, velocidad y GPS. Ayuda a encontrar la causa raíz (por ejemplo, con el árbol de causas) y a evitar que se repita.</p></div>
+    <div class="card"><div class="ic" style="background:var(--oks);color:var(--ok)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div><h3>Indicadores y auditorías <span class="fase f-despues">DESPUÉS</span></h3><p>% de checklists cumplidos, alertas por faena y tiempos de respuesta. Respaldo ordenado ante auditorías, la mutualidad o una fiscalización.</p></div>
+  </div>
+  <div class="cita" style="font-size:9.6pt"><b>Impacto económico de la seguridad:</b> menos accidentes significan menos días perdidos y, con el tiempo, una menor <b>cotización adicional diferenciada</b> del seguro de la Ley 16.744 (DS 67), que se calcula según la siniestralidad de la empresa.</div>
+  <div class="pie"><b>PORTA</b><span>14</span></div>
+</section>
+
+<!-- ALCANCES -->
+<section class="pg">
+  <div class="k">14 · Alcances</div>
+  <h1>Consideraciones y próximos pasos</h1>
   <div class="cols">
-    <div>
-      <h2 style="margin-top:0">Beneficios</h2>
-      <ul class="lista">
-        <li><b>Documentación vigente en terreno:</b> siempre la última versión aprobada, publicada a distancia.</li>
-        <li><b>Apoya el deber de informar:</b> el trabajador puede consultar su IRL, procedimientos y reglamento cuando lo necesite (Ley 16.744, DS 44 y art. 184 del Código del Trabajo).</li>
-        <li><b>Prevención de la fatiga:</b> la autoevaluación antes de conducir permite detener a tiempo a un conductor no apto, y la alerta llega a la central.</li>
-        <li><b>Investigación de incidentes:</b> video de la ruta y la cabina con fecha, hora y GPS.</li>
-        <li><b>Trazabilidad:</b> cada checklist queda con nombre, fecha, hora y vehículo; útil para auditorías.</li>
-        <li><b>Cero logística:</b> nunca hay que retirar el equipo para actualizarlo.</li>
-      </ul>
-    </div>
     <div>
       <h2 style="margin-top:0">Consideraciones</h2>
       <ul class="lista">
         <li><b>iPhone y NFC:</b> los iPhone no se conectan a Wi-Fi solo con NFC; para ellos está el código QR (la cámara lo reconoce directamente).</li>
-        <li><b>Privacidad:</b> la cámara interior debe informarse y regularse en el RIOHS, con fines de seguridad.</li>
-        <li><b>No reemplaza la radio</b> ni los sistemas de emergencia.</li>
-        <li><b>Seguridad:</b> red con contraseña, documentos de solo lectura y contratos protegidos por trabajador.</li>
-        <li><b>Costos mensuales</b> bajos: plan de datos por equipo y servidor de la central.</li>
+        <li><b>Privacidad:</b> la cámara interior debe informarse a los trabajadores y regularse en el RIOHS, con fines de seguridad.</li>
+        <li><b>No reemplaza la radio</b> ni los sistemas de emergencia: es una herramienta de consulta, registro y evidencia.</li>
+        <li><b>Seguridad de la información:</b> red con contraseña, documentos de solo lectura y contratos protegidos por trabajador.</li>
+        <li><b>Mantención:</b> el área de prevención debe mantener al día los documentos en PORTA Central; lo que se publica ahí es lo que se ve en terreno.</li>
       </ul>
-      <h2>Próximos pasos</h2>
+    </div>
+    <div>
+      <h2 style="margin-top:0">Próximos pasos</h2>
       <ul class="lista">
         <li>Demo funcionando en un computador para la presentación.</li>
         <li>Prototipo físico en una camioneta (piloto de 1 mes).</li>
-        <li>Medir: checklists completados, alertas detectadas y tiempos de respuesta.</li>
+        <li>Medir: checklists completados, alertas detectadas, tiempos de respuesta y opinión de los conductores.</li>
+        <li>Ajustar los checklists junto al área de prevención y a los trabajadores.</li>
+        <li>Versión comercial con una placa a medida, más pequeña y económica.</li>
       </ul>
     </div>
   </div>
-  <img class="full" src="img/04-fatiga-amanecer.jpg" style="height:66mm;margin-top:5mm;object-position:center 45%">
+  <img class="full" src="img/04-fatiga-amanecer.jpg" style="height:80mm;margin-top:6mm;object-position:center 45%">
   <div class="cap">Imagen referencial generada con IA: autoevaluación de fatiga antes de iniciar la conducción.</div>
-  <div class="pie"><b>PORTA</b><span>13</span></div>
+  <div class="pie"><b>PORTA</b><span>15</span></div>
 </section>
 
 <!-- 14 · ANEXOS -->
 <section class="pg oscuro">
-  <div class="k">13 · Anexos para la presentación</div>
+  <div class="k">15 · Anexos para la presentación</div>
   <h1>Material visual incluido</h1>
   <p class="lead muted" style="font-size:11pt">Archivos que acompañan este documento, listos para usar en diapositivas.</p>
   <div class="cols" style="margin-top:6mm">
@@ -392,7 +451,7 @@ tr.opt td{color:#555}
     <div class="anexo"><b>💻 Prototipos navegables</b><span class="muted">app del teléfono y portal</span><code>fuente/app · fuente/central</code></div>
   </div>
   <p class="muted" style="font-size:8.5pt;margin-top:6mm">Las fotografías de personas son ilustraciones generadas con inteligencia artificial con fines referenciales; no corresponden a personas, empresas ni faenas reales. Los documentos, nombres y datos que aparecen en las pantallas son ejemplos.</p>
-  <div class="pie" style="color:#aab3bc"><b>PORTA</b><span>14</span></div>
+  <div class="pie" style="color:#aab3bc"><b>PORTA</b><span>16</span></div>
 </section>
 
 </body>
