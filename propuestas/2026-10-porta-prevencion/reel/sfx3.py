@@ -8,7 +8,8 @@ CL = json.loads(re.search(r'window\.CLIPS = (\{.*?\});', (AQUI / 'clips' / 'clip
 A, C, P = CL['inicio'] / 30, CL['cierre'] / 30, 1.5
 # mismos tramos que reel3.html: [inicio, fin] en tiempo de reel2 (clips y golpe en tiempos virtuales 100+, 200+, 300+)
 CEN = 5.6   # escena de PORTA Central (tiempos virtuales 400+)
-TRAMOS = [(100, 100 + A), (200, 200 + P), (3.2, 12.6), (14.6, 16.6), (20.8, 28.0), (400, 400 + CEN), (300, 300 + C), (37.0, 40.4)]
+CHK = 3.4   # checklists con semáforo (tiempos virtuales 500+)
+TRAMOS = [(100, 100 + A), (200, 200 + P), (3.2, 12.6), (14.6, 16.6), (20.8, 25.6), (500, 500 + CHK), (400, 400 + CEN), (300, 300 + C), (37.0, 40.4)]
 T0 = np.cumsum([0] + [b - a for a, b in TRAMOS])[:-1]
 TOTAL = sum(b - a for a, b in TRAMOS)
 OUT = sys.argv[1] if len(sys.argv) > 1 else 'sfx3.wav'
@@ -171,6 +172,12 @@ obturador(15.8 + O, .3); thump(15.9 + O, .4); thump(16.1 + O, .4); whoosh(16.6 +
 chime(16.65 + O, (1319, 1760), .3); chime(17.55 + O, (1319, 1760), .18)
 # 9 · checklists
 whoosh(18.2 + O, .4, .55); whoosh(18.6 + O, .3, .3); whoosh(18.95 + O, .3, .3); sello(19.5 + O, .8); buzz(19.52 + O, .3, .14)
+# ================= checklists con semáforo: verde (apto), ámbar (con observaciones), rojo (no apto)
+S9 = 500
+thump(S9 + .1, .45); thump(S9 + .3, .45); whoosh(S9 + .2, .4, .35); whoosh(S9 + .4, .35, .25)
+chime(S9 + .95, (1047, 1568), .22)
+blip(S9 + 1.65, 880, .12, .22); blip(S9 + 1.8, 880, .12, .22)
+sello(S9 + 2.35, .6); buzz(S9 + 2.37, .35, .15)
 # ================= PORTA Central: ficha del vehículo, carga y envío por 4G
 W = 400
 whoosh(W, .5, .5); thump(W + .05, .45); thump(W + .3, .45); whoosh(W + .3, .45, .35)

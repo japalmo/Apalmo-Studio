@@ -11,6 +11,7 @@ Por eso estoy diseñando PORTA, un pequeño computador de 7 × 4 × 3 cm que va 
 
 ▸ Procesa y guarda los documentos en el equipo (128 GB), así que funciona sin señal.
 ▸ Crea su propia red Wi-Fi: documentos y checklists desde el navegador del celular, sin apps.
+▸ Cada checklist entrega su resultado al instante: apto, apto con observaciones o no apto.
 ▸ QR hacia afuera: quien fiscaliza lo escanea a través del parabrisas.
 ▸ NFC hacia adentro: acercas el teléfono y entras.
 ▸ Desde PORTA Central cargas los datos en la ficha del vehículo y llegan al equipo por 4G. En terreno, al escanear, ya están al día.
