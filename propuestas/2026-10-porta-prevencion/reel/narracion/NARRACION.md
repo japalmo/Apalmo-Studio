@@ -1,32 +1,26 @@
 # Narración del reel PORTA (ElevenLabs vía Higgsfield)
 
-Motor: Higgsfield `text2speech_v2`, variante `elevenlabs`, voces predefinidas. Cada muestra completa costó 1,8 créditos (las tres: 5,4; quedan 533,6).
+Voz elegida por Juan: **Andre** (muestra 3; las otras "daban sueño"). Motor: Higgsfield `text2speech_v2`, variante `elevenlabs`.
 
-## Guion (texto que se le pasa a la voz)
+## Cómo está armada
 
-| Tramo del reel | Segundos | Texto |
-|---|---|---|
-| Toma aérea | 8,5–9,9 | ¿En faena no hay señal? |
-| Golpe | 10,1–11,4 | Sin señal… sin problema. |
-| Entra el equipo / por dentro | 11,7–17,4 | Te presento PORTA: un pequeño computador que va bajo el retrovisor, con memoria propia y cuatro G. |
-| Tamaño / 0 señal | 17,8–22,6 | Es más chico que un celular, y funciona sin señal: guarda todo a bordo. |
-| QR / NFC | 23,0–27,5 | Se conecta en un toque: código QR por fuera, NFC por dentro, y sin aplicaciones. |
-| Checklists | 27,9–31,0 | Checklists sin señal: apto, con observaciones o no apto. |
-| PORTA Central | 31,3–36,6 | Y desde PORTA Central cargas los documentos del vehículo. Con cuatro G, llegan solos al equipo. |
-| Cierre (escaneo) | 37,0–39,9 | Así, en terreno, basta escanear: todo al día. |
-| Firma | 45,2–47,8 | PORTA. Un concepto en desarrollo de apalmo. |
+- Frases 1–8: **cortes de `muestras/muestra-3-andre.mp3`** (la lectura que Juan eligió), en `cortes/S1.wav` … `S8.wav`.
+- Frase 9: generada aparte (`lineas/L9.mp3`) para decir "apalmo **studio**".
+- `lineas.json` dice dónde entra cada frase en el reel y su velocidad. `sfx3.py` la mezcla y baja los efectos mientras habla.
+- `lineas/L1`–`L8.mp3` son una generación línea por línea que quedó sin usar (se hizo antes de que Juan pidiera usar los cortes).
 
-"4G" se escribe "cuatro G" para que la voz lo pronuncie bien.
+| # | Entra (s) | Velocidad | Texto | Calce con la imagen |
+|---|---|---|---|---|
+| 1 | 8,50 | 1,00 | ¿En faena no hay señal? | toma aérea |
+| 2 | 10,06 | 1,00 | Sin señal… sin problema. | golpe |
+| 3 | 11,93 | 1,12 | Te presento PORTA: un pequeño computador que va bajo el retrovisor, con memoria propia y cuatro G. | entra el equipo / por dentro |
+| 4 | 18,20 | 1,00 | Es más chico que un celular, y funciona sin señal: guarda todo a bordo. | tamaño / 0 señal |
+| 5 | 22,50 | 1,10 | Se conecta en un toque: código QR por fuera, NFC por dentro, y sin aplicaciones. | "NFC" cae en el corte a la escena NFC |
+| 6 | 27,98 | 1,00 | Checklists sin señal: apto, con observaciones o no apto. | cada luz del semáforo se enciende cuando la voz la nombra |
+| 7 | 32,83 | 1,00 | Y desde PORTA Central cargas los documentos del vehículo. Con cuatro G, llegan solos al equipo. | el archivo cae al decir "cargas"; el envío por 4G al decir "con cuatro G" |
+| 8 | 39,33 | 1,00 | Así, en terreno, basta escanear: todo al día. | escaneo y "Documentos al día" |
+| 9 | 47,56 | 1,00 | PORTA. Un concepto en desarrollo de apalmo studio. | firma |
 
-## Muestras (`muestras/`)
+Créditos: muestras 5,4 + líneas 2,1 (quedan 531,5). Reel con narración: ~51 s.
 
-| Archivo | Voz | Duración de la lectura completa |
-|---|---|---|
-| `muestra-1-marisol.mp3` | Marisol (femenina) | 41 s |
-| `muestra-2-ines.mp3` | Ines (femenina) | 51 s (lenta) |
-| `muestra-3-andre.mp3` | Andre (masculina) | 39 s |
-
-Ninguna voz predefinida declara acento chileno; las tres hablan un español claro pero de acento neutro o extranjero.
-Para un acento chileno real: clonar una voz chilena con consentimiento (por ejemplo la de Juan, con una grabación de 1–2 minutos) en Higgsfield, o usar una cuenta propia de ElevenLabs con voces chilenas de su biblioteca.
-
-Siguiente paso, con la voz elegida: generar cada línea por separado (≈0,6 créditos c/u) y ubicarla en su tramo del reel; los efectos de sonido se bajan bajo la voz.
+Acento: las voces predefinidas no son chilenas. Para acento chileno real: clonar la voz de Juan (grabación de 1–2 min) o cuenta propia de ElevenLabs.

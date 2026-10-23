@@ -151,8 +151,8 @@ NUEVO = r'''
 const CL = window.CLIPS || { inicio: 300, cierre: 240 };
 const A = CL.inicio / 30, C = CL.cierre / 30, P = 1.5;
 const QUITAR = ['e1', 'e2', 'e5b', 'e5d', 'e6', 'e9', 'e10', 'e11', 'e12'];   // e9 (checklists de reel2) lo reemplaza la escena con semáforo
-const CHK = 3.4;   // fuera: gancho y procedimientos (los cuenta el clip), 0 apps (va en NFC), 38 h y dashcam, retrovisor (lo muestra el cierre), alerta (la reemplaza PORTA Central)
-const CEN = 5.6;
+const CHK = 4.8;   // largo de la narración de los checklists   // fuera: gancho y procedimientos (los cuenta el clip), 0 apps (va en NFC), 38 h y dashcam, retrovisor (lo muestra el cierre), alerta (la reemplaza PORTA Central)
+const CEN = 6.7;   // largo de la narración de PORTA Central
 QUITAR.forEach(id => $(id).style.display = 'none');
 // tramos: [inicio, fin] en el tiempo de reel2 (los clips y el golpe usan tiempos virtuales 100+, 200+, 300+)
 const TRAMOS = [[100, 100 + A], [200, 200 + P], [3.2, 12.6], [14.6, 16.6], [20.8, 25.6], [500, 500 + CHK], [400, 400 + CEN], [300, 300 + C], [37.0, 40.4]];
@@ -179,9 +179,9 @@ scene('#e9s', K0, K0 + CHK, .01, .04); tw('#e9s', K0, K0 + .28, { x: [1080, 0], 
 pop('k1', K0 + .1); pop('k2', K0 + .3); sube('k3', K0 + .5);
 tw('#kt', K0 + .15, K0 + .55, { o: [0, 1], y: [900, 0], r: [-12, -4] }, 'out');
 tw('#sema', K0 + .35, K0 + .75, { o: [0, 1], x: [320, 0] }, 'out');
-[['lv', .95], ['la', 1.65], ['lr', 2.35]].forEach(([id, d]) => { tw('#' + id + ' i', K0, K0, { s: [1, 1] }); tw('#' + id + ' i', K0 + d, K0 + d + .3, { s: [1.3, 1] }, 'back'); });
-flash(K0 + 2.35, .22);
-tick(t => { [['lv', .95], ['la', 1.65], ['lr', 2.35]].forEach(([id, d]) => $(id).classList.toggle('on', t >= K0 + d)); });
+[['lv', 2.09], ['la', 2.69], ['lr', 3.95]].forEach(([id, d]) => { tw('#' + id + ' i', K0, K0, { s: [1, 1] }); tw('#' + id + ' i', K0 + d, K0 + d + .3, { s: [1.3, 1] }, 'back'); });
+flash(K0 + 3.95, .22);
+tick(t => { [['lv', 2.09], ['la', 2.69], ['lr', 3.95]].forEach(([id, d]) => $(id).classList.toggle('on', t >= K0 + d)); });
 // PORTA Central: entra a la ficha del vehículo, sube la revisión técnica y la envía al equipo por 4G
 const C0 = 400;
 scene('#ecen', C0, C0 + CEN, .01, .01); flash(C0, .45);
@@ -194,15 +194,15 @@ tw('#cursor2', C0 + 1.3, C0 + 1.85, { x: [930, 650], y: [1540, 1095] }, 'io'); t
 tw('#frt', C0 + 1.75, C0 + 1.85, { s: [1, 1.04] }, 'out'); tw('#frt', C0 + 1.85, C0 + 2.05, { s: [1.04, 1] }, 'back');
 tw('.barra', C0 + 1.9, C0 + 2.0, { o: [0, 1] }, 'lin'); tw('.barra', C0 + 2.6, C0 + 2.75, { o: [1, 0] }, 'lin');
 tw('#rtA', C0 + 2.6, C0 + 2.7, { o: [1, 0] }, 'lin'); tw('#rtB', C0 + 2.65, C0 + 2.95, { o: [0, 1], s: [1.4, 1] }, 'back');
-tw('#pieA', C0 + 2.95, C0 + 3.1, { o: [0, 1] }, 'lin'); tw('#pieA', C0 + 3.95, C0 + 4.05, { o: [1, 0] }, 'lin');
-tw('#pieB', C0 + 4.05, C0 + 4.25, { o: [0, 1], y: [16, 0] }, 'out');
-tw('#dev', C0 + 2.9, C0 + 3.2, { o: [0, 1], y: [80, 0] }, 'out');
-['q1', 'q2', 'q3'].forEach((id, i) => { const t = C0 + 3.1 + i * .22; tw('#' + id, C0, C0, { o: [0, 0] }); tw('#' + id, t, t + .5, { o: [1, 1], y: [0, 150] }, 'in'); tw('#' + id, t + .5, t + .55, { o: [1, 0] }, 'lin'); });
-tw('#dev', C0 + 3.9, C0 + 4.0, { s: [1, 1.08] }, 'out'); tw('#dev', C0 + 4.0, C0 + 4.25, { s: [1.08, 1] }, 'back');
+tw('#pieA', C0 + 3.9, C0 + 4.05, { o: [0, 1] }, 'lin'); tw('#pieA', C0 + 4.95, C0 + 5.05, { o: [1, 0] }, 'lin');
+tw('#pieB', C0 + 5.05, C0 + 5.25, { o: [0, 1], y: [16, 0] }, 'out');
+tw('#dev', C0 + 3.7, C0 + 4.0, { o: [0, 1], y: [80, 0] }, 'out');
+['q1', 'q2', 'q3'].forEach((id, i) => { const t = C0 + 4.1 + i * .22; tw('#' + id, C0, C0, { o: [0, 0] }); tw('#' + id, t, t + .5, { o: [1, 1], y: [0, 150] }, 'in'); tw('#' + id, t + .5, t + .55, { o: [1, 0] }, 'lin'); });
+tw('#dev', C0 + 4.95, C0 + 5.05, { s: [1, 1.08] }, 'out'); tw('#dev', C0 + 5.05, C0 + 5.3, { s: [1.08, 1] }, 'back');
 tick(t => { const k = Math.min(1, Math.max(0, (t - C0 - 1.95) / .65)); $('rtBar').style.width = (k * 100) + '%';
-  $('spin2').style.transform = `rotate(${t * 500}deg)`; const ok = t >= C0 + 4.0;
-  $('devs').textContent = ok ? 'datos al día ✓' : (t >= C0 + 3.0 ? 'recibiendo por 4G…' : 'esperando datos…'); $('devs').style.color = ok ? '#3ce07f' : '#9aa4ad';
-  $('g4').style.background = t >= C0 + 2.95 ? '#1f3a2b' : '#2a3138'; $('g4').style.color = t >= C0 + 2.95 ? '#3ce07f' : '#9aa4ad'; });
+  $('spin2').style.transform = `rotate(${t * 500}deg)`; const ok = t >= C0 + 5.05;
+  $('devs').textContent = ok ? 'datos al día ✓' : (t >= C0 + 3.95 ? 'recibiendo por 4G…' : 'esperando datos…'); $('devs').style.color = ok ? '#3ce07f' : '#9aa4ad';
+  $('g4').style.background = t >= C0 + 3.9 ? '#1f3a2b' : '#2a3138'; $('g4').style.color = t >= C0 + 3.9 ? '#3ce07f' : '#9aa4ad'; });
 // clip de cierre (entra con flash)
 scene('#ecc', 300, 300 + C, .01, .01); seq('scc', 'clips/cierre', 300, CL.cierre); flash(300, .5);
 // pantallas reales sobre los teléfonos: esquinas [sup-izq, sup-der, inf-der, inf-izq] en px del cuadro 1080x1920, por segundo del clip

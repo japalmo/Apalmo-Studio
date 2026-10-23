@@ -1,0 +1,60 @@
+{
+  "_como_usar": "Narración: archivo (relativo a narracion/), inicio en segundos del reel final, velocidad (atempo), texto. S1-S8 son cortes de muestras/muestra-3-andre.mp3 (la lectura elegida); solo L9 se generó aparte para decir 'apalmo studio'. sfx3.py la mezcla y baja los efectos bajo la voz.",
+  "voz": "Andre (preset Higgsfield f1e8226e-2248-4d5f-b43c-0a79e9949dbf, motor elevenlabs)",
+  "lineas": [
+    [
+      "cortes/S1.wav",
+      8.5,
+      1.0,
+      "¿En faena no hay señal?"
+    ],
+    [
+      "cortes/S2.wav",
+      10.06,
+      1.0,
+      "Sin señal… sin problema."
+    ],
+    [
+      "cortes/S3.wav",
+      11.93,
+      1.12,
+      "Te presento PORTA: un pequeño computador que va bajo el retrovisor, con memoria propia y cuatro G."
+    ],
+    [
+      "cortes/S4.wav",
+      18.2,
+      1.0,
+      "Es más chico que un celular, y funciona sin señal: guarda todo a bordo."
+    ],
+    [
+      "cortes/S5.wav",
+      22.5,
+      1.1,
+      "Se conecta en un toque: código QR por fuera, NFC por dentro, y sin aplicaciones."
+    ],
+    [
+      "cortes/S6.wav",
+      27.98,
+      1.0,
+      "Checklists sin señal: apto, con observaciones o no apto."
+    ],
+    [
+      "cortes/S7.wav",
+      32.83,
+      1.0,
+      "Y desde PORTA Central cargas los documentos del vehículo. Con cuatro G, llegan solos al equipo."
+    ],
+    [
+      "cortes/S8.wav",
+      39.33,
+      1.0,
+      "Así, en terreno, basta escanear: todo al día."
+    ],
+    [
+      "lineas/L9.mp3",
+      47.56,
+      1.0,
+      "PORTA. Un concepto en desarrollo de apalmo studio."
+    ]
+  ]
+}

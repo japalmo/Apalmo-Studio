@@ -1,14 +1,14 @@
 # Efectos de sonido de reel3.html (sin música: la canción se agrega en la app).
 # Reutiliza los sonidos de reel2 (sfx.py) remapeados a la estructura nueva y suma los de los clips IA.
 # Uso: python sfx3.py <salida.wav>      (lee la duración de los clips en clips/clips.js)
-import numpy as np, wave, sys, json, re, pathlib
+import numpy as np, wave, sys, json, re, pathlib, subprocess
 AQUI = pathlib.Path(__file__).parent
 SR = 44100
 CL = json.loads(re.search(r'window\.CLIPS = (\{.*?\});', (AQUI / 'clips' / 'clips.js').read_text(encoding='utf-8')).group(1))
 A, C, P = CL['inicio'] / 30, CL['cierre'] / 30, 1.5
 # mismos tramos que reel3.html: [inicio, fin] en tiempo de reel2 (clips y golpe en tiempos virtuales 100+, 200+, 300+)
-CEN = 5.6   # escena de PORTA Central (tiempos virtuales 400+)
-CHK = 3.4   # checklists con semáforo (tiempos virtuales 500+)
+CEN = 6.7   # escena de PORTA Central (tiempos virtuales 400+), largo de la narración
+CHK = 4.8   # checklists con semáforo (tiempos virtuales 500+), largo de la narración
 TRAMOS = [(100, 100 + A), (200, 200 + P), (3.2, 12.6), (14.6, 16.6), (20.8, 25.6), (500, 500 + CHK), (400, 400 + CEN), (300, 300 + C), (37.0, 40.4)]
 T0 = np.cumsum([0] + [b - a for a, b in TRAMOS])[:-1]
 TOTAL = sum(b - a for a, b in TRAMOS)
@@ -175,16 +175,16 @@ whoosh(18.2 + O, .4, .55); whoosh(18.6 + O, .3, .3); whoosh(18.95 + O, .3, .3); 
 # ================= checklists con semáforo: verde (apto), ámbar (con observaciones), rojo (no apto)
 S9 = 500
 thump(S9 + .1, .45); thump(S9 + .3, .45); whoosh(S9 + .2, .4, .35); whoosh(S9 + .4, .35, .25)
-chime(S9 + .95, (1047, 1568), .22)
-blip(S9 + 1.65, 880, .12, .22); blip(S9 + 1.8, 880, .12, .22)
-sello(S9 + 2.35, .6); buzz(S9 + 2.37, .35, .15)
+chime(S9 + 2.09, (1047, 1568), .22)
+blip(S9 + 2.69, 880, .12, .22); blip(S9 + 2.84, 880, .12, .22)
+sello(S9 + 3.95, .6); buzz(S9 + 3.97, .35, .15)
 # ================= PORTA Central: ficha del vehículo, carga y envío por 4G
 W = 400
 whoosh(W, .5, .5); thump(W + .05, .45); thump(W + .3, .45); whoosh(W + .3, .45, .35)
 click(W + 1.0, .3); whoosh(W + 1.6, .45, .22); thump(W + 1.85, .45); click(W + 1.86, .3)
 ticks(W + 1.95, W + 2.6, .06, .1); chime(W + 2.65, (1319, 1760), .26)
-for i in range(6): blip(W + 3.0 + i * .16, 900 + i * 160, .05, .14)
-chime(W + 4.0, (1568, 2093), .3)
+for i in range(6): blip(W + 3.95 + i * .16, 900 + i * 160, .05, .14)
+chime(W + 5.05, (1568, 2093), .3)
 # ================= clip de cierre (cortes: 1.42 check en el teléfono (inserto), 2.38 pulgar arriba, 3.42 conductor aliviado,
 # 4.75 equipo bajo el retrovisor (LED verde, arranca), 5.95 la camioneta se va)
 K = 300
@@ -211,6 +211,21 @@ if USAR_VOZ_CLIP and (AQUI / 'clips' / 'fuente' / 'inicio.mp4').exists():
         if n is not None: add(voz * env / (np.abs(voz).max() + 1e-9), n, .55)
 y = np.tanh(out[:int(SR * TOTAL)] * 1.2)
 y = y / np.max(np.abs(y)) * .75
+# narración (narracion/lineas.json): voz encima y efectos bajados mientras habla
+LJ = AQUI / 'narracion' / 'lineas.json'
+if LJ.exists():
+    voz = np.zeros(len(y))
+    for arch, t0, tempo, _ in json.loads(LJ.read_text(encoding='utf-8'))['lineas']:
+        raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', str(AQUI / 'narracion' / arch), '-af', f'atempo={tempo}', '-ac', '1',
+                              '-ar', str(SR), '-f', 's16le', '-'], capture_output=True).stdout
+        v = np.frombuffer(raw, np.int16).astype(float) / 32768
+        v = v / (np.abs(v).max() + 1e-9) * .92
+        i = int(t0 * SR); e = min(len(voz), i + len(v)); voz[i:e] += v[:e - i]
+    env = np.convolve(np.abs(voz), np.ones(int(.12 * SR)) / int(.12 * SR), 'same')
+    env = np.clip(env / (env.max() + 1e-9) * 4, 0, 1)
+    duck = 1 - .62 * np.convolve(env, np.ones(int(.08 * SR)) / int(.08 * SR), 'same')
+    y = y * duck * .85 + voz
+    y = y / np.max(np.abs(y)) * .89
 st = np.stack([y, np.roll(y, int(SR * .0005))], axis=1)
 w = wave.open(OUT, 'wb'); w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR)
 w.writeframes((st * 32767).astype(np.int16).tobytes()); w.close(); print('ok', OUT, f'{TOTAL:.2f} s')
