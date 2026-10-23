@@ -53,6 +53,8 @@ Prompts para los clips de inicio y cierre generados con IA: `reel/PROMPTS-VIDEO-
 
 Clips generados en Higgsfield (Seedance 2.0 / 2.0 Mini + Nano Banana Pro, 61 créditos); detalle, costos y arreglos en `reel/clips/GENERACION.md`.
 
+Versión del 23-oct (pedido de Juan): sin dashcam; subtítulos en el clip de inicio para que se entienda el problema; cómputo y memoria a bordo ("0 señal necesaria", 128 GB); escena de PORTA Central donde se sube la revisión técnica a la ficha CH-04 y llega al equipo por 4G; en el cierre el escaneo muestra la ficha al día. Caption en `reel/CAPTION.md`.
+
 `reel/reel3.html` reorganiza el reel: **clip IA de inicio → "Sin señal. Sin problema." → escenas actuales (equipo … la alerta llega sola) → clip IA de cierre → firma**. Se genera desde `reel2.html` (que no se toca) con `python reel/hacer_reel3.py`.
 
 - Clips: dejar los MP4 en `reel/clips/fuente/` y, si vienen en partes, copiar `clips/montaje.ejemplo.json` como `clips/montaje.json`. Luego `python reel/clips/preparar.py` los convierte en cuadros y escribe `clips/clips.js`. Sin videos, genera marcadores con la lista de tomas.

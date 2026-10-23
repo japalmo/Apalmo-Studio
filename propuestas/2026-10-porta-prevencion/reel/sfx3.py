@@ -7,7 +7,8 @@ SR = 44100
 CL = json.loads(re.search(r'window\.CLIPS = (\{.*?\});', (AQUI / 'clips' / 'clips.js').read_text(encoding='utf-8')).group(1))
 A, C, P = CL['inicio'] / 30, CL['cierre'] / 30, 1.5
 # mismos tramos que reel3.html: [inicio, fin] en tiempo de reel2 (clips y golpe en tiempos virtuales 100+, 200+, 300+)
-TRAMOS = [(100, 100 + A), (200, 200 + P), (3.2, 14.6), (20.8, 33.4), (300, 300 + C), (37.0, 40.4)]
+CEN = 5.6   # escena de PORTA Central (tiempos virtuales 400+)
+TRAMOS = [(100, 100 + A), (200, 200 + P), (3.2, 12.6), (14.6, 16.6), (20.8, 28.0), (400, 400 + CEN), (300, 300 + C), (37.0, 40.4)]
 T0 = np.cumsum([0] + [b - a for a, b in TRAMOS])[:-1]
 TOTAL = sum(b - a for a, b in TRAMOS)
 OUT = sys.argv[1] if len(sys.argv) > 1 else 'sfx3.wav'
@@ -157,7 +158,10 @@ blip(10.5, 1568, .14, .3)
 click(10.3, .3); barrido_tono(10.3, 10.55, 500, 900, .06)
 whoosh(11.2, .7, .3, sube=False)
 click(11.75, .35); thump(11.95, .55)
-golpe(12.6, .55); thump(12.75, .4); whoosh(13.15, .25, .35); buzz(13.1, .25, .14)
+# 0 señal necesaria: cómputo y memoria a bordo, red Wi-Fi propia
+golpe(14.6, .55)
+for i, f in enumerate([880, 740, 620, 520]): blip(14.7 + i * .1, f, .08, .22)
+chime(15.2, (1319, 1760), .3)
 # 7 · QR (en sfx.py: 13.4 + 7.4 de desfase)
 O = 7.4
 whoosh(13.4 + O, .55, .6); thump(13.5 + O, .4); thump(13.7 + O, .4)
@@ -167,14 +171,13 @@ obturador(15.8 + O, .3); thump(15.9 + O, .4); thump(16.1 + O, .4); whoosh(16.6 +
 chime(16.65 + O, (1319, 1760), .3); chime(17.55 + O, (1319, 1760), .18)
 # 9 · checklists
 whoosh(18.2 + O, .4, .55); whoosh(18.6 + O, .3, .3); whoosh(18.95 + O, .3, .3); sello(19.5 + O, .8); buzz(19.52 + O, .3, .14)
-# 10 · dashcam
-obturador(20.6 + O, .5); thump(20.7 + O, .4); thump(20.95 + O, .4)
-for t in np.arange(20.7, 22.9, .67): blip(t + O, 2000, .04, .1)
-blip(21.3 + O, 1400, .06, .25); blip(21.42 + O, 1400, .06, .25); buzz(21.8 + O, .5, .18)
-# 11 · vuelve la señal
-whoosh(23.0 + O, .55, .6); thump(23.1 + O, .4); click(23.6 + O, .45); blip(23.7 + O, 880, .08, .2); blip(23.8 + O, 1320, .1, .25)
-for i in range(6): blip(23.9 + O + i * .08, 900 + i * 180, .05, .15)
-chime(24.5 + O, (1568, 2093), .32)
+# ================= PORTA Central: ficha del vehículo, carga y envío por 4G
+W = 400
+whoosh(W, .5, .5); thump(W + .05, .45); thump(W + .3, .45); whoosh(W + .3, .45, .35)
+click(W + 1.0, .3); whoosh(W + 1.6, .45, .22); thump(W + 1.85, .45); click(W + 1.86, .3)
+ticks(W + 1.95, W + 2.6, .06, .1); chime(W + 2.65, (1319, 1760), .26)
+for i in range(6): blip(W + 3.0 + i * .16, 900 + i * 160, .05, .14)
+chime(W + 4.0, (1568, 2093), .3)
 # ================= clip de cierre (cortes: 1.42 check en el teléfono (inserto), 2.38 pulgar arriba, 3.42 conductor aliviado,
 # 4.75 equipo bajo el retrovisor (LED verde, arranca), 5.95 la camioneta se va)
 K = 300
