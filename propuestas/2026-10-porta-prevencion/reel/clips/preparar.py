@@ -48,12 +48,28 @@ def marcador(nombre):
     return n
 
 
+RETOQUES = json.loads((AQUI / 'retoques.json').read_text(encoding='utf-8')) if (AQUI / 'retoques.json').exists() else {}
+
+
+def retocado(arch):
+    """aplica los difuminados de clips/retoques.json ({archivo: [[t0, t1, x, y, w, h], ...]} en px del video original)"""
+    cajas = [c for c in RETOQUES.get(arch, []) if not isinstance(c, str)]
+    if not cajas: return FUENTE / arch
+    out = FUENTE / f'_ret_{arch}'
+    fc, prev = [], '0:v'
+    for k, (t0, t1, x, y, w, h) in enumerate(cajas):
+        fc.append(f"[{prev}]split[b{k}][c{k}];[c{k}]crop={w}:{h}:{x}:{y},boxblur=12:3,format=rgba,geq=r='r(X,Y)':g='g(X,Y)':b='b(X,Y)':a='255*clip(min(min(X,W-1-X),min(Y,H-1-Y))/12,0,1)'[d{k}];[b{k}][d{k}]overlay={x}:{y}:enable='between(t,{t0},{t1})'[o{k}]")
+        prev = f'o{k}'
+    ff(['-i', str(FUENTE / arch), '-filter_complex', ';'.join(fc), '-map', f'[{prev}]', '-map', '0:a?', '-c:v', 'libx264', '-crf', '12', '-pix_fmt', 'yuv420p', '-c:a', 'copy', str(out)])
+    return out
+
+
 def desde_videos(nombre, partes):
     out = AQUI / nombre; shutil.rmtree(out, ignore_errors=True); out.mkdir()
     tmp = AQUI / f'_{nombre}.mp4'
     ins, fc = [], []
     for k, (arch, a, b) in enumerate(partes):
-        ins += ['-i', str(FUENTE / arch)]
+        ins += ['-i', str(retocado(arch))]
         fc.append(f'[{k}:v]trim=start={a}:end={b},setpts=PTS-STARTPTS,fps={FPS},scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1[v{k}]')
     fc.append(''.join(f'[v{k}]' for k in range(len(partes))) + f'concat=n={len(partes)}:v=1:a=0[v]')
     ff([*ins, '-filter_complex', ';'.join(fc), '-map', '[v]', '-c:v', 'libx264', '-crf', '12', '-pix_fmt', 'yuv420p', str(tmp)])

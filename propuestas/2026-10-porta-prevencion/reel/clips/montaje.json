@@ -1,0 +1,20 @@
+{
+  "_como_usar": "Cada parte: [archivo, segundo inicial, segundo final]. Cierre: la toma del encendido (4,75-5,88 s) se reemplaza por cierre4.mp4, con el equipo bajo el retrovisor.",
+  "cierre": [
+    [
+      "cierre.mp4",
+      0.0,
+      4.75
+    ],
+    [
+      "cierre4.mp4",
+      1.3,
+      2.6
+    ],
+    [
+      "cierre.mp4",
+      5.875,
+      8.04
+    ]
+  ]
+}

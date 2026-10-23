@@ -1,0 +1,55 @@
+{
+  "_como_usar": "Difuminados por tiempo en px del video original (720x1280): [t0, t1, x, y, ancho, alto]. Textos tipo logo que la IA dibujó en el chaleco del conductor (PARTTAL y otro en la correa).",
+  "inicio.mp4": [
+    [
+      2.3,
+      4.06,
+      80,
+      915,
+      250,
+      85
+    ],
+    [
+      2.3,
+      4.06,
+      485,
+      840,
+      90,
+      95
+    ],
+    [
+      5.33,
+      6.72,
+      0,
+      978,
+      265,
+      72
+    ],
+    [
+      5.33,
+      6.72,
+      455,
+      880,
+      110,
+      90
+    ]
+  ],
+  "cierre.mp4": [
+    [
+      3.38,
+      4.78,
+      85,
+      920,
+      240,
+      75
+    ],
+    [
+      3.38,
+      4.78,
+      430,
+      840,
+      150,
+      100
+    ]
+  ]
+}

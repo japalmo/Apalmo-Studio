@@ -129,15 +129,17 @@ def polvo(t0, t1, v=.25):
     add((suave(n, 25) * 3 + (n - suave(n, 4)) * .25) * np.sin(np.pi * x / d) ** 1.2, t0, v)
 
 
-# ================= clip de inicio (tiempos dentro del clip: 100 + s; ajustar cuando estén los clips reales)
+# ================= clip de inicio (tiempos dentro del clip: 100 + s; cortes reales: 1.25 ventana, 2.38 conductor,
+# 4.04 teléfono (inserto), 5.38 "es que… no tengo señal", 6.71 fiscalizadora, 8.42 toma aérea)
 I = 100
+USAR_VOZ_CLIP = True        # la frase del conductor sale del audio del propio clip IA (poner False para dejar solo efectos)
 viento(I, I + A, .11)
-for k in range(4): paso_ripio(I + .15 + k * .36, .3 + .03 * k)
-for k in range(3): golpe_vidrio(I + 1.65 + k * .14, .5)
-click(I + 3.5, .3)                                # toma el teléfono
-cargando(I + 4.55, I + 5.9); sin_senal(I + 5.75, .22)
-thump(I + 7.55, .25)                              # ella baja la mirada
-whoosh(I + 9.1, .9, .4); polvo(I + 9.0, I + A, .15)
+for k in range(4): paso_ripio(I + .12 + k * .3, .3 + .03 * k)
+for k in range(3): golpe_vidrio(I + 1.45 + k * .14, .5)
+click(I + 3.3, .3)                                # toma el teléfono
+cargando(I + 4.15, I + 5.2); sin_senal(I + 5.05, .22)
+thump(I + 7.6, .25)                               # ella baja la mirada
+whoosh(I + 8.5, .9, .4); polvo(I + 8.4, I + A, .15)
 # ================= golpe "Sin señal. Sin problema."
 G = 200
 golpe(G, .9); thump(G + .05, .55); thump(G + .4, .6); chime(G + .75, (1319, 1760), .3)
@@ -173,17 +175,30 @@ blip(21.3 + O, 1400, .06, .25); blip(21.42 + O, 1400, .06, .25); buzz(21.8 + O, 
 whoosh(23.0 + O, .55, .6); thump(23.1 + O, .4); click(23.6 + O, .45); blip(23.7 + O, 880, .08, .2); blip(23.8 + O, 1320, .1, .25)
 for i in range(6): blip(23.9 + O + i * .08, 900 + i * 180, .05, .15)
 chime(24.5 + O, (1568, 2093), .32)
-# ================= clip de cierre
+# ================= clip de cierre (cortes: 1.42 check en el teléfono (inserto), 2.38 pulgar arriba, 3.42 conductor aliviado,
+# 4.75 equipo bajo el retrovisor (LED verde, arranca), 5.95 la camioneta se va)
 K = 300
 viento(K, K + C, .10); obturador(K, .3)
-escaneo(K + .55, .28); chime(K + 1.55, (1568, 2093), .26)     # QR leído -> check verde
-thump(K + 3.05, .3)                                            # pulgar arriba
-motor(K + 4.5, 3.6, .38)
-polvo(K + 6.0, K + C, .28)
-for k in range(3): paso_ripio(K + 6.2 + k * .5, .12)
+escaneo(K + .5, .28); chime(K + 1.45, (1568, 2093), .26)      # QR leído -> check verde
+thump(K + 2.6, .3)                                             # pulgar arriba
+blip(K + 4.85, 1800, .05, .14); blip(K + 5.05, 1800, .05, .14) # LED verde
+motor(K + 4.7, 3.4, .38)
+polvo(K + 5.95, K + C, .28)
+for k in range(3): paso_ripio(K + 6.1 + k * .5, .12)
 # ================= firma
 whoosh(29.6 + O, .6, .55); thump(29.75 + O, .5); chime(30.45 + O, (784, 1175, 1568), .2)
 
+# frase del conductor desde el audio del clip de inicio
+if USAR_VOZ_CLIP and (AQUI / 'clips' / 'fuente' / 'inicio.mp4').exists():
+    import subprocess
+    a0, a1 = 5.3, 6.75
+    raw = subprocess.run(['ffmpeg', '-v', 'error', '-ss', str(a0), '-t', str(a1 - a0), '-i', str(AQUI / 'clips' / 'fuente' / 'inicio.mp4'),
+                          '-vn', '-ac', '1', '-ar', str(SR), '-f', 's16le', '-'], capture_output=True).stdout
+    voz = np.frombuffer(raw, np.int16).astype(float) / 32768
+    if len(voz):
+        f = int(.04 * SR); env = np.ones(len(voz)); env[:f] = np.linspace(0, 1, f); env[-f:] = np.linspace(1, 0, f)
+        n = nuevo(I + a0)
+        if n is not None: add(voz * env / (np.abs(voz).max() + 1e-9), n, .55)
 y = np.tanh(out[:int(SR * TOTAL)] * 1.2)
 y = y / np.max(np.abs(y)) * .75
 st = np.stack([y, np.roll(y, int(SR * .0005))], axis=1)
