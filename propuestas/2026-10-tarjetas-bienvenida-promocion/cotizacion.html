@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Cotización · Tarjetas de bienvenida, promoción y llaveros · AP-2026-005 Rev. 1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@700&display=swap">
+<style>
+/* Cotización en carta, misma línea gráfica que AP-2026-005: verde apalmo, cobre y crema. */
+:root {
+  --verde: #1A2E20; --cobre: #B87333; --crema: #FDFBF0; --crema-borde: #E3DCC6; --durazno: #F6E8DA;
+  --texto: #3E4440; --suave: #6E7570; --regla: #E4E6E3; --escenario: #F2F3F6; --precio: #E3A462;
+}
+@page { size: Letter; margin: 0; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: #DADDD9; }
+body { font-family: Inter, sans-serif; color: var(--texto); font-size: 9.3pt; line-height: 1.42; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.page { position: relative; width: 8.5in; height: 11in; margin: 0 auto 24px; background: #fff; padding: 0.42in 0.62in 0.95in; overflow: hidden; break-after: page; }
+@media print { html, body { background: #fff; } .page { margin: 0; } }
+h1, h2, h3, .sg { font-family: "Space Grotesk", sans-serif; color: var(--verde); }
+
+/* encabezado y pie */
+.top { display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 10px; border-bottom: 1.4px solid var(--cobre); }
+.top img { height: 26px; display: block; margin-bottom: 4px; }
+.top .meta { text-align: right; font-size: 8.4pt; line-height: 1.4; color: var(--suave); }
+.top .meta b { color: var(--verde); font-weight: 600; display: block; }
+.pie { position: absolute; left: 0.62in; right: 0.62in; bottom: 0.34in; display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid var(--regla); padding-top: 8px; font-size: 7.9pt; color: var(--suave); }
+.pie ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 1px; }
+.pie li { display: flex; align-items: center; gap: 6px; }
+.pie li img { width: 10px; height: 10px; }
+.pie .n { font-size: 7.9pt; } .pie .n b { color: var(--verde); font-size: 9pt; }
+
+.eyebrow { color: var(--cobre); font-weight: 600; font-size: 9pt; margin: 16px 0 2px; }
+h1 { font-size: 21pt; line-height: 1.06; margin: 0 0 6px; letter-spacing: -0.01em; }
+.lede { font-size: 10pt; margin: 0 0 10px; color: #4A504C; }
+.lede b { color: var(--verde); }
+h2 { font-size: 11.6pt; text-transform: uppercase; letter-spacing: 0.01em; margin: 13px 0 8px; padding-bottom: 6px; border-bottom: 1.2px solid var(--cobre); }
+
+/* escenario de renders */
+.stage { background: var(--escenario); border-radius: 14px; padding: 12px 10px 10px; display: grid; gap: 4px; }
+.stage.tres { grid-template-columns: 1fr 1fr 1.32fr; align-items: end; }
+.stage figure { margin: 0; text-align: center; }
+.stage img { width: 100%; display: block; }
+.stage.tres img { max-height: 232px; width: auto; max-width: 100%; margin: 0 auto; }
+.stage figcaption { font-size: 8pt; font-weight: 600; color: var(--verde); margin-top: 2px; }
+.stage figcaption span { display: block; font-weight: 400; color: var(--suave); }
+.nota-img { font-size: 7.6pt; color: var(--suave); text-align: center; margin: 5px 0 0; }
+
+/* tarjetas de piezas */
+.piezas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.pz { background: var(--crema); border: 1px solid var(--crema-borde); border-radius: 10px; padding: 11px 12px 10px; }
+.pz .num { width: 20px; height: 20px; border-radius: 50%; background: var(--cobre); color: #fff; font: 700 9pt "Space Grotesk"; display: grid; place-items: center; margin-bottom: 6px; }
+.pz h3 { font-size: 10.6pt; margin: 0 0 1px; line-height: 1.2; }
+.pz .med { font-size: 8pt; color: var(--cobre); font-weight: 600; margin: 0 0 4px; }
+.pz p { margin: 0; font-size: 8.3pt; line-height: 1.4; }
+
+.sheets { display: grid; grid-template-columns: 26px 1fr; gap: 12px; align-items: center; margin-top: 12px; border: 1px solid var(--crema-borde); border-left: 3.5px solid #1E8E4E; border-radius: 10px; padding: 8px 14px; background: var(--crema); font-size: 8.4pt; }
+.sheets b { color: var(--verde); }
+
+/* página 2 */
+.fila { display: grid; gap: 14px; align-items: center; }
+.fila.llav { grid-template-columns: 1.35fr 1fr; }
+.fila.promo { grid-template-columns: 1.35fr 1fr; }
+.stage.dos { grid-template-columns: 1fr 1fr; align-items: end; padding: 14px 12px 10px; }
+.stage.promo { grid-template-columns: 1.15fr .85fr; align-items: center; padding: 14px 14px 10px; }
+.specs { margin: 0; display: grid; gap: 0; font-size: 8.3pt; }
+.specs div { display: grid; grid-template-columns: 70px 1fr; gap: 8px; padding: 4px 0; border-bottom: 1px solid var(--regla); }
+.specs div:last-child { border-bottom: 0; }
+.specs dt { font-weight: 600; color: var(--verde); }
+.specs dd { margin: 0; }
+.txt p { margin: 0 0 6px; font-size: 8.7pt; }
+.txt p b { color: var(--verde); }
+ul.check { list-style: none; padding: 0; margin: 6px 0 0; display: grid; gap: 3px; font-size: 8.4pt; }
+ul.check li { display: grid; grid-template-columns: 14px 1fr; gap: 6px; }
+ul.check li::before { content: ""; width: 9px; height: 5px; border-left: 2px solid var(--cobre); border-bottom: 2px solid var(--cobre); transform: rotate(-45deg); margin-top: 4px; }
+
+/* página 3: precios */
+table { border-collapse: collapse; width: 100%; }
+.precios th { text-align: left; font: 600 7.8pt Inter; text-transform: uppercase; letter-spacing: .05em; color: var(--suave); padding: 0 10px 5px; white-space: nowrap; }
+.precios th:last-child, .precios td:last-child { text-align: right; }
+.precios td { padding: 5px 10px; border-top: 1px solid var(--regla); vertical-align: top; font-size: 8.4pt; line-height: 1.35; }
+.precios td:first-child { width: 27%; font-weight: 600; color: var(--verde); }
+.precios td:last-child { width: 16%; white-space: nowrap; font: 700 10.4pt "Space Grotesk"; color: var(--verde); }
+.precios td:last-child small { font: 400 7.6pt Inter; color: var(--suave); margin-left: 3px; }
+.precios tr.grupo td { background: var(--crema); border-top: 1px solid var(--crema-borde); font: 700 8.2pt "Space Grotesk"; text-transform: uppercase; letter-spacing: .04em; color: var(--cobre); padding: 4px 10px; text-align: left !important; }
+.precios td span { display: block; font-weight: 400; color: var(--suave); font-size: 7.6pt; }
+
+.caja { margin-top: 10px; background: var(--verde); color: #E9EEE9; border-radius: 14px; padding: 9px 18px; display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; }
+.caja h3 { color: #fff; font-size: 12pt; margin: 0 0 5px; }
+.caja ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1px 14px; font-size: 8.4pt; }
+.caja li { display: flex; gap: 6px; align-items: baseline; }
+.caja li::before { content: ""; flex: none; width: 8px; height: 4.5px; border-left: 2px solid var(--precio); border-bottom: 2px solid var(--precio); transform: rotate(-45deg) translateY(-2px); }
+.caja .total { text-align: right; }
+.caja .total .v { font: 700 27pt/1 "Space Grotesk"; color: var(--precio); }
+.caja .total small { display: block; font-size: 8.4pt; color: #C9D3CA; margin-top: 3px; }
+.suma { margin-top: 8px; display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: center; background: var(--durazno); border-radius: 10px; padding: 6px 14px; font-size: 8.3pt; }
+.suma b { color: var(--verde); }
+.suma .lbl { font: 700 8.2pt "Space Grotesk"; text-transform: uppercase; color: var(--cobre); letter-spacing: .04em; }
+.letra { font-size: 8pt; color: var(--suave); margin: 6px 0 0; }
+
+.cond td { padding: 4px 10px; border-top: 1px solid var(--regla); font-size: 8pt; line-height: 1.35; vertical-align: top; }
+.cond tr:last-child td { border-bottom: 1px solid var(--regla); }
+.cond td:first-child { width: 16%; background: var(--crema); font-weight: 600; color: var(--verde); }
+.acepta { background: var(--durazno); border-radius: 8px; padding: 6px 12px; font-weight: 600; color: var(--verde); font-size: 8.3pt; }
+.banco { margin-top: 5px; font-size: 8.3pt; }
+.banco td { padding: 4px 0; border-top: 1px solid var(--regla); }
+.banco td:nth-child(odd) { color: var(--suave); width: 13%; }
+.banco td:nth-child(even) { color: var(--verde); }
+.p3 h2 { margin: 10px 0 6px; }
+.p3 .letra { margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<!-- ───────── Página 1 ───────── -->
+<section class="page">
+  <header class="top">
+    <img src="imagenes/logo.png" alt="apalmo studio">
+    <div class="meta"><b>Cotización</b>Tarjetas de bienvenida, promoción y llaveros<br>AP-2026-005 · Rev. 1 · 25 de octubre de 2026</div>
+  </header>
+
+  <p class="eyebrow">Propuesta de servicio</p>
+  <h1>Tarjetas de bienvenida, de promoción<br>y llavero casita con NFC y QR</h1>
+  <p class="lede">Tres piezas impresas en 3D que se abren acercando el celular o escaneando el QR: la <b>bienvenida</b> en la pared del departamento, la <b>promoción</b> de los dos departamentos disponibles y los autos en arriendo, y un <b>llavero</b> que el huésped lleva junto a la llave.</p>
+
+  <div class="stage tres">
+    <figure><img src="imagenes/pared.png" alt="Tarjeta de bienvenida en su soporte de pared azul"><figcaption>Bienvenida<span>con soporte de pared</span></figcaption></figure>
+    <figure><img src="imagenes/promo.png" alt="Tarjeta de promoción en su stand de mesa azul"><figcaption>Promoción<span>con stand de mesa</span></figcaption></figure>
+    <figure><img src="imagenes/llaveros.png" alt="Llaveros con forma de casita, frente y reverso"><figcaption>Llavero casita<span>NFC al frente, QR por detrás</span></figcaption></figure>
+  </div>
+  <p class="nota-img">Imágenes referenciales de las piezas. La terminación final se valida con la primera pieza impresa.</p>
+
+  <h2>Las piezas</h2>
+  <div class="piezas">
+    <div class="pz"><div class="num">1</div><h3>Tarjeta de bienvenida</h3><p class="med">10 × 14,5 cm · soporte de pared</p>
+      <p>Abre la ficha del departamento: WiFi, horarios, reglas, contactos y encuesta. El soporte azul se fija con cinta doble contacto o dos tornillos, y la tarjeta se desliza desde arriba.</p></div>
+    <div class="pz"><div class="num">2</div><h3>Tarjeta de promoción</h3><p class="med">10 × 14,5 cm · stand de mesa</p>
+      <p>Abre la vitrina con los dos departamentos disponibles y los autos en arriendo, cada uno con fotos, precio y botón directo a WhatsApp. Sirve en recepción, en el mismo departamento o en un local aliado.</p></div>
+    <div class="pz"><div class="num">3</div><h3>Llavero casita</h3><p class="med">4,6 × 5,4 cm · argolla metálica</p>
+      <p>Va con la llave y abre la ficha desde cualquier lugar: el huésped tiene a mano la dirección, el WiFi, el check-out y los contactos, y vuelve a ver la promoción de autos.</p></div>
+  </div>
+
+  <div class="sheets">
+    <svg width="26" height="34" viewBox="0 0 26 34" aria-hidden="true"><path d="M3 0h14l9 9v22a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V3a3 3 0 0 1 3-3Z" fill="#1E8E4E"/><path d="M17 0v6a3 3 0 0 0 3 3h6Z" fill="#8ED1A8"/><path d="M6 14h14v13H6Zm2 2v3h4v-3Zm6 0v3h4v-3Zm-6 5v4h4v-4Zm6 0v4h4v-4Z" fill="#fff"/></svg>
+    <div><b>Todo funciona con Google Apps Script, por eso no tiene costos de alojamiento.</b> La ficha y la vitrina se editan en la misma planilla de Google Sheets: datos del departamento, fotos, precios de los departamentos y autos. Las respuestas de la encuesta quedan registradas ahí mismo. Para editar la planilla se requiere una cuenta de Google.</div>
+  </div>
+
+  <footer class="pie">
+    <ul><li><img src="imagenes/ic1.png" alt="">Antofagasta, Chile</li><li><img src="imagenes/ic2.png" alt="">contacto@apalmo.com</li><li><img src="imagenes/ic3.png" alt="">+56 9 9057 4036</li></ul>
+    <div class="n">N° PÁG: <b>1</b></div>
+  </footer>
+</section>
+
+<!-- ───────── Página 2 ───────── -->
+<section class="page">
+  <header class="top">
+    <img src="imagenes/logo.png" alt="apalmo studio">
+    <div class="meta"><b>Cotización</b>Tarjetas de bienvenida, promoción y llaveros<br>AP-2026-005 · Rev. 1 · 25 de octubre de 2026</div>
+  </header>
+
+  <h2>El llavero casita</h2>
+  <div class="fila llav">
+    <div class="stage dos">
+      <figure><img src="imagenes/llavero-frente.png" alt="Frente del llavero: Info del depto y NFC"><figcaption>Frente<span>se acerca el celular</span></figcaption></figure>
+      <figure><img src="imagenes/llavero-reverso.png" alt="Reverso del llavero con el código QR"><figcaption>Reverso<span>se escanea el QR</span></figcaption></figure>
+    </div>
+    <dl class="specs">
+      <div><dt>Forma</dt><dd>Casita con techo a dos aguas y argolla en la punta.</dd></div>
+      <div><dt>Medidas</dt><dd>4,6 × 5,4 cm, 4 mm de espesor. Liviano para ir con la llave.</dd></div>
+      <div><dt>Material</dt><dd>Impreso en 3D, cuerpo azul y cara blanca con letras en relieve, igual que las tarjetas.</dd></div>
+      <div><dt>NFC</dt><dd>Chip sellado dentro de la pieza. Funciona en iPhone y Android sin descargar nada.</dd></div>
+      <div><dt>QR</dt><dd>En relieve en el reverso, para celulares sin NFC.</dd></div>
+      <div><dt>Abre</dt><dd>La ficha del departamento. El texto del frente se puede cambiar por el nombre del depto.</dd></div>
+    </dl>
+  </div>
+
+  <h2>La tarjeta de promoción y su vitrina</h2>
+  <div class="fila promo">
+    <div class="stage promo">
+      <figure><img src="imagenes/promo.png" alt="Tarjeta de promoción en stand"></figure>
+      <figure><img src="imagenes/vitrina-telefono.png" alt="Vitrina en el celular: dos departamentos y autos en arriendo"></figure>
+    </div>
+    <div class="txt">
+      <p><b>Una vitrina para arrendar directo.</b> Quien acerca el celular a la tarjeta ve los dos departamentos disponibles y los autos en arriendo, y consulta o reserva con un toque por WhatsApp, sin intermediarios.</p>
+      <ul class="check">
+        <li>Fotos, capacidad y precio de cada departamento.</li>
+        <li>Autos con sus características y precio por día.</li>
+        <li>Botón de WhatsApp con el mensaje ya escrito.</li>
+        <li>Se edita en la misma planilla de Google Sheets: si cambia un precio o un auto, la vitrina se actualiza sola.</li>
+        <li>La ficha del departamento suma un botón a la vitrina, así la bienvenida y el llavero también la muestran.</li>
+      </ul>
+      <p class="letra">En la maqueta del celular los nombres, fotos y precios son de ejemplo.</p>
+    </div>
+  </div>
+
+  <h2>La bienvenida, ahora en la pared</h2>
+  <div class="txt">
+    <p>Es la misma tarjeta de la propuesta anterior, con su ficha, encuesta y aviso de vehículos. Cambia el soporte: un <b>marco azul de pared</b> que abraza los lados y la base de la tarjeta, queda a la vista en la entrada y no ocupa espacio en la mesa. Se fija con cinta doble contacto o dos tornillos, y la tarjeta sale deslizándola hacia arriba.</p>
+  </div>
+
+  <footer class="pie">
+    <ul><li><img src="imagenes/ic1.png" alt="">Antofagasta, Chile</li><li><img src="imagenes/ic2.png" alt="">contacto@apalmo.com</li><li><img src="imagenes/ic3.png" alt="">+56 9 9057 4036</li></ul>
+    <div class="n">N° PÁG: <b>2</b></div>
+  </footer>
+</section>
+
+<!-- ───────── Página 3 ───────── -->
+<section class="page p3">
+  <header class="top">
+    <img src="imagenes/logo.png" alt="apalmo studio">
+    <div class="meta"><b>Cotización</b>Tarjetas de bienvenida, promoción y llaveros<br>AP-2026-005 · Rev. 1 · 25 de octubre de 2026</div>
+  </header>
+
+  <h2>Precios unitarios</h2>
+  <table class="precios">
+    <thead><tr><th>Ítem</th><th>Detalle</th><th>Precio unitario</th></tr></thead>
+    <tbody>
+      <tr class="grupo"><td colspan="3">Piezas con NFC y QR</td></tr>
+      <tr><td>Tarjeta de bienvenida</td><td>10 × 14,5 cm con NFC y QR, más soporte de pared azul y su fijación.</td><td>$10.000<small>c/u</small></td></tr>
+      <tr><td>Tarjeta de promoción</td><td>10 × 14,5 cm con NFC y QR, más stand de mesa azul.</td><td>$10.000<small>c/u</small></td></tr>
+      <tr><td>Llavero casita</td><td>4,6 × 5,4 cm con NFC al frente, QR por detrás y argolla metálica.</td><td>$5.000<small>c/u</small></td></tr>
+      <tr class="grupo"><td colspan="3">Servicio digital · pago único</td></tr>
+      <tr><td>Ficha digital del departamento<span>La abren la bienvenida y los llaveros</span></td><td>WiFi con QR, horarios, reglas, contactos, encuesta de satisfacción, aviso de vehículos con WhatsApp y planilla.</td><td>$15.000<small>una vez</small></td></tr>
+      <tr><td>Vitrina de promoción<span>La abren las tarjetas de promoción</span></td><td>Los dos departamentos y los autos con fotos, precios y WhatsApp. Solo si se piden tarjetas de promoción.</td><td>$8.000<small>una vez</small></td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja">
+    <div>
+      <h3>Pedido base · Incluye</h3>
+      <ul>
+        <li>2 tarjetas de bienvenida y soportes</li><li>Ficha digital con encuesta</li>
+        <li>Aviso de vehículos con WhatsApp</li><li>Planilla en Google Sheets</li>
+      </ul>
+    </div>
+    <div class="total"><div class="v">$35.000</div><small>valor total</small><small>50% al confirmar · 50% contra entrega<br>($17.500 + $17.500)</small></div>
+  </div>
+  <div class="suma"><span class="lbl">Se suman</span><span>Cada tarjeta de promoción <b>$10.000</b> (más la vitrina, <b>$8.000</b> una sola vez) y cada llavero casita <b>$5.000</b>. Por ejemplo, el pedido base con 2 tarjetas de promoción y 4 llaveros suma <b>$83.000</b>.</span></div>
+  <p class="letra">Valores en pesos chilenos, sin recargos. Propuesta válida hasta el 8 de noviembre de 2026.</p>
+
+  <h2>Condiciones</h2>
+  <table class="cond">
+    <tr><td>Plazo</td><td>Hasta 10 días hábiles desde el anticipo y la recepción de la planilla completa con datos, fotos y precios.</td></tr>
+    <tr><td>Cambios</td><td>El primer mes desde la entrega, los cambios a la ficha y la vitrina (textos, orden, colores) no tienen costo; después se cotizan aparte. Los datos de la planilla los actualiza el cliente cuando quiera.</td></tr>
+    <tr><td>Reposiciones</td><td>Tarjetas o llaveros extra, por ejemplo para reponer los que se lleven los huéspedes, se cobran a su precio unitario, sin repetir el servicio digital.</td></tr>
+    <tr><td>Garantía</td><td>6 meses por fallas de fabricación, incluido el NFC. No cubre pérdida, mal uso ni fallas por cambios en la planilla o en los servicios de Google.</td></tr>
+    <tr><td>Uso de imágenes</td><td>Apalmo Studio podrá mostrar fotos y videos de las piezas, la ficha y la vitrina en redes y portafolio, sin datos privados del departamento ni de los huéspedes.</td></tr>
+  </table>
+
+  <h2>Aceptación</h2>
+  <div class="acepta">El pago del anticipo confirma el pedido e implica aceptar todas las condiciones. No requiere firma.</div>
+  <p style="margin:6px 0 0;font-size:8.4pt">Para confirmar, transferir el 50% del pedido elegido (<b style="color:var(--verde)">$17.500</b> para el pedido base) y enviar el comprobante por WhatsApp o correo:</p>
+  <table class="banco">
+    <tr><td>Titular</td><td>Juan Apalmo</td><td>RUT</td><td>27.968.571-7</td></tr>
+    <tr><td>Banco</td><td>Banco de Chile · Cta. corriente</td><td>N° de cuenta</td><td>00-110-46308-00</td></tr>
+  </table>
+
+  <footer class="pie">
+    <ul><li><img src="imagenes/ic1.png" alt="">Antofagasta, Chile</li><li><img src="imagenes/ic2.png" alt="">contacto@apalmo.com</li><li><img src="imagenes/ic3.png" alt="">+56 9 9057 4036</li></ul>
+    <div class="n">N° PÁG: <b>3</b></div>
+  </footer>
+</section>
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Tarjetas y llavero casita · modelos 3D</title>
+<style>
+*{margin:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:transparent}
+canvas{position:absolute;inset:0;width:100%;height:100%}
+</style>
+<script type="importmap">
+{ "imports": { "three": "./node_modules/three/build/three.module.js", "three/addons/": "./node_modules/three/examples/jsm/" } }
+</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const P = new URLSearchParams(location.search);
+const VISTA = P.get('vista') || 'promo';          // pared | promo | llaveros | llavero-frente | llavero-reverso
+await Promise.all(['800 80px Inter', '700 80px Inter', '600 80px Inter'].map(f => document.fonts.load(f)));
+const QR = await (await fetch('qr.json')).json();
+
+// Colores de la pieza impresa (mismo azul y gris del combo aprobado)
+const AZUL = '#1F3F96', GRIS = '#2B2B2E', BLANCO = '#ECEBE7';
+
+/* ---------- utilidades ---------- */
+function lienzo(w, h, dibujar) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  dibujar(c.getContext('2d'), w, h); return c;
+}
+function texturas(w, h, dibujar) {
+  // Color + relieve: el mismo dibujo en blanco sobre negro sirve de bump map para que se vea en alto relieve
+  const color = lienzo(w, h, (g) => { g.fillStyle = BLANCO; g.fillRect(0, 0, w, h); dibujar(g, w, h, false); });
+  const relieve = lienzo(w, h, (g) => { g.fillStyle = '#000'; g.fillRect(0, 0, w, h); dibujar(g, w, h, true); });
+  const blur = lienzo(w, h, (g) => { g.filter = 'blur(2px)'; g.drawImage(relieve, 0, 0); });
+  const map = new THREE.CanvasTexture(color); map.colorSpace = THREE.SRGBColorSpace; map.anisotropy = 16;
+  const bump = new THREE.CanvasTexture(blur); bump.anisotropy = 16;
+  return { map, bump };
+}
+const tinta = (g, r, c) => (g.fillStyle = r ? '#fff' : c, g.strokeStyle = r ? '#fff' : c);
+const rrShape = (w, h, r) => { const s = new THREE.Shape(); const x = -w / 2, y = -h / 2;
+  s.moveTo(x + r, y); s.lineTo(x + w - r, y); s.quadraticCurveTo(x + w, y, x + w, y + r); s.lineTo(x + w, y + h - r);
+  s.quadraticCurveTo(x + w, y + h, x + w - r, y + h); s.lineTo(x + r, y + h); s.quadraticCurveTo(x, y + h, x, y + h - r);
+  s.lineTo(x, y + r); s.quadraticCurveTo(x, y, x + r, y); return s; };
+function caraUV(shape, w, h, map, bump, ox = 0, oy = 0) {
+  const geo = new THREE.ShapeGeometry(shape, 24);
+  const uv = geo.attributes.uv, pos = geo.attributes.position;
+  for (let i = 0; i < uv.count; i++) uv.setXY(i, (pos.getX(i) - ox + w / 2) / w, (pos.getY(i) - oy + h / 2) / h);
+  return new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map, bumpMap: bump, bumpScale: 3.2, roughness: .62 }));
+}
+const plastico = (c, r = .42) => new THREE.MeshPhysicalMaterial({ color: c, roughness: r, clearcoat: .25, clearcoatRoughness: .45 });
+const matAzul = plastico(AZUL), matBlanco = plastico(BLANCO, .6);
+const metal = new THREE.MeshStandardMaterial({ color: 0xc9ccd2, roughness: .22, metalness: 1 });
+const sombras = m => (m.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } }), m);
+
+function dibujarQR(g, q, x, y, s) {
+  const n = q.size, m = s / n;
+  for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) if (q.data[i * n + j]) g.fillRect(x + j * m, y + i * m, m + .8, m + .8);
+}
+function iconoNFC(g, cx, cy, s, r) {        // teléfono con ondas, mismo lenguaje de la tarjeta aprobada
+  tinta(g, r, GRIS); g.lineWidth = s * .07; g.lineCap = 'round'; g.lineJoin = 'round';
+  g.beginPath(); g.roundRect(cx - s * .28, cy - s * .2, s * .56, s * .82, s * .09); g.stroke();
+  g.beginPath(); g.moveTo(cx - s * .08, cy - s * .12); g.lineTo(cx + s * .08, cy - s * .12); g.stroke();
+  g.font = `800 ${s * .2}px Inter`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('NFC', cx, cy + s * .24);
+  for (const k of [.3, .5, .7]) { g.beginPath(); g.arc(cx, cy - s * .2, s * k, -Math.PI * .72, -Math.PI * .28); g.stroke(); }
+}
+function iconoWifi(g, cx, cy, s, r) {
+  tinta(g, r, AZUL); g.lineWidth = s * .13; g.lineCap = 'round';
+  for (const k of [.32, .62]) { g.beginPath(); g.arc(cx, cy + s * .35, s * k, -Math.PI * .78, -Math.PI * .22); g.stroke(); }
+  g.beginPath(); g.arc(cx, cy + s * .35, s * .1, 0, 7); g.fill();
+}
+function iconoCasa(g, cx, cy, s, r, num) {
+  tinta(g, r, AZUL); g.lineWidth = s * .11; g.lineJoin = 'round'; g.lineCap = 'round';
+  g.beginPath(); g.moveTo(cx - s * .5, cy - s * .02); g.lineTo(cx, cy - s * .48); g.lineTo(cx + s * .5, cy - s * .02); g.stroke();
+  g.beginPath(); g.moveTo(cx - s * .36, cy - s * .14); g.lineTo(cx - s * .36, cy + s * .46); g.lineTo(cx + s * .36, cy + s * .46); g.lineTo(cx + s * .36, cy - s * .14); g.stroke();
+  g.font = `800 ${s * .42}px Inter`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(num, cx, cy + s * .17);
+}
+function iconoAuto(g, cx, cy, s, r) {
+  tinta(g, r, AZUL); g.lineWidth = s * .11; g.lineJoin = 'round'; g.lineCap = 'round';
+  g.beginPath();
+  g.moveTo(cx - s * .56, cy + s * .22); g.lineTo(cx - s * .56, cy - s * .02); g.quadraticCurveTo(cx - s * .55, cy - s * .1, cx - s * .44, cy - s * .12);
+  g.lineTo(cx - s * .3, cy - s * .4); g.lineTo(cx + s * .3, cy - s * .4); g.lineTo(cx + s * .44, cy - s * .12);
+  g.quadraticCurveTo(cx + s * .55, cy - s * .1, cx + s * .56, cy - s * .02); g.lineTo(cx + s * .56, cy + s * .22); g.closePath(); g.stroke();
+  for (const d of [-.32, .32]) { g.beginPath(); g.arc(cx + s * d, cy + s * .26, s * .13, 0, 7); g.fill(); }
+  g.beginPath(); g.moveTo(cx - s * .44, cy - s * .12); g.lineTo(cx + s * .44, cy - s * .12); g.stroke();
+}
+function iconoLista(g, cx, cy, s, r) {
+  tinta(g, r, AZUL); g.lineWidth = s * .1; g.lineCap = 'round';
+  g.beginPath(); g.roundRect(cx - s * .36, cy - s * .5, s * .72, s * 1, s * .12); g.stroke();
+  for (const k of [-.22, 0, .22]) { g.beginPath(); g.arc(cx - s * .17, cy + s * k, s * .05, 0, 7); g.fill();
+    g.beginPath(); g.moveTo(cx - s * .04, cy + s * k); g.lineTo(cx + s * .2, cy + s * k); g.stroke(); }
+}
+function iconoEstrella(g, cx, cy, s, r) {
+  tinta(g, r, AZUL); g.lineWidth = s * .1; g.lineJoin = 'round';
+  g.beginPath();
+  for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, k = i % 2 ? s * .22 : s * .5; g.lineTo(cx + Math.cos(a) * k, cy + .04 * s + Math.sin(a) * k); }
+  g.closePath(); g.stroke();
+}
+function pieNFCQR(g, w, h, y0, q, r) {      // franja inferior: NFC | QR
+  iconoNFC(g, w * .27, y0 + 150, 210, r);
+  tinta(g, r, GRIS); g.fillRect(w * .47, y0 + 10, 9, 300);
+  dibujarQR(g, q, w * .55, y0 + 10, 300);
+}
+
+/* ---------- caras de las tarjetas (10 × 14,5 cm) ---------- */
+const TW = 10, TH = 14.5, TT = .3;
+const caraBienvenida = texturas(1000, 1450, (g, w, h, r) => {
+  tinta(g, r, GRIS); g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+  g.font = '800 104px Inter'; g.fillText('¡Bienvenido!', w / 2, 210);
+  tinta(g, r, AZUL); g.beginPath(); g.roundRect(w / 2 - 70, 262, 140, 16, 8); g.fill();
+  tinta(g, r, GRIS); g.font = '800 70px Inter'; g.fillText('Info del depto', w / 2, 400);
+  const ic = [[iconoWifi, 'WiFi'], [iconoLista, 'Reglas'], [iconoEstrella, 'Opina']];
+  ic.forEach(([f, t], i) => { const cx = w * (.22 + i * .28); f(g, cx, 545, 150, r); tinta(g, r, GRIS); g.font = '800 58px Inter'; g.textAlign = 'center'; g.textBaseline = 'alphabetic'; g.fillText(t, cx, 720); });
+  pieNFCQR(g, w, h, 860, QR.ficha, r);
+});
+const caraPromo = texturas(1000, 1450, (g, w, h, r) => {
+  tinta(g, r, GRIS); g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+  g.font = '800 94px Inter'; g.fillText('¡Arrienda', w / 2, 175); g.fillText('con nosotros!', w / 2, 280);
+  tinta(g, r, AZUL); g.beginPath(); g.roundRect(w / 2 - 70, 322, 140, 16, 8); g.fill();
+  tinta(g, r, GRIS); g.font = '700 54px Inter'; g.fillText('Fotos, precios y reservas', w / 2, 435);
+  const ic = [[(g, cx, cy, s, r) => iconoCasa(g, cx, cy, s, r, '1'), 'Depto'], [(g, cx, cy, s, r) => iconoCasa(g, cx, cy, s, r, '2'), 'Depto'], [iconoAuto, 'Autos']];
+  ic.forEach(([f, t], i) => { const cx = w * (.22 + i * .28); f(g, cx, 575, 150, r); tinta(g, r, GRIS); g.font = '800 58px Inter'; g.textAlign = 'center'; g.textBaseline = 'alphabetic'; g.fillText(t, cx, 730); });
+  pieNFCQR(g, w, h, 860, QR.vitrina, r);
+});
+
+function tarjeta(cara) {
+  const g = new THREE.Group();
+  const geo = new THREE.ExtrudeGeometry(rrShape(TW, TH, .55), { depth: TT - .06, bevelEnabled: true, bevelThickness: .03, bevelSize: .03, bevelSegments: 2, curveSegments: 16 });
+  geo.translate(0, 0, -TT / 2 + .03);
+  g.add(new THREE.Mesh(geo, matBlanco));
+  const borde = new THREE.Mesh(new THREE.ExtrudeGeometry(rrShape(TW, TH, .55), { depth: .12, bevelEnabled: false, curveSegments: 16 }), matAzul);
+  borde.position.z = -TT / 2 - .1; g.add(borde);                // capa trasera azul, como la pieza impresa
+  const f = caraUV(rrShape(TW - .04, TH - .04, .53), TW - .04, TH - .04, cara.map, cara.bump); f.position.z = TT / 2 + .002; g.add(f);
+  return sombras(g);
+}
+
+/* ---------- stand de mesa (base redondeada azul) ---------- */
+function stand() {
+  const g = new THREE.Group();
+  const geo = new THREE.ExtrudeGeometry(rrShape(9.8, 3.0, 1.45), { depth: .8, bevelEnabled: true, bevelThickness: .9, bevelSize: .9, bevelSegments: 12, curveSegments: 28 });
+  geo.rotateX(-Math.PI / 2); geo.translate(0, .9, 0);
+  g.add(new THREE.Mesh(geo, matAzul));
+  return sombras(g);
+}
+
+/* ---------- soporte de pared: marco en U, abierto arriba ---------- */
+function soportePared() {
+  const g = new THREE.Group();
+  const W = TW + 1.0, H = TH * .78, fondo = .35;
+  const placa = new THREE.Mesh(new THREE.ExtrudeGeometry(rrShape(W, H, .7), { depth: fondo, bevelEnabled: true, bevelThickness: .08, bevelSize: .08, bevelSegments: 3, curveSegments: 16 }), matAzul);
+  placa.position.set(0, -TH / 2 + H / 2 - .5, -TT / 2 - .16 - fondo); g.add(placa);
+  // marco frontal: contorno en U que abraza los lados y la base de la tarjeta
+  const s = new THREE.Shape(); const x0 = -W / 2, y0 = -TH / 2 - .5, y1 = y0 + H, xi = TW / 2 - .45, yi = -TH / 2 + .55, r = .7;
+  s.moveTo(x0 + r, y0); s.lineTo(-x0 - r, y0); s.quadraticCurveTo(-x0, y0, -x0, y0 + r); s.lineTo(-x0, y1 - .25);
+  s.quadraticCurveTo(-x0, y1, -x0 - .25, y1); s.lineTo(xi + .25, y1); s.quadraticCurveTo(xi, y1, xi, y1 - .25);
+  s.lineTo(xi, yi + .4); s.quadraticCurveTo(xi, yi, xi - .4, yi); s.lineTo(-xi + .4, yi); s.quadraticCurveTo(-xi, yi, -xi, yi + .4);
+  s.lineTo(-xi, y1 - .25); s.quadraticCurveTo(-xi, y1, -xi - .25, y1); s.lineTo(x0 + .25, y1); s.quadraticCurveTo(x0, y1, x0, y1 - .25);
+  s.lineTo(x0, y0 + r); s.quadraticCurveTo(x0, y0, x0 + r, y0);
+  const marco = new THREE.Mesh(new THREE.ExtrudeGeometry(s, { depth: TT + .3, bevelEnabled: true, bevelThickness: .12, bevelSize: .1, bevelSegments: 4, curveSegments: 16 }), matAzul);
+  marco.position.z = -TT / 2 - .16; g.add(marco);
+  return sombras(g);
+}
+
+/* ---------- llavero casita (4,6 × 5,4 cm, 4 mm) ---------- */
+const LW = 4.6, LCuerpo = 3.2, LTecho = 2.2, LT = .4;
+function formaCasa(m = 0) {                 // m = margen interior para la placa blanca (sin aleros)
+  const W0 = LW / 2, T0 = LCuerpo / 2, A = .25, e = .18, k = (LTecho - e) / (W0 + A);
+  const yTecho = x => T0 + LTecho - k * Math.abs(x) - m * Math.sqrt(1 + k * k);
+  const s = new THREE.Shape(), w = W0 - m, b = -T0 + m, r = .35, rc = .32;
+  s.moveTo(-w + r, b); s.lineTo(w - r, b); s.quadraticCurveTo(w, b, w, b + r);
+  if (m === 0) { s.lineTo(w, T0); s.lineTo(w + A - .06, T0); s.quadraticCurveTo(w + A, T0, w + A, T0 + .06); s.lineTo(w + A, T0 + e); }
+  else s.lineTo(w, yTecho(w));
+  s.lineTo(rc, yTecho(rc)); s.quadraticCurveTo(0, yTecho(0) + .02, -rc, yTecho(rc));
+  if (m === 0) { s.lineTo(-w - A, T0 + e); s.lineTo(-w - A, T0 + .06); s.quadraticCurveTo(-w - A, T0, -w - A + .06, T0); s.lineTo(-w, T0); }
+  else s.lineTo(-w, yTecho(w));
+  s.lineTo(-w, b + r); s.quadraticCurveTo(-w, b, -w + r, b);
+  return s;
+}
+const LAlto = LCuerpo + LTecho, LCentroY = LTecho / 2;     // caja de la textura: alto total y su centro
+const caraLlaveroFrente = texturas(920, 1080, (g, w, h, r) => {
+  // ventana redonda en el techo + texto + NFC
+  tinta(g, r, AZUL); g.lineWidth = 22; g.beginPath(); g.arc(w / 2, 300, 62, 0, 7); g.stroke();
+  g.lineWidth = 14; g.beginPath(); g.moveTo(w / 2 - 62, 300); g.lineTo(w / 2 + 62, 300); g.moveTo(w / 2, 238); g.lineTo(w / 2, 362); g.stroke();
+  tinta(g, r, GRIS); g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+  g.font = '800 104px Inter'; g.fillText('Info del', w / 2, 560); g.fillText('depto', w / 2, 670);
+  iconoNFC(g, w / 2 - 150, 850, 150, r);
+  tinta(g, r, GRIS); g.font = '800 54px Inter'; g.textAlign = 'left'; g.fillText('Acerca', w / 2 - 40, 830); g.fillText('tu celular', w / 2 - 40, 895);
+});
+const caraLlaveroReverso = texturas(920, 1080, (g, w, h, r) => {
+  tinta(g, r, GRIS); g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+  g.font = '800 76px Inter'; g.fillText('Escanea', w / 2, 375);
+  dibujarQR(g, QR.llavero, w / 2 - 270, 430, 540);
+});
+function llavero(cara, conLlave = false) {
+  const g = new THREE.Group();
+  const cuerpo = new THREE.Mesh(new THREE.ExtrudeGeometry(formaCasa(0), { depth: LT - .1, bevelEnabled: true, bevelThickness: .05, bevelSize: .05, bevelSegments: 3, curveSegments: 12 }), matAzul);
+  cuerpo.position.z = -LT / 2 + .05; g.add(cuerpo);
+  // agujero de la argolla: se simula con un anillo oscuro y la argolla metálica
+  const yAgujero = LCuerpo / 2 + LTecho - .75;
+  const ojal = new THREE.Mesh(new THREE.CylinderGeometry(.22, .22, LT + .14, 24), new THREE.MeshStandardMaterial({ color: 0x1a2240, roughness: .8 }));
+  ojal.rotation.x = Math.PI / 2; ojal.position.y = yAgujero; g.add(ojal);
+  const placa = new THREE.Mesh(new THREE.ExtrudeGeometry(formaCasa(.28), { depth: .06, bevelEnabled: false, curveSegments: 12 }), matBlanco);
+  placa.position.z = LT / 2; g.add(placa);
+  const f = caraUV(formaCasa(.28), LW, LAlto, cara.map, cara.bump, 0, LCentroY); f.position.z = LT / 2 + .062; g.add(f);
+  const tapaOjal = new THREE.Mesh(new THREE.CylinderGeometry(.34, .34, .02, 24), matAzul); tapaOjal.rotation.x = Math.PI / 2; tapaOjal.position.set(0, yAgujero, LT / 2 + .07); g.add(tapaOjal);
+  const hueco = new THREE.Mesh(new THREE.CylinderGeometry(.21, .21, .03, 24), new THREE.MeshStandardMaterial({ color: 0x141a30, roughness: .9 })); hueco.rotation.x = Math.PI / 2; hueco.position.set(0, yAgujero, LT / 2 + .075); g.add(hueco);
+  // argolla
+  const arg = new THREE.Mesh(new THREE.TorusGeometry(1.05, .07, 14, 64), metal);
+  arg.position.set(0, yAgujero + .85, 0); arg.rotation.y = Math.PI / 2.2; g.add(arg);
+  if (conLlave) {
+    const k = new THREE.Shape();
+    k.absarc(0, 0, .95, 0, Math.PI * 2);
+    const hk = new THREE.Path(); hk.absarc(0, .45, .22, 0, Math.PI * 2, true); k.holes.push(hk);
+    const cuerpoLlave = new THREE.Mesh(new THREE.ExtrudeGeometry(k, { depth: .18, bevelEnabled: true, bevelThickness: .03, bevelSize: .03, bevelSegments: 2, curveSegments: 32 }), new THREE.MeshStandardMaterial({ color: 0xc8a75a, roughness: .3, metalness: 1 }));
+    const pala = new THREE.Shape(); pala.moveTo(-.28, 0); pala.lineTo(-.28, -3.4); pala.lineTo(0, -3.7); pala.lineTo(.28, -3.4);
+    for (let i = 0; i < 5; i++) { pala.lineTo(.28 + (i % 2 ? .22 : .1), -3.1 + i * .5); pala.lineTo(.28, -2.85 + i * .5); }
+    pala.lineTo(.28, 0); pala.closePath();
+    const hoja = new THREE.Mesh(new THREE.ExtrudeGeometry(pala, { depth: .12, bevelEnabled: true, bevelThickness: .02, bevelSize: .02, bevelSegments: 1 }), cuerpoLlave.material);
+    hoja.position.set(0, -.6, .03);
+    const llave = new THREE.Group(); llave.add(cuerpoLlave, hoja);
+    llave.position.set(.0, yAgujero + 1.7, -.05); llave.rotation.set(.15, -.25, Math.PI * .78); g.add(llave);
+  }
+  return sombras(g);
+}
+
+/* ---------- escena ---------- */
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(window.devicePixelRatio); renderer.setSize(innerWidth, innerHeight, false);
+renderer.toneMapping = THREE.NeutralToneMapping; renderer.toneMappingExposure = .95;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+const scene = new THREE.Scene();
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), .04).texture;
+scene.environmentIntensity = .85;
+const cam = new THREE.PerspectiveCamera(24, innerWidth / innerHeight, .1, 500);
+const sol = new THREE.DirectionalLight(0xffffff, 1.6); sol.castShadow = true;
+sol.shadow.mapSize.set(4096, 4096); sol.shadow.radius = 6; sol.shadow.bias = -.0004; sol.shadow.normalBias = .02;
+Object.assign(sol.shadow.camera, { left: -20, right: 20, top: 20, bottom: -20, near: .5, far: 120 });
+scene.add(sol, sol.target, new THREE.HemisphereLight(0xffffff, 0xdfe3ee, .35));
+const piso = (normal) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.ShadowMaterial({ opacity: .16 })); m.receiveShadow = true; if (normal === 'y') m.rotation.x = -Math.PI / 2; scene.add(m); return m; };
+
+if (VISTA === 'promo' || VISTA === 'bienvenida-mesa') {
+  const s = stand(); scene.add(s);
+  const t = tarjeta(VISTA === 'promo' ? caraPromo : caraBienvenida); t.position.set(0, TH / 2 + 1.25, -.3); t.rotation.x = -.07; scene.add(t);
+  piso('y');
+  sol.position.set(-14, 26, 22); sol.target.position.set(0, 5, 0);
+  cam.position.set(19, 13.5, 37); cam.lookAt(0, 7.3, 0); cam.fov = 26;
+} else if (VISTA === 'pared') {
+  const pared = piso('z'); pared.position.z = -TT / 2 - .55; pared.material.opacity = .2;
+  const s = soportePared(); scene.add(s);
+  const t = tarjeta(caraBienvenida); t.position.z = .02; scene.add(t);
+  sol.position.set(-12, 16, 22); sol.target.position.set(0, 0, 0);
+  cam.position.set(17, 3, 40); cam.lookAt(0, -.3, 0); cam.fov = 26;
+} else {
+  const f = llavero(caraLlaveroFrente, VISTA === 'llaveros'), r = llavero(caraLlaveroReverso);
+  if (VISTA === 'llaveros') {
+    piso('y');
+    f.rotation.set(-Math.PI / 2 + .02, 0, .32); f.position.set(-3.1, LT / 2, .6);
+    r.rotation.set(-Math.PI / 2 + .02, 0, -.28); r.position.set(3.2, LT / 2, -.4);
+    scene.add(f, r);
+    sol.position.set(-10, 30, 14); sol.target.position.set(0, 0, 0);
+    cam.position.set(0, 26, 15.5); cam.lookAt(0, 0, -.2); cam.fov = 26;
+  } else {
+    const L = VISTA === 'llavero-frente' ? f : r;
+    L.rotation.set(-.12, VISTA === 'llavero-frente' ? -.38 : .38, 0); L.position.y = LAlto / 2 + .3; scene.add(L);
+    sol.position.set(-8, 14, 16); sol.target.position.set(0, 2, 0);
+    cam.position.set(0, 4.5, 21); cam.lookAt(0, 2.9, 0); cam.fov = 26;
+  }
+}
+cam.updateProjectionMatrix();
+renderer.render(scene, cam);
+window.ready = true;
+</script>
+</body>
+</html>
