@@ -8,7 +8,7 @@ Servicio de transporte en Orlando, Florida (prima de Juan). Primer cliente del s
 
 ## Estado
 
-- [x] Formulario listo y probado.
+- [x] Formulario listo y probado (v2: enfoque en sensación, proyección y estilos con logos conocidos).
 - [ ] Publicado en apalmo.com (se copia a `apps/web/public/brief/logo/` del proyecto WEB).
 - [ ] Brief enviado a la prima.
 - [ ] Respuestas guardadas en `brief.json` (y referencias en `referencias/`).

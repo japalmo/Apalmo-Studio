@@ -1,8 +1,11 @@
-# Brief de logo
+# Brief de marca
 
-Formulario corto (5 pasos, unos 5 minutos) para entender qué quiere un cliente antes de diseñar su logo. Es la primera etapa del servicio de logos: ver [`PROCESO.md`](PROCESO.md).
+Formulario corto (6 pasos, unos 6 minutos) para entender qué ofrece un cliente, hacia dónde va, cómo quiere que se sienta su marca y qué estilo gráfico le gusta, antes de diseñar su logo. No muestra propuestas: muestra logos muy conocidos como referencia de estilo. Es la primera etapa del servicio de logos: ver [`PROCESO.md`](PROCESO.md).
 
-- HTML estático, sin dependencias ni servidor. Funciona en el teléfono, en español e inglés, y en tema claro u oscuro.
+**Los pasos:** 1) Lo que ofrecen · 2) Hacia dónde van · 3) Cómo se debe sentir · 4) Estilo gráfico (tipo de logo, estilos que gustan y no gustan, nivel de detalle) · 5) Colores · 6) Para terminar (usos, referencias, plazo y contacto).
+
+- HTML estático, sin dependencias ni servidor. Funciona en el teléfono y en español e inglés.
+- Mismo estilo que apalmo.com: bosque oscuro, crema y cobre, Geist, botones píldora, dock flotante y animaciones con resorte (se apagan si el teléfono pide menos movimiento).
 - Cumple la CSP de apalmo.com: no tiene scripts ni estilos en línea, y las fuentes son locales.
 - Guarda un borrador en el teléfono del cliente mientras responde.
 - Entrega las respuestas como JSON.
@@ -15,8 +18,9 @@ Formulario corto (5 pasos, unos 5 minutos) para entender qué quiere un cliente 
 | `preguntas.js` | **El cuestionario.** Para cambiar o agregar preguntas, edita aquí. |
 | `clientes.js` | Configuración (WhatsApp, URL pública, endpoint) y datos precargados de cada cliente. |
 | `brief.js` | La lógica: arma el formulario, guarda el borrador y genera el JSON. |
-| `brief.css` | Estilos, con los colores de apalmo.com. |
-| `fuentes/` | Geist (la de apalmo.com) y las 6 tipografías de las muestras de estilo (todas con licencia OFL). |
+| `brief.css` | Estilos y animaciones, con los tokens de apalmo.com. |
+| `fuentes/` | Geist, la tipografía de apalmo.com (licencia OFL). |
+| `img/logos/` | Logos de marcas conocidas para las referencias, descargados de Wikimedia Commons. Solo se usan como ejemplo de estilo; la página lo aclara al pie. |
 
 ## Cómo se comparte
 
@@ -26,13 +30,15 @@ https://apalmo.com/brief/logo/?c=rr-pro-hauling&lang=en  ← en inglés
 https://apalmo.com/brief/logo/                           ← genérico (el cliente escribe su nombre)
 ```
 
-Con `?c=` el formulario saluda con el nombre de la marca, dibuja las muestras de estilo con ese nombre y precarga lo que ya sabemos.
+Con `?c=` la portada saluda con el nombre de la marca y se precarga lo que ya sabemos (por ejemplo, la lista de servicios de su rubro).
 
-**Cliente nuevo:** copia la entrada `rr-pro-hauling` en `clientes.js`, cambia el id y los datos, y comparte `?c=<id>`. Puedes reemplazar cualquier pregunta para ese cliente (por ejemplo, la lista de servicios de su rubro).
+**Cliente nuevo:** copia la entrada `rr-pro-hauling` en `clientes.js`, cambia el id y los datos, y comparte `?c=<id>`. Puedes reemplazar cualquier pregunta para ese cliente.
+
+**Cambiar las referencias:** las tarjetas de estilo usan los ids de `LOGOS` en `preguntas.js`. Para sumar un logo, deja el archivo en `img/logos/`, agrégalo a `LOGOS` y úsalo en la opción que quieras (`logos: ["id"]`).
 
 ## Cómo llegan las respuestas
 
-1. Al final, el cliente toca **Enviar por WhatsApp**. Se abre un chat con tu número y un mensaje listo, que incluye un link `https://apalmo.com/brief/logo/#r=…`. Las respuestas van comprimidas dentro del link (~1 KB), así que no se necesita servidor ni base de datos.
+1. Al final, el cliente toca **Enviar por WhatsApp**. Se abre un chat con tu número y un mensaje listo, que incluye un link `https://apalmo.com/brief/logo/#r=…`. Las respuestas van comprimidas dentro del link (~1,5 KB), así que no se necesita servidor ni base de datos.
 2. Abres el link y ves las respuestas ordenadas, con **Copiar JSON** y **Descargar JSON**.
 3. Guardas el JSON en la carpeta del cliente (`propuestas/<fecha>-<cliente>/brief.json`) y lo analizas según `PROCESO.md`.
 
@@ -58,8 +64,8 @@ Para retirarlo, borra la carpeta `public/brief/logo/` y vuelve a desplegar.
 
 ```json
 {
-  "formulario": "apalmo-brief-logo",
-  "version": 1,
+  "formulario": "apalmo-brief-marca",
+  "version": 2,
   "cliente": "rr-pro-hauling",
   "marca": "R&R Pro Hauling",
   "idioma": "es",
@@ -67,16 +73,21 @@ Para retirarlo, borra la carpeta `public/brief/logo/` y vuelve a desplegar.
   "contacto": { "nombre": "…", "medio": "…" },
   "formato": "Escalas de 1 a 5: 1 = primera palabra del id, 5 = la segunda…",
   "respuestas": {
-    "negocio":      { "nombre", "eslogan", "historia_nombre", "servicios", "servicios_otro", "clientes", "zona", "diferencia", "usos" },
-    "personalidad": { "clasico_moderno": 1-5, "serio_cercano", "rudo_prolijo", "local_grande", "sobrio_llamativo", "simple_detallado" },
-    "estilo":       { "estilos": { "me_gusta": [], "no_me_gusta": [] }, "simbolo": [] },
-    "color":        { "paletas": [], "colores_existentes", "colores_evitar" },
-    "cierre":       { "referencias", "competencia", "evitar", "plazo", "notas", "contacto_nombre", "contacto_medio" }
+    "negocio":   { "nombre", "servicios", "servicios_otro", "clientes", "diferencia", "historia_nombre" },
+    "futuro":    { "vision", "nuevos_servicios", "frase_cliente" },
+    "sensacion": { "sensaciones": [], "clasico_moderno": 1-5, "serio_cercano", "rudo_prolijo", "sobrio_llamativo" },
+    "estilo":    { "tipo": [], "esteticas": { "me_gusta": [], "no_me_gusta": [] }, "detalle" },
+    "color":     { "paletas": [], "colores_existentes", "colores_evitar" },
+    "cierre":    { "usos": [], "referencias", "evitar", "plazo", "contacto_nombre", "contacto_medio" }
+  },
+  "referencias_visuales": {
+    "industrial": { "ejemplos": ["Caterpillar", "Jeep", "DeWalt"] },
+    "azul-rojo":  { "ejemplos": ["Pepsi", "Domino's"], "colores": ["#14254A", "#D0202E", "#F5F5F2"] }
   }
 }
 ```
 
-Siempre salen todas las claves (vacías si no hubo respuesta), así los briefs de distintos clientes se pueden comparar. Los ids de opciones están en `preguntas.js` y `clientes.js`.
+Siempre salen todas las claves (vacías si no hubo respuesta), así los briefs de distintos clientes se pueden comparar. Los ids de opciones están en `preguntas.js` y `clientes.js`, y `referencias_visuales` repite qué logos y colores vio el cliente en cada opción que marcó, para que el JSON se entienda solo.
 
 Si cambias preguntas de forma que el JSON ya no sea comparable, sube `version` en `preguntas.js`.
 

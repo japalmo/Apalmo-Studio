@@ -1,5 +1,5 @@
 /*
- * Configuración general y clientes del brief de logo.
+ * Configuración general y clientes del brief de marca.
  *
  * Para un cliente nuevo, agrega una entrada en "clientes" y comparte:
  *   https://apalmo.com/brief/logo/?c=<id-del-cliente>
@@ -7,11 +7,9 @@
  * Agrega &lang=en para abrirlo en inglés.
  *
  * Campos de un cliente:
- *   marca       Nombre de la marca (se usa en los ejemplos de estilo).
- *   monograma   Iniciales para los ejemplos. Si falta, se calculan del nombre.
- *   lugar       Ciudad que aparece en el ejemplo de insignia.
+ *   marca       Nombre de la marca (se muestra en la portada).
+ *   lugar       Ciudad (se muestra en la portada).
  *   idioma      "es" o "en": idioma con que abre.
- *   saludo      Nombre de quien responde, para el saludo inicial (opcional).
  *   respuestas  Valores precargados, por id de pregunta.
  *   preguntas   Reemplazos de preguntas, por id (se mezclan con la pregunta base).
  */
@@ -31,12 +29,10 @@
     clientes: {
       "rr-pro-hauling": {
         marca: "R&R Pro Hauling",
-        monograma: "R&R",
-        lugar: "ORLANDO, FL",
+        lugar: "Orlando, Florida",
         idioma: "es",
         respuestas: {
-          nombre: "R&R Pro Hauling",
-          zona: "Orlando, Florida"
+          nombre: "R&R Pro Hauling"
         },
         preguntas: {
           historia_nombre: {
@@ -47,8 +43,8 @@
             tipo: "chips",
             multiple: true,
             otro: true,
-            label: { es: "¿Qué servicios ofrecen?", en: "What services do you offer?" },
-            ayuda: { es: "Marca todos los que hagan. Si falta alguno, escríbelo en «Otro».", en: "Tap all that apply. If something's missing, add it under “Other”." },
+            label: { es: "¿Qué servicios ofrecen o van a ofrecer?", en: "What services do you offer, or plan to offer?" },
+            ayuda: { es: "Marca todos. Si falta alguno, escríbelo en «Otro».", en: "Tap all that apply. If something's missing, add it under “Other”." },
             opciones: [
               { id: "retiro-basura", es: "Retiro de basura y cachivaches", en: "Junk removal" },
               { id: "mudanzas", es: "Mudanzas", en: "Moving" },
