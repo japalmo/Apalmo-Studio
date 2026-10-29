@@ -8,10 +8,11 @@ Servicio de transporte en Orlando, Florida (prima de Juan). Primer cliente del s
 
 ## Estado
 
-- [x] Formulario listo y probado (v2: enfoque en sensación, proyección y estilos con logos conocidos).
+- [x] Formulario listo y probado (v3: 8 pasos, envío a la API y agradecimiento).
+- [ ] Base de datos, alerta e intranet en el proyecto WEB (`servicios/brief-logo/PROMPT-SESION-LOCAL.md`).
 - [ ] Publicado en apalmo.com (se copia a `apps/web/public/brief/logo/` del proyecto WEB).
 - [ ] Brief enviado a la prima.
-- [ ] Respuestas guardadas en `brief.json` (y referencias en `referencias/`).
+- [ ] Respuestas descargadas de la intranet a `brief.json` (y referencias en `referencias/`).
 - [ ] Análisis (`analisis.md`).
 - [ ] Tres propuestas.
 - [ ] Ajustes y entrega.

@@ -1,7 +1,7 @@
 /*
  * Brief de marca · apalmo studio
  * Arma el formulario desde preguntas.js + clientes.js, guarda un borrador en el navegador
- * y entrega las respuestas como JSON (WhatsApp con link, archivo, copiar o POST opcional).
+ * y envía las respuestas como JSON por POST a la API (CONFIG.endpoint). El cliente solo ve el agradecimiento.
  * Sin dependencias y sin scripts en línea, para respetar la CSP de apalmo.com.
  */
 (function () {
@@ -20,65 +20,51 @@
       marcaForm: "Brief de marca",
       introTitulo: "Hablemos de cómo quieren que se vea {marca}.",
       introTituloGenerico: "Hablemos de cómo quieren que se vea su marca.",
-      introTexto: "Antes de dibujar nada, queremos entender qué ofrecen, hacia dónde van y qué estilo los representa. No hay respuestas correctas: marquen lo que les nace y lo que no sepan, déjenlo en blanco.",
-      introDatos: ["6 pasos", "Unos 6 minutos", "Se guarda en tu teléfono"],
+      introTexto: "Antes de dibujar nada, queremos entender quiénes son, qué ofrecen, hacia dónde van y qué estilo los representa. No hay respuestas correctas: marquen lo que les nace y lo que no sepan, déjenlo en blanco.",
+      introDatos: ["8 pasos cortos", "Unos 8 minutos", "Se guarda mientras respondes"],
       empezar: "Empezar",
       continuar: "Seguir donde quedé",
       reiniciar: "Empezar de nuevo",
       paso: "Paso {n} de {t}",
       atras: "Atrás",
       siguiente: "Siguiente",
-      revisar: "Revisar",
+      enviar: "Enviar",
+      enviando: "Enviando…",
       requerido: "Falta este dato.",
-      otro: "Otro",
+      otro: "Otra",
       otroPh: "Escribe aquí",
       meGusta: "Me gusta",
       noMeGusta: "No va",
       elegidos: "{n} de {m}",
       ejemplos: "Ejemplos: {lista}",
-      revisionTitulo: "Revisa y envía",
-      revisionIntro: "Así quedaron sus respuestas. Pueden volver a cualquier paso para cambiar algo.",
-      sinRespuesta: "Sin respuesta",
-      editar: "Editar",
-      leGusta: "Le gusta",
-      noLeGusta: "No le gusta",
-      enviarWa: "Enviar por WhatsApp",
-      enviarServidor: "Enviar respuestas",
-      enviando: "Enviando…",
-      enviado: "Listo, recibimos sus respuestas. ¡Gracias!",
-      errorEnvio: "No se pudo enviar. Usen WhatsApp o descarguen el archivo.",
-      descargar: "Descargar archivo",
-      copiar: "Copiar respuestas",
-      copiado: "Copiado",
-      copiaManual: "Selecciona el texto y cópialo.",
-      waNota: "Se abre WhatsApp con un mensaje listo: solo toca enviar. Si no se abre, descarga el archivo y mándalo al +{numero}.",
-      waMensaje: "Hola, te mando las respuestas del brief de marca de {marca}.",
-      waFirma: "Responde: {nombre}",
-      resultadoEyebrow: "Respuestas del brief",
-      resultadoMeta: "Enviado el {fecha} · {contacto}",
-      resultadoError: "Este link está incompleto o dañado. Pide que te reenvíen las respuestas.",
-      verJson: "JSON para el análisis",
-      copiarJson: "Copiar JSON",
-      descargarJson: "Descargar JSON",
-      nuevo: "Abrir el formulario vacío",
+      muestraVacia: "Tu Marca",
+      libreMuestra: "Aa?",
+      aviso: "Al enviar, aceptas que apalmo studio use tus respuestas solo para preparar la propuesta de tu marca y contactarte.",
+      errorEnvio: "No pudimos enviar tus respuestas. Revisa tu conexión e inténtalo de nuevo; no se perdió nada.",
+      graciasTitulo: "¡Muchas gracias por llenar el formulario!",
+      graciasTexto: "Pronto nos estaremos contactando contigo.",
+      graciasFirma: "El equipo de apalmo studio",
+      demo: "Vista previa: las respuestas no se enviaron a ningún lado.",
       creditos: "Los logos de marcas conocidas se muestran solo como referencia de estilo y pertenecen a sus dueños.",
       idioma: "EN",
       idiomaLargo: "Switch to English",
-      pasos: "Pasos"
+      pasos: "Pasos",
+      trampa: "No completes este campo"
     },
     en: {
       marcaForm: "Brand brief",
       introTitulo: "Let's talk about how {marca} should look.",
       introTituloGenerico: "Let's talk about how your brand should look.",
-      introTexto: "Before drawing anything, we want to understand what you offer, where you're headed and which style feels like you. There are no wrong answers: go with your gut and leave blank anything you're not sure about.",
-      introDatos: ["6 steps", "About 6 minutes", "Saved on your phone"],
+      introTexto: "Before drawing anything, we want to understand who you are, what you offer, where you're headed and which style feels like you. There are no wrong answers: go with your gut and leave blank anything you're not sure about.",
+      introDatos: ["8 short steps", "About 8 minutes", "Saved as you go"],
       empezar: "Start",
       continuar: "Continue where I left off",
       reiniciar: "Start over",
       paso: "Step {n} of {t}",
       atras: "Back",
       siguiente: "Next",
-      revisar: "Review",
+      enviar: "Send",
+      enviando: "Sending…",
       requerido: "This one is needed.",
       otro: "Other",
       otroPh: "Type here",
@@ -86,35 +72,19 @@
       noMeGusta: "Not for us",
       elegidos: "{n} of {m}",
       ejemplos: "Examples: {lista}",
-      revisionTitulo: "Review and send",
-      revisionIntro: "Here are your answers. Go back to any step to change something.",
-      sinRespuesta: "No answer",
-      editar: "Edit",
-      leGusta: "Likes",
-      noLeGusta: "Dislikes",
-      enviarWa: "Send on WhatsApp",
-      enviarServidor: "Send answers",
-      enviando: "Sending…",
-      enviado: "Done, we got your answers. Thank you!",
-      errorEnvio: "It didn't go through. Use WhatsApp or download the file.",
-      descargar: "Download file",
-      copiar: "Copy answers",
-      copiado: "Copied",
-      copiaManual: "Select the text and copy it.",
-      waNota: "WhatsApp opens with a ready message: just tap send. If it doesn't open, download the file and send it to +{numero}.",
-      waMensaje: "Hi, here are the brand brief answers for {marca}.",
-      waFirma: "From: {nombre}",
-      resultadoEyebrow: "Brief answers",
-      resultadoMeta: "Sent {fecha} · {contacto}",
-      resultadoError: "This link is incomplete or broken. Ask for the answers to be sent again.",
-      verJson: "JSON for analysis",
-      copiarJson: "Copy JSON",
-      descargarJson: "Download JSON",
-      nuevo: "Open a blank form",
+      muestraVacia: "Your Brand",
+      libreMuestra: "Aa?",
+      aviso: "By sending, you agree that apalmo studio may use your answers only to prepare your brand proposal and contact you.",
+      errorEnvio: "We couldn't send your answers. Check your connection and try again; nothing was lost.",
+      graciasTitulo: "Thank you so much for filling out the form!",
+      graciasTexto: "We'll be in touch with you soon.",
+      graciasFirma: "The apalmo studio team",
+      demo: "Preview: the answers were not sent anywhere.",
       creditos: "Logos of well-known brands are shown only as style references and belong to their owners.",
       idioma: "ES",
       idiomaLargo: "Cambiar a español",
-      pasos: "Steps"
+      pasos: "Steps",
+      trampa: "Leave this field empty"
     }
   };
 
@@ -125,7 +95,7 @@
   var ICONO_CORAZON = '<path d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40Z"/>';
   var ICONO_X = '<path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/>';
   var ICONO_PINCEL = '<path d="M232,32a8,8,0,0,0-8-8c-44.08,0-89.31,49.71-114.43,82.63A60,60,0,0,0,32,164c0,30.88-19.54,44.73-20.47,45.37A8,8,0,0,0,16,224H92a60,60,0,0,0,57.37-77.57C182.3,121.31,232,76.08,232,32ZM92,208H34.63C41.38,198.41,48,183.92,48,164a44,44,0,1,1,44,44Zm32.42-94.45q5.14-6.66,10.09-12.55A76.23,76.23,0,0,1,155,121.49q-5.9,4.94-12.55,10.09A60.54,60.54,0,0,0,124.42,113.55Zm42.7-2.68a92.57,92.57,0,0,0-22-22c31.78-34.53,55.75-45,69.9-47.91C212.17,55.12,201.65,79.09,167.12,110.87Z"/>';
-  var ICONO_WA = '<path d="M187.58,144.84l-32-16a8,8,0,0,0-8,.5l-14.69,9.8a40.55,40.55,0,0,1-16-16l9.8-14.69a8,8,0,0,0,.5-8l-16-32A8,8,0,0,0,104,64a40,40,0,0,0-40,40,88.1,88.1,0,0,0,88,88,40,40,0,0,0,40-40A8,8,0,0,0,187.58,144.84ZM152,176a72.08,72.08,0,0,1-72-72A24,24,0,0,1,99.29,80.46l11.48,23L101,118a8,8,0,0,0-.73,7.51,56.47,56.47,0,0,0,30.15,30.15A8,8,0,0,0,138,155l14.61-9.74,23,11.48A24,24,0,0,1,152,176ZM128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24Zm0,192a87.87,87.87,0,0,1-44.06-11.81,8,8,0,0,0-6.54-.67L40,216,52.47,178.6a8,8,0,0,0-.66-6.54A88,88,0,1,1,128,216Z"/>';
+  var ICONO_ENVIAR = '<path d="M227.32,28.68a16,16,0,0,0-15.66-4.08l-.15,0L19.57,82.84a16,16,0,0,0-2.49,29.8L102,154l41.3,84.87A15.86,15.86,0,0,0,157.74,248q.69,0,1.38-.06a15.88,15.88,0,0,0,14-11.51l58.2-191.94c0-.05,0-.1,0-.15A16,16,0,0,0,227.32,28.68ZM157.83,231.85l-.05.14,0-.07-40.06-82.3,48-48a8,8,0,0,0-11.31-11.31l-48,48L24.08,98.25l-.07,0,.14,0L216,40Z"/>';
 
   // ---------- utilidades ----------
 
@@ -170,11 +140,6 @@
   }
 
   function clonar(o) { return JSON.parse(JSON.stringify(o)); }
-
-  function slug(s) {
-    return String(s || "cliente").normalize("NFD").replace(/[̀-ͯ]/g, "")
-      .toLowerCase().replace(/&/g, "y").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "cliente";
-  }
 
   function leerLocal(clave) {
     try { var v = window.localStorage.getItem(clave); return v ? JSON.parse(v) : null; } catch (e) { return null; }
@@ -241,6 +206,7 @@
     switch (p.tipo) {
       case "chips": return p.multiple ? [] : null;
       case "escala": return null;
+      case "escritura": return null;
       case "tarjetas":
         if (p.valorar) return { me_gusta: [], no_me_gusta: [] };
         return p.max === 1 ? null : [];
@@ -264,14 +230,15 @@
 
   // ---------- estado ----------
 
-  var estado = { idioma: "es", cliente: null, def: null, respuestas: null, paso: 0, errores: {} };
+  var estado = { idioma: "es", cliente: null, def: null, respuestas: null, paso: 0, errores: {}, iniciado: null, trampa: "", demo: false };
   var claveBorrador = "";
   var raiz;
 
   function t(clave) { return UI[estado.idioma][clave]; }
 
   function guardar() {
-    guardarLocal(claveBorrador, { idioma: estado.idioma, paso: estado.paso, respuestas: estado.respuestas, v: BASE.version });
+    if (estado.paso > estado.def.pasos.length) return;
+    guardarLocal(claveBorrador, { idioma: estado.idioma, paso: estado.paso, iniciado: estado.iniciado, respuestas: estado.respuestas, v: BASE.version });
   }
 
   function cliente() { return estado.cliente ? CONFIG.clientes[estado.cliente] : null; }
@@ -292,11 +259,11 @@
     raiz.appendChild(cuerpo);
     if (estado.paso === 0) cuerpo.appendChild(vistaIntro());
     else if (estado.paso <= total) cuerpo.appendChild(vistaPaso(estado.def.pasos[estado.paso - 1]));
-    else cuerpo.appendChild(vistaRevision());
+    else cuerpo.appendChild(vistaGracias());
     raiz.appendChild(el("footer", { class: "pie" }, [el("p", { text: t("creditos") })]));
-    if (estado.paso > 0) raiz.appendChild(dock());
+    if (estado.paso > 0 && estado.paso <= total) raiz.appendChild(dock());
     raiz.setAttribute("data-previa", raiz.getAttribute("data-vista") || "");
-    raiz.setAttribute("data-vista", estado.paso === 0 ? "intro" : estado.paso > total ? "revision" : "paso");
+    raiz.setAttribute("data-vista", estado.paso === 0 ? "intro" : estado.paso > total ? "gracias" : "paso");
   }
 
   function cabecera() {
@@ -343,7 +310,10 @@
       el("p", { class: "lead aparece", style: "--i:2", text: t("introTexto") }),
       el("ul", { class: "intro__datos aparece", style: "--i:3" }, t("introDatos").map(function (d) { return el("li", { text: d }); })),
       el("div", { class: "acciones aparece", style: "--i:4" }, [
-        el("button", { type: "button", class: "btn", id: "btn-empezar", onclick: function () { irA(hayAvance ? borrador.paso : 1); } }, [
+        el("button", { type: "button", class: "btn", id: "btn-empezar", onclick: function () {
+          if (!estado.iniciado) estado.iniciado = new Date().toISOString();
+          irA(hayAvance ? Math.min(borrador.paso, estado.def.pasos.length) : 1);
+        } }, [
           el("span", { text: hayAvance ? t("continuar") : t("empezar") }), icono(ICONO_FLECHA, "ico--fin")
         ]),
         hayAvance ? el("button", { type: "button", class: "btn btn--fantasma", id: "btn-reiniciar", onclick: reiniciar }, [t("reiniciar")]) : null
@@ -367,6 +337,15 @@
       nodo.style.setProperty("--i", String(i + 2));
       lista.appendChild(nodo);
     });
+    var ultimo = estado.paso === estado.def.pasos.length;
+    if (ultimo) {
+      // Campo trampa para bots: invisible para las personas.
+      var trampa = el("input", { type: "text", id: "q-sitio-web", name: "sitio_web", tabindex: "-1", autocomplete: "off",
+        oninput: function (e) { estado.trampa = e.target.value; } });
+      lista.appendChild(el("div", { class: "trampa", "aria-hidden": "true" }, [el("label", { for: "q-sitio-web", text: t("trampa") }), trampa]));
+      lista.appendChild(el("p", { class: "aviso aparece", style: "--i:" + (paso.preguntas.length + 2), text: t("aviso") }));
+      lista.appendChild(el("p", { class: "nota nota--error", id: "nota-envio", role: "alert" }));
+    }
     return el("section", { class: "paso paso--" + paso.id }, [
       el("p", { class: "eyebrow aparece", style: "--i:0" }, [el("span", { class: "eyebrow__num", text: String(estado.paso).padStart(2, "0") }), fmt(t("paso"), { n: estado.paso, t: estado.def.pasos.length })]),
       titulo("h1", tx(paso.titulo), "titulo"),
@@ -392,9 +371,9 @@
 
     if (p.tipo === "texto" || p.tipo === "area") {
       var attrs = { id: idc, class: "entrada", "aria-describedby": describe, "aria-invalid": error ? "true" : null, autocomplete: p.autocompletar || "off",
-        oninput: function (e) { setVal(e.target.value); } };
+        oninput: function (e) { setVal(e.target.value); if (p.id === "nombre") actualizarMuestras(); } };
       var control;
-      if (p.tipo === "texto") { attrs.type = "text"; control = el("input", attrs); }
+      if (p.tipo === "texto") { attrs.type = p.teclado || "text"; control = el("input", attrs); }
       else { attrs.rows = "3"; control = el("textarea", attrs); }
       control.value = r[p.id] || "";
       return grupo(el("label", { class: "pregunta__label", for: idc }, [etiqueta, p.req ? el("span", { class: "req", "aria-hidden": "true", text: " *" }) : null]), p, control, ayudaId, errId);
@@ -417,7 +396,8 @@
             if (p.multiple) {
               var arr = r[p.id], i = arr.indexOf(o.id);
               if (i >= 0) arr.splice(i, 1);
-              else { arr.push(o.id); if (p.max && arr.length > p.max) arr.shift(); }
+              else if (p.max && arr.length >= p.max) { avisarLleno(cont); return; }
+              else arr.push(o.id);
               setVal(arr);
             } else {
               setVal(r[p.id] === o.id ? null : o.id);
@@ -464,9 +444,50 @@
       ]);
     }
 
+    if (p.tipo === "escritura") return campoEscritura(p, r, idc, etiqueta, ayudaId, errId, setVal);
     if (p.tipo === "tarjetas") return campoTarjetas(p, r, idc, etiqueta, ayudaId, errId, setVal);
     if (p.tipo === "paletas") return campoPaletas(p, r, idc, etiqueta, ayudaId, errId, setVal);
     return el("div");
+  }
+
+  // Muestra el nombre escrito de cada forma, y se actualiza mientras lo escriben.
+  function muestraEscritura(caso) {
+    var nombre = marcaActual() || t("muestraVacia");
+    if (caso === "mayusculas") return nombre.toLocaleUpperCase(estado.idioma);
+    if (caso === "minusculas") return nombre.toLocaleLowerCase(estado.idioma);
+    if (caso === "libre") return t("libreMuestra");
+    return nombre;
+  }
+  function actualizarMuestras() {
+    Array.prototype.forEach.call(document.querySelectorAll("[data-caso]"), function (n) {
+      n.textContent = muestraEscritura(n.getAttribute("data-caso"));
+    });
+  }
+
+  function campoEscritura(p, r, idc, etiqueta, ayudaId, errId, setVal) {
+    var rejilla = el("div", { class: "escrituras", role: "group", "aria-labelledby": idc + "-l" });
+    var botones = [];
+    function pintar() { botones.forEach(function (b) { b.btn.setAttribute("aria-pressed", r[p.id] === b.id ? "true" : "false"); }); }
+    p.opciones.forEach(function (o) {
+      var b = el("button", { type: "button", class: "escritura", id: idc + "-" + o.id, "aria-pressed": "false",
+        onclick: function () { setVal(r[p.id] === o.id ? null : o.id); pintar(); } }, [
+        el("span", { class: "escritura__muestra" + (o.caso === "libre" ? " escritura__muestra--libre" : ""), "data-caso": o.caso, "aria-hidden": "true", text: muestraEscritura(o.caso) }),
+        el("span", { class: "escritura__nombre", text: tx(o) }),
+        el("span", { class: "tarjeta__check", "aria-hidden": "true" }, [icono(ICONO_CHECK)])
+      ]);
+      botones.push({ id: o.id, btn: b });
+      rejilla.appendChild(b);
+    });
+    pintar();
+    return grupo(cabPregunta(idc, etiqueta, null), p, rejilla, ayudaId, errId);
+  }
+
+  // Al llegar al máximo no se marca nada más: el contador parpadea para avisar.
+  function avisarLleno(contador) {
+    if (!contador) return;
+    contador.classList.remove("contador--lleno");
+    void contador.offsetWidth;
+    contador.classList.add("contador--lleno");
   }
 
   function cabPregunta(idc, etiqueta, contador) {
@@ -541,7 +562,8 @@
           else {
             var arr = r[p.id], k = arr.indexOf(o.id);
             if (k >= 0) arr.splice(k, 1);
-            else { arr.push(o.id); if (arr.length > p.max) arr.shift(); }
+            else if (arr.length >= p.max) { avisarLleno(cont); return; }
+            else arr.push(o.id);
             setVal(arr);
           }
           pintar();
@@ -568,8 +590,8 @@
       else if (id === libre) arr.splice(0, arr.length, id);
       else {
         if (libre && arr.indexOf(libre) >= 0) arr.splice(arr.indexOf(libre), 1);
+        if (arr.length >= p.max) { avisarLleno(cont); return; }
         arr.push(id);
-        if (arr.length > p.max) arr.shift();
       }
       setVal(arr);
       pintar();
@@ -614,7 +636,7 @@
   // Barra flotante inferior, como el dock de apalmo.com.
   function dock() {
     var total = estado.def.pasos.length;
-    var enRevision = estado.paso > total;
+    var ultimo = estado.paso === total;
     var puntos = el("ol", { class: "dock__puntos", "aria-label": t("pasos") });
     for (var i = 1; i <= total; i++) {
       var estadoP = i < estado.paso ? "hecho" : i === estado.paso ? "actual" : "";
@@ -626,15 +648,13 @@
       el("button", { type: "button", class: "dock__btn", id: "btn-atras", "aria-label": t("atras"), onclick: function () { irA(estado.paso - 1); } }, [icono(ICONO_ATRAS)]),
       puntos
     ];
-    if (!enRevision) {
-      hijos.push(el("button", { type: "button", class: "btn btn--dock", id: "btn-siguiente", onclick: avanzar }, [
-        el("span", { text: estado.paso === total ? t("revisar") : t("siguiente") }), icono(ICONO_FLECHA, "ico--fin")
-      ]));
-    }
-    return el("nav", { class: "dock", "aria-label": t("pasos") }, [el("div", { class: "dock__pastilla" + (enRevision ? " dock__pastilla--corta" : "") }, hijos)]);
+    hijos.push(el("button", { type: "button", class: "btn btn--dock", id: ultimo ? "btn-enviar" : "btn-siguiente", onclick: function (e) { avanzar(e.currentTarget); } }, [
+      el("span", { text: ultimo ? t("enviar") : t("siguiente") }), icono(ultimo ? ICONO_ENVIAR : ICONO_FLECHA, "ico--fin")
+    ]));
+    return el("nav", { class: "dock", "aria-label": t("pasos") }, [el("div", { class: "dock__pastilla" }, hijos)]);
   }
 
-  function avanzar() {
+  function avanzar(boton) {
     var paso = estado.def.pasos[estado.paso - 1];
     var r = estado.respuestas[paso.id];
     estado.errores = {};
@@ -651,7 +671,8 @@
       if (f) { f.focus(); f.scrollIntoView({ block: "center", behavior: MOVIMIENTO ? "smooth" : "auto" }); }
       return;
     }
-    irA(estado.paso + 1);
+    if (estado.paso === estado.def.pasos.length) enviar(boton);
+    else irA(estado.paso + 1);
   }
 
   var cambiando = false;
@@ -679,7 +700,7 @@
     } else mostrar();
   }
 
-  // ---------- revisión, salida y envío ----------
+  // ---------- salida y envío ----------
 
   function referenciasVisuales(def, respuestas) {
     var refs = {};
@@ -710,246 +731,66 @@
       cliente: estado.cliente,
       marca: marcaActual(),
       idioma: estado.idioma,
+      iniciado: estado.iniciado,
       enviado: new Date().toISOString(),
-      contacto: { nombre: cierre.contacto_nombre || "", medio: cierre.contacto_medio || "" },
+      contacto: { nombre: cierre.contacto_nombre || "", telefono: cierre.contacto_telefono || "", correo: cierre.contacto_correo || "" },
       formato: "Escalas de 1 a 5: 1 = primera palabra del id, 5 = la segunda, 3 = neutro, null = sin responder. Las opciones usan los id de preguntas.js; referencias_visuales trae los logos de ejemplo y los colores de cada opción elegida.",
       respuestas: r,
-      referencias_visuales: referenciasVisuales(estado.def, r)
+      referencias_visuales: referenciasVisuales(estado.def, r),
+      trampa: estado.trampa || ""
     };
   }
 
-  function vistaRevision() {
+  var enviandoAhora = false;
+  function enviar(boton) {
+    if (enviandoAhora) return;
+    var nota = document.getElementById("nota-envio");
     var datos = construirSalida();
-    return el("section", { class: "revision" }, [
-      el("p", { class: "eyebrow aparece", style: "--i:0" }, [el("span", { class: "eyebrow__punto" }), t("marcaForm") + (datos.marca ? " · " + datos.marca : "")]),
-      titulo("h1", t("revisionTitulo"), "titulo"),
-      el("p", { class: "lead aparece", style: "--i:1", text: t("revisionIntro") }),
-      resumen(estado.def, datos.respuestas, true),
-      panelEnvio(datos)
-    ]);
-  }
+    enviandoAhora = true;
+    if (boton) { boton.disabled = true; boton.firstChild.textContent = t("enviando"); }
+    if (nota) nota.textContent = "";
 
-  function resumen(def, respuestas, conEditar) {
-    var cont = el("div", { class: "resumen" });
-    def.pasos.forEach(function (paso, i) {
-      var r = respuestas[paso.id] || {};
-      var filas = el("dl", { class: "resumen__lista" });
-      paso.preguntas.forEach(function (p) {
-        var etiqueta = p.tipo === "escala" ? tx(p.izq) + " ↔ " + tx(p.der) : tx(p.label);
-        filas.appendChild(el("div", { class: "resumen__fila" }, [el("dt", { text: etiqueta }), el("dd", {}, [valorLegible(p, r)])]));
-      });
-      var cab = [el("h2", { class: "resumen__titulo" }, [el("span", { class: "resumen__num", text: String(i + 1).padStart(2, "0") }), tx(paso.titulo)])];
-      if (conEditar) cab.push(el("button", { type: "button", class: "btn btn--fantasma btn--chico", id: "editar-" + paso.id, onclick: function () { irA(i + 1); } }, [t("editar")]));
-      var bloque = el("section", { class: "resumen__bloque aparece", style: "--i:" + (i + 2) }, [el("div", { class: "resumen__cab" }, cab), filas]);
-      cont.appendChild(bloque);
-    });
-    return cont;
-  }
-
-  function opcion(p, id) {
-    var o = (p.opciones || []).filter(function (x) { return x.id === id; })[0];
-    if (!o && p.libre && p.libre.id === id) o = p.libre;
-    return o;
-  }
-
-  function nombreOpcion(p, id) { var o = opcion(p, id); return o ? tx(o) : id; }
-
-  function chipResumen(p, id) {
-    var o = opcion(p, id);
-    var media = null;
-    if (o && o.logos && o.logos.length) media = el("span", { class: "resumen-chip__logos" }, o.logos.slice(0, 3).map(function (l) { return imgLogo(l, "logo--mini"); }));
-    if (o && o.colores) media = el("span", { class: "resumen-chip__colores", "aria-hidden": "true" }, o.colores.map(function (c) { return el("span", { style: "background:" + c }); }));
-    return el("span", { class: "resumen-chip" }, [media, el("span", { text: nombreOpcion(p, id) })]);
-  }
-
-  function valorLegible(p, r) {
-    var v = r[p.id];
-    var vacio = el("span", { class: "vacio", text: t("sinRespuesta") });
-    if (p.tipo === "escala") {
-      if (!v) return vacio;
-      var puntos = el("span", { class: "mini-escala", role: "img", "aria-label": v + " / 5" });
-      for (var i = 1; i <= 5; i++) puntos.appendChild(el("span", { class: i === v ? "es-activo" : "" }));
-      return puntos;
-    }
-    if (p.tipo === "tarjetas" && p.valorar) {
-      if (!v || (!v.me_gusta.length && !v.no_me_gusta.length)) return vacio;
-      return el("span", { class: "resumen-valorar" }, [
-        v.me_gusta.length ? el("span", { class: "linea" }, [el("strong", { text: t("leGusta") }), el("span", { class: "resumen-chips" }, v.me_gusta.map(function (id) { return chipResumen(p, id); }))]) : null,
-        v.no_me_gusta.length ? el("span", { class: "linea linea--no" }, [el("strong", { text: t("noLeGusta") }), el("span", { class: "resumen-chips" }, v.no_me_gusta.map(function (id) { return chipResumen(p, id); }))]) : null
-      ]);
-    }
-    if (p.tipo === "tarjetas" || p.tipo === "paletas") {
-      var ids = Array.isArray(v) ? v : v ? [v] : [];
-      if (!ids.length) return vacio;
-      return el("span", { class: "resumen-chips" }, ids.map(function (id) { return chipResumen(p, id); }));
-    }
-    if (Array.isArray(v)) {
-      var lista = v.map(function (id) { return nombreOpcion(p, id); });
-      if (p.otro && r[p.id + "_otro"]) lista.push(r[p.id + "_otro"]);
-      return lista.length ? document.createTextNode(lista.join(", ")) : vacio;
-    }
-    if (p.tipo === "chips") return v ? document.createTextNode(nombreOpcion(p, v)) : vacio;
-    return v && String(v).trim() ? el("span", { class: "texto-libre", text: v }) : vacio;
-  }
-
-  function panelEnvio(datos) {
-    var numero = CONFIG.whatsapp || "";
-    var nota = el("p", { class: "nota", id: "nota-envio", "aria-live": "polite" });
-    var waBtn = el("a", { class: "btn" + (CONFIG.endpoint ? " btn--fantasma" : "") + " btn--ancho", id: "btn-whatsapp", href: "https://wa.me/" + numero, target: "_blank", rel: "noopener" }, [
-      icono(ICONO_WA), el("span", { text: t("enviarWa") })
-    ]);
-    // El link lleva las respuestas comprimidas; se arma apenas está listo.
-    codificar(JSON.stringify(datos)).then(function (codigo) {
-      var link = (CONFIG.urlPublica || (location.origin + location.pathname)) + "#r=" + codigo;
-      var msg = fmt(t("waMensaje"), { marca: datos.marca }) + "\n" + link;
-      if (datos.contacto.nombre) msg += "\n" + fmt(t("waFirma"), { nombre: datos.contacto.nombre });
-      waBtn.setAttribute("href", "https://wa.me/" + numero + "?text=" + encodeURIComponent(msg));
-    });
-
-    var principales = [];
+    var envio;
     if (CONFIG.endpoint) {
-      var envBtn = el("button", { type: "button", class: "btn btn--ancho", id: "btn-enviar" }, [t("enviarServidor")]);
-      envBtn.addEventListener("click", function () {
-        envBtn.disabled = true;
-        envBtn.textContent = t("enviando");
-        fetch(CONFIG.endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(construirSalida()) })
-          .then(function (res) {
-            if (!res.ok) throw new Error(res.status);
-            nota.textContent = t("enviado");
-            envBtn.textContent = t("enviado");
-          })
-          .catch(function () {
-            nota.textContent = t("errorEnvio");
-            envBtn.disabled = false;
-            envBtn.textContent = t("enviarServidor");
-          });
+      var control = typeof AbortController === "function" ? new AbortController() : null;
+      var reloj = setTimeout(function () { if (control) control.abort(); }, 20000);
+      envio = fetch(CONFIG.endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos),
+        credentials: "same-origin",
+        signal: control ? control.signal : undefined
+      }).then(function (res) {
+        clearTimeout(reloj);
+        if (!res.ok) throw new Error("HTTP " + res.status);
       });
-      principales.push(envBtn);
+    } else {
+      // Sin servidor configurado (vista previa): se muestra el agradecimiento sin enviar nada.
+      if (window.console) console.info("[brief] Vista previa, sin envío:", datos);
+      estado.demo = true;
+      envio = new Promise(function (ok) { setTimeout(ok, 700); });
     }
-    principales.push(waBtn);
 
-    return el("div", { class: "envio aparece", style: "--i:9" }, [
-      el("div", { class: "envio__principal" }, principales),
-      el("p", { class: "nota", text: fmt(t("waNota"), { numero: numero }) }),
-      el("div", { class: "envio__secundario" }, [
-        el("button", { type: "button", class: "btn btn--fantasma btn--chico", id: "btn-descargar", onclick: function () { descargar(construirSalida()); } }, [t("descargar")]),
-        el("button", { type: "button", class: "btn btn--fantasma btn--chico", id: "btn-copiar", onclick: function (e) { copiar(JSON.stringify(construirSalida(), null, 2), e.currentTarget, t("copiar")); } }, [t("copiar")])
-      ]),
-      nota,
-      el("textarea", { class: "respaldo", id: "respaldo-json", readonly: true, "aria-label": "JSON", hidden: true })
-    ]);
-  }
-
-  function nombreArchivo(datos) {
-    return "brief-marca-" + slug(datos.marca) + "-" + String(datos.enviado || new Date().toISOString()).slice(0, 10) + ".json";
-  }
-
-  function descargar(datos) {
-    var blob = new Blob([JSON.stringify(datos, null, 2)], { type: "application/json" });
-    var url = URL.createObjectURL(blob);
-    var a = el("a", { href: url, download: nombreArchivo(datos) });
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(function () { URL.revokeObjectURL(url); a.remove(); }, 1000);
-  }
-
-  function copiar(texto, boton, etiqueta) {
-    function ok() { boton.textContent = t("copiado"); setTimeout(function () { boton.textContent = etiqueta; }, 1800); }
-    function manual() {
-      var area = document.getElementById("respaldo-json");
-      if (!area) return;
-      area.value = texto;
-      area.hidden = false;
-      area.focus();
-      area.select();
-      var nota = document.getElementById("nota-envio");
-      if (nota) nota.textContent = t("copiaManual");
-    }
-    try {
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(texto).then(ok, manual);
-      else manual();
-    } catch (e) { manual(); }
-  }
-
-  // ---------- codificación para el link (#r=...) ----------
-
-  function aBase64Url(bytes) {
-    var bin = "";
-    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
-    return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-  }
-  function deBase64Url(s) {
-    var b = atob(s.replace(/-/g, "+").replace(/_/g, "/"));
-    var out = new Uint8Array(b.length);
-    for (var i = 0; i < b.length; i++) out[i] = b.charCodeAt(i);
-    return out;
-  }
-  function transformar(bytes, Stream, modo) {
-    var s = new Blob([bytes]).stream().pipeThrough(new Stream(modo));
-    return new Response(s).arrayBuffer().then(function (b) { return new Uint8Array(b); });
-  }
-  function codificar(texto) {
-    var bytes = new TextEncoder().encode(texto);
-    if (typeof CompressionStream === "function") {
-      return transformar(bytes, CompressionStream, "deflate-raw")
-        .then(function (c) { return "z" + aBase64Url(c); })
-        .catch(function () { return "j" + aBase64Url(bytes); });
-    }
-    return Promise.resolve("j" + aBase64Url(bytes));
-  }
-  function decodificar(codigo) {
-    var tipo = codigo.charAt(0), bytes = deBase64Url(codigo.slice(1));
-    var p = tipo === "z" ? transformar(bytes, DecompressionStream, "deflate-raw") : Promise.resolve(bytes);
-    return p.then(function (b) { return JSON.parse(new TextDecoder().decode(b)); });
-  }
-
-  // ---------- vista de resultados (para quien recibe el link) ----------
-
-  function vistaResultado(codigo) {
-    raiz.textContent = "";
-    raiz.setAttribute("data-vista", "resultado");
-    var cuerpo = el("main", { class: "cuerpo resultado", id: "contenido" });
-    decodificar(codigo).then(function (datos) {
-      if (!datos || datos.formulario !== FORMULARIO) throw new Error("formato");
-      if (datos.idioma && UI[datos.idioma]) estado.idioma = datos.idioma;
-      document.documentElement.lang = estado.idioma;
-      estado.cliente = datos.cliente && CONFIG.clientes[datos.cliente] ? datos.cliente : null;
-      estado.def = definicion(estado.cliente);
-      raiz.insertBefore(cabeceraResultado(), cuerpo);
-      var fecha = new Date(datos.enviado);
-      var texto = JSON.stringify(datos, null, 2);
-      cuerpo.appendChild(el("p", { class: "eyebrow aparece", style: "--i:0" }, [el("span", { class: "eyebrow__punto" }), t("resultadoEyebrow")]));
-      cuerpo.appendChild(titulo("h1", datos.marca || "—", "titulo"));
-      cuerpo.appendChild(el("p", { class: "lead aparece", style: "--i:1", text: fmt(t("resultadoMeta"), {
-        fecha: isNaN(fecha) ? "—" : fecha.toLocaleString(estado.idioma === "en" ? "en-US" : "es-CL", { dateStyle: "medium", timeStyle: "short" }),
-        contacto: [datos.contacto && datos.contacto.nombre, datos.contacto && datos.contacto.medio].filter(Boolean).join(" · ") || "—"
-      }) }));
-      cuerpo.appendChild(el("div", { class: "envio__secundario aparece", style: "--i:2" }, [
-        el("button", { type: "button", class: "btn", id: "btn-copiar-json", onclick: function (e) { copiar(texto, e.currentTarget, t("copiarJson")); } }, [t("copiarJson")]),
-        el("button", { type: "button", class: "btn btn--fantasma", id: "btn-descargar-json", onclick: function () { descargar(datos); } }, [t("descargarJson")])
-      ]));
-      cuerpo.appendChild(el("p", { class: "nota", id: "nota-envio", "aria-live": "polite" }));
-      cuerpo.appendChild(el("textarea", { class: "respaldo", id: "respaldo-json", readonly: true, "aria-label": "JSON", hidden: true }));
-      cuerpo.appendChild(resumen(estado.def, datos.respuestas || {}, false));
-      cuerpo.appendChild(el("details", { class: "detalle-json" }, [el("summary", { text: t("verJson") }), el("pre", { class: "json" }, [el("code", { text: texto })])]));
+    envio.then(function () {
+      enviandoAhora = false;
+      borrarLocal(claveBorrador);
+      irA(estado.def.pasos.length + 1);
     }).catch(function () {
-      raiz.insertBefore(cabeceraResultado(), cuerpo);
-      cuerpo.appendChild(el("h1", { class: "titulo", text: t("resultadoEyebrow") }));
-      cuerpo.appendChild(el("p", { class: "lead", text: t("resultadoError") }));
-    }).then(function () {
-      cuerpo.appendChild(el("p", {}, [el("a", { class: "btn btn--fantasma", href: location.pathname + location.search, id: "btn-nuevo" }, [t("nuevo")])]));
+      enviandoAhora = false;
+      if (boton) { boton.disabled = false; boton.firstChild.textContent = t("enviar"); }
+      if (nota) nota.textContent = t("errorEnvio");
     });
-    raiz.appendChild(cuerpo);
   }
 
-  function cabeceraResultado() {
-    return el("header", { class: "cabecera" }, [
-      el("div", { class: "cabecera__fila" }, [
-        el("a", { class: "firma", href: "https://apalmo.com/", target: "_blank", rel: "noopener", "aria-label": "apalmo studio" }, [
-          svg("-35 -70 1200 1200", MARCA_APALMO, "firma__mano"), el("span", { class: "firma__texto", text: "apalmo" })
-        ]),
-        el("span", { class: "cabecera__titulo", text: t("marcaForm") })
-      ])
+  function vistaGracias() {
+    return el("section", { class: "gracias" }, [
+      el("div", { class: "gracias__sello aparece", style: "--i:0", "aria-hidden": "true" }, [
+        svg("0 0 64 64", '<circle class="gracias__circulo" cx="32" cy="32" r="29"/><path class="gracias__check" d="M20 33.5 28 41 44 24"/>', "gracias__svg")
+      ]),
+      titulo("h1", t("graciasTitulo"), "display gracias__titulo"),
+      el("p", { class: "lead aparece", style: "--i:3", text: t("graciasTexto") }),
+      el("p", { class: "gracias__firma aparece", style: "--i:4" }, [svg("-35 -70 1200 1200", MARCA_APALMO, "firma__mano"), el("span", { text: t("graciasFirma") })]),
+      estado.demo ? el("p", { class: "nota aparece", style: "--i:5", text: t("demo") }) : null
     ]);
   }
 
@@ -959,7 +800,6 @@
     raiz = document.getElementById("brief");
     if (!raiz || !BASE) return;
     estado.idioma = UI[parametro("lang")] ? parametro("lang") : "es";
-    if ((location.hash || "").indexOf("#r=") === 0) { vistaResultado(location.hash.slice(3)); return; }
 
     estado.cliente = idCliente();
     var cli = cliente();
@@ -978,12 +818,12 @@
         });
       });
       if (!parametro("lang") && UI[borrador.idioma]) estado.idioma = borrador.idioma;
+      estado.iniciado = borrador.iniciado || null;
     }
     if (cli && cli.marca) document.title = (estado.idioma === "en" ? "Brand brief · " : "Brief de marca · ") + cli.marca;
     render();
   }
 
-  window.addEventListener("hashchange", function () { if ((location.hash || "").indexOf("#r=") === 0) iniciar(); });
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", iniciar);
   else iniciar();
 })();

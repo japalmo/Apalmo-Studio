@@ -59,18 +59,46 @@
   window.BRIEF_ICONOS = ICONOS;
 
   window.BRIEF_PREGUNTAS = {
-    version: 2,
+    version: 3,
     pasos: [
       {
-        id: "negocio",
-        titulo: { es: "Lo que ofrecen", en: "What you offer" },
-        intro: { es: "Empecemos por lo concreto: qué hacen, para quién y por qué los prefieren.", en: "Let's start with the basics: what you do, who for, and why people pick you." },
+        id: "nombre",
+        titulo: { es: "Su nombre", en: "Your name" },
+        intro: { es: "Partimos por lo más importante: cómo se llama y cómo se escribe la marca.", en: "First things first: what the brand is called and how it's written." },
         preguntas: [
           { id: "nombre", tipo: "texto", req: true,
             label: { es: "Nombre de la marca", en: "Brand name" },
             ayuda: { es: "Tal como debería leerse en el logo.", en: "Exactly as it should read in the logo." } },
+          { id: "escritura", tipo: "escritura",
+            label: { es: "¿Cómo prefieren que se vea escrito?", en: "How should it look when written?" },
+            opciones: [
+              { id: "tal-cual", caso: "tal-cual", es: "Tal como lo escribí", en: "Exactly as I typed it" },
+              { id: "mayusculas", caso: "mayusculas", es: "Todo en mayúsculas", en: "All caps" },
+              { id: "minusculas", caso: "minusculas", es: "Todo en minúsculas", en: "All lowercase" },
+              { id: "libre", caso: "libre", es: "Que el diseñador proponga", en: "Let the designer decide" }
+            ] },
+          { id: "version_corta", tipo: "texto",
+            label: { es: "¿Usan una versión corta o apodo de la marca?", en: "Do you use a short version or nickname?" },
+            ayuda: { es: "Por ejemplo, solo las iniciales. Sirve para el ícono o la foto de perfil.", en: "For example, just the initials. Useful for the icon or profile picture." } },
+          { id: "detalle_escritura", tipo: "texto",
+            label: { es: "¿Algún detalle de escritura que debamos respetar?", en: "Any spelling detail we must respect?" },
+            ayuda: { es: "Un símbolo, un guion, una palabra que siempre va en inglés…", en: "A symbol, a hyphen, a word that's always in English…" } },
+          { id: "eslogan", tipo: "texto",
+            label: { es: "¿Tienen una frase o eslogan?", en: "Do you have a tagline?" },
+            ayuda: { es: "Opcional. Puede ir junto al logo.", en: "Optional. It can go next to the logo." } },
+          { id: "historia_nombre", tipo: "area",
+            label: { es: "¿Hay una historia detrás del nombre?", en: "Is there a story behind the name?" } }
+        ]
+      },
+      {
+        id: "negocio",
+        titulo: { es: "Lo que ofrecen", en: "What you offer" },
+        intro: { es: "Qué hacen, para quién y por qué los prefieren.", en: "What you do, who for, and why people pick you." },
+        preguntas: [
           { id: "servicios", tipo: "area",
             label: { es: "¿Qué servicios ofrecen o van a ofrecer?", en: "What services do you offer, or plan to offer?" } },
+          { id: "servicio_estrella", tipo: "texto",
+            label: { es: "¿Cuál es el servicio que más quieren vender?", en: "Which service do you most want to sell?" } },
           { id: "clientes", tipo: "chips", multiple: true,
             label: { es: "¿Para quién trabajan?", en: "Who do you work for?" },
             opciones: [
@@ -80,11 +108,69 @@
               { id: "inmobiliarias", es: "Inmobiliarias y administradores", en: "Realtors & property managers" },
               { id: "comercios", es: "Tiendas y comercios", en: "Stores & retailers" }
             ] },
+          { id: "zona", tipo: "texto",
+            label: { es: "¿En qué zona trabajan?", en: "What area do you serve?" } },
           { id: "diferencia", tipo: "area",
             label: { es: "¿Por qué los eligen a ustedes y no a otros?", en: "Why do customers pick you over others?" },
-            ayuda: { es: "Lo que más les dicen sus clientes: puntualidad, trato, precio, cuidado…", en: "What customers tell you most: on time, friendly, fair price, careful…" } },
-          { id: "historia_nombre", tipo: "texto",
-            label: { es: "¿Hay una historia detrás del nombre?", en: "Is there a story behind the name?" } }
+            ayuda: { es: "Lo que más les dicen sus clientes: puntualidad, trato, precio, cuidado…", en: "What customers tell you most: on time, friendly, fair price, careful…" } }
+        ]
+      },
+      {
+        id: "identidad",
+        titulo: { es: "Quiénes son", en: "Who you are" },
+        intro: { es: "La marca tiene que parecerse a ustedes. Marquen lo que los describe de verdad, no lo que suena bien.", en: "The brand should look like you. Mark what truly describes you, not what sounds nice." },
+        preguntas: [
+          { id: "como_se_identifican", tipo: "chips", multiple: true, max: 2,
+            label: { es: "¿Cómo se identifican? (hasta 2)", en: "How do you see yourselves? (up to 2)" },
+            opciones: [
+              { id: "familia", es: "Un negocio familiar", en: "A family business" },
+              { id: "emprendedores", es: "Emprendedores que empiezan", en: "Entrepreneurs starting out" },
+              { id: "expertos", es: "Expertos con años de oficio", en: "Experts with years of experience" },
+              { id: "comunidad", es: "Parte de la comunidad local", en: "Part of the local community" },
+              { id: "raices-latinas", es: "Con raíces latinas", en: "With Latino roots" },
+              { id: "empresa-formal", es: "Una empresa formal y establecida", en: "A formal, established company" }
+            ] },
+          { id: "adjetivos", tipo: "chips", multiple: true, max: 5, otro: true,
+            label: { es: "Elijan hasta 5 palabras que los representen", en: "Pick up to 5 words that represent you" },
+            opciones: [
+              { id: "confiables", es: "Confiables", en: "Reliable" },
+              { id: "puntuales", es: "Puntuales", en: "On time" },
+              { id: "rapidos", es: "Rápidos", en: "Fast" },
+              { id: "fuertes", es: "Fuertes", en: "Strong" },
+              { id: "trabajadores", es: "Trabajadores", en: "Hard-working" },
+              { id: "honestos", es: "Honestos", en: "Honest" },
+              { id: "amables", es: "Amables", en: "Kind" },
+              { id: "cuidadosos", es: "Cuidadosos", en: "Careful" },
+              { id: "ordenados", es: "Ordenados", en: "Tidy" },
+              { id: "profesionales", es: "Profesionales", en: "Professional" },
+              { id: "responsables", es: "Responsables", en: "Responsible" },
+              { id: "eficientes", es: "Eficientes", en: "Efficient" },
+              { id: "cercanos", es: "Cercanos", en: "Approachable" },
+              { id: "alegres", es: "Alegres", en: "Cheerful" },
+              { id: "jovenes", es: "Jóvenes", en: "Young" },
+              { id: "modernos", es: "Modernos", en: "Modern" },
+              { id: "tradicionales", es: "Tradicionales", en: "Traditional" },
+              { id: "serios", es: "Serios", en: "Serious" },
+              { id: "elegantes", es: "Elegantes", en: "Elegant" },
+              { id: "economicos", es: "Económicos", en: "Affordable" },
+              { id: "flexibles", es: "Flexibles", en: "Flexible" },
+              { id: "detallistas", es: "Detallistas", en: "Detail-oriented" }
+            ] },
+          { id: "no_quieren_parecer", tipo: "chips", multiple: true,
+            label: { es: "¿Y cómo NO quieren que los vean?", en: "And how do you NOT want to be seen?" },
+            opciones: [
+              { id: "baratos", es: "Baratos o de mala calidad", en: "Cheap or low quality" },
+              { id: "informales", es: "Informales", en: "Unprofessional" },
+              { id: "lentos", es: "Lentos", en: "Slow" },
+              { id: "frios", es: "Fríos o distantes", en: "Cold or distant" },
+              { id: "anticuados", es: "Anticuados", en: "Old-fashioned" },
+              { id: "caros", es: "Demasiado caros o lujosos", en: "Too pricey or fancy" },
+              { id: "agresivos", es: "Agresivos", en: "Aggressive" },
+              { id: "genericos", es: "Uno más del montón", en: "Just another one" }
+            ] },
+          { id: "como_persona", tipo: "area",
+            label: { es: "Si la marca fuera una persona, ¿cómo sería?", en: "If the brand were a person, what would they be like?" },
+            ayuda: { es: "Qué edad tendría, cómo se vestiría, cómo hablaría…", en: "How old, how they'd dress, how they'd talk…" } }
         ]
       },
       {
@@ -109,12 +195,18 @@
         ]
       },
       {
-        id: "sensacion",
-        titulo: { es: "Cómo se debe sentir", en: "How it should feel" },
-        intro: { es: "La primera impresión que debería dejar la marca, antes de que alguien lea una palabra.", en: "The first impression the brand should leave, before anyone reads a word." },
+        id: "tono",
+        titulo: { es: "Tono y personalidad", en: "Tone & personality" },
+        intro: { es: "Toquen el punto que más se acerque a la marca. El centro es «ni lo uno ni lo otro».", en: "Tap the point closest to the brand. The middle means “neither”." },
         preguntas: [
+          { id: "serio_jugueton", tipo: "escala", izq: { es: "Serio", en: "Serious" }, der: { es: "Juguetón", en: "Playful" } },
+          { id: "juvenil_senorial", tipo: "escala", izq: { es: "Juvenil", en: "Youthful" }, der: { es: "Señorial", en: "Distinguished" } },
+          { id: "convencional_original", tipo: "escala", izq: { es: "Convencional", en: "Conventional" }, der: { es: "Original y atrevido", en: "Bold & original" } },
+          { id: "clasico_moderno", tipo: "escala", izq: { es: "Clásico", en: "Classic" }, der: { es: "Moderno", en: "Modern" } },
+          { id: "rudo_refinado", tipo: "escala", izq: { es: "Rudo y fuerte", en: "Rugged & tough" }, der: { es: "Limpio y refinado", en: "Clean & refined" } },
+          { id: "sobrio_llamativo", tipo: "escala", izq: { es: "Sobrio", en: "Low-key" }, der: { es: "Llamativo", en: "Eye-catching" } },
           { id: "sensaciones", tipo: "chips", multiple: true, max: 3,
-            label: { es: "Al ver la marca, el cliente debería sentir… (elige hasta 3)", en: "When customers see the brand they should feel… (pick up to 3)" },
+            label: { es: "Al ver la marca, el cliente debería sentir… (hasta 3)", en: "When customers see the brand they should feel… (up to 3)" },
             opciones: [
               { id: "confianza", es: "Confianza", en: "Trust" },
               { id: "rapidez", es: "Rapidez", en: "Speed" },
@@ -123,16 +215,11 @@
               { id: "profesionalismo", es: "Profesionalismo", en: "Professionalism" },
               { id: "tranquilidad", es: "Tranquilidad", en: "Peace of mind" },
               { id: "orden", es: "Orden y limpieza", en: "Clean & tidy" },
-              { id: "precio-justo", es: "Precio justo", en: "Fair price" },
               { id: "energia", es: "Energía", en: "Energy" },
               { id: "orgullo-local", es: "Orgullo local", en: "Local pride" },
               { id: "premium", es: "Calidad premium", en: "Premium quality" },
               { id: "diversion", es: "Buena onda", en: "Fun" }
-            ] },
-          { id: "clasico_moderno", tipo: "escala", izq: { es: "Clásico", en: "Classic" }, der: { es: "Moderno", en: "Modern" } },
-          { id: "serio_cercano", tipo: "escala", izq: { es: "Serio", en: "Serious" }, der: { es: "Cercano", en: "Friendly" } },
-          { id: "rudo_prolijo", tipo: "escala", izq: { es: "Rudo y fuerte", en: "Rugged & tough" }, der: { es: "Limpio y prolijo", en: "Clean & polished" } },
-          { id: "sobrio_llamativo", tipo: "escala", izq: { es: "Sobrio", en: "Low-key" }, der: { es: "Llamativo", en: "Eye-catching" } }
+            ] }
         ]
       },
       {
@@ -217,7 +304,7 @@
       {
         id: "cierre",
         titulo: { es: "Para terminar", en: "Last few" },
-        intro: { es: "Si tienen fotos o capturas de marcas que les gusten, mándenlas por WhatsApp junto con las respuestas.", en: "If you have photos or screenshots of brands you like, send them on WhatsApp with your answers." },
+        intro: { es: "Unas últimas preguntas y sus datos para contactarlos.", en: "A few last questions and your contact details." },
         preguntas: [
           { id: "usos", tipo: "chips", multiple: true,
             label: { es: "¿Dónde se va a ver más el logo?", en: "Where will the logo be seen most?" },
@@ -243,8 +330,10 @@
             ] },
           { id: "contacto_nombre", tipo: "texto", req: true, autocompletar: "name",
             label: { es: "Tu nombre", en: "Your name" } },
-          { id: "contacto_medio", tipo: "texto", autocompletar: "tel",
-            label: { es: "Tu WhatsApp o correo", en: "Your WhatsApp or email" } }
+          { id: "contacto_telefono", tipo: "texto", autocompletar: "tel", teclado: "tel",
+            label: { es: "Tu WhatsApp", en: "Your WhatsApp" } },
+          { id: "contacto_correo", tipo: "texto", autocompletar: "email", teclado: "email",
+            label: { es: "Tu correo", en: "Your email" } }
         ]
       }
     ]

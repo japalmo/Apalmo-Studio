@@ -17,14 +17,9 @@
   "use strict";
 
   window.BRIEF_CONFIG = {
-    // WhatsApp que recibe las respuestas (solo dígitos, con código de país).
-    whatsapp: "56990574036",
-    correo: "contacto@apalmo.com",
-    // Dirección pública del formulario: se usa para armar el link con las respuestas.
-    urlPublica: "https://apalmo.com/brief/logo/",
-    // Opcional: ruta del mismo dominio que recibe el JSON por POST (por ejemplo "/api/brief").
-    // Vacío = sin servidor; las respuestas viajan por WhatsApp o como archivo.
-    endpoint: "",
+    // Ruta del mismo dominio que recibe las respuestas en JSON por POST (la API de apalmo.com).
+    // Vacío = vista previa: muestra el agradecimiento sin enviar nada.
+    endpoint: "/api/brief",
 
     clientes: {
       "rr-pro-hauling": {
@@ -35,6 +30,9 @@
           nombre: "R&R Pro Hauling"
         },
         preguntas: {
+          detalle_escritura: {
+            ayuda: { es: "Por ejemplo, si el «&» va como símbolo o se escribe «and».", en: "For example, whether the “&” stays a symbol or is spelled “and”." }
+          },
           historia_nombre: {
             label: { es: "¿Qué significan las dos R?", en: "What do the two R's stand for?" },
             ayuda: { es: "Nombres, apellidos, una idea… Nos puede dar pistas para el logo.", en: "Names, a family name, an idea… It can inspire the logo." }
