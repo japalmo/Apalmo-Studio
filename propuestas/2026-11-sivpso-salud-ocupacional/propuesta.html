@@ -1,0 +1,485 @@
+<title>SIVPSO · Propuesta de implementación</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<style>
+/* Layout: propuesta técnica en formato dossier de apalmo studio. Banda de ficha arriba, índice a la izquierda en escritorio, columna de lectura con tablas de costos que se recalculan según la dotación. */
+:root {
+  --bg: #F3F5F9; --surface: #FFFFFF; --ink: #0F1A33; --muted: #55607A; --rule: #DAE0EA;
+  --navy: #1C3A6B; --navy-soft: #E5ECF7; --copper: #B84A00; --copper-soft: #FCEBDD;
+  --ok: #1E7449; --ok-soft: #E2F3EA; --warn: #8F5200; --warn-soft: #FFF2D9;
+  --crit: #A3261F; --crit-soft: #FBE6E4;
+  --band: #1C3A6B; --band-ink: #F4F7FC; --band-muted: #B9C7E0; --band-line: rgba(255,255,255,0.14);
+  --f-display: "IBM Plex Sans Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", "Cascadia Mono", Consolas, "Courier New", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0C1322; --surface: #131C30; --ink: #E6EBF4; --muted: #9AA6BD; --rule: #25314A;
+    --navy: #93B3E8; --navy-soft: #1A2742; --copper: #FF8F45; --copper-soft: #33200F;
+    --ok: #5FCB93; --ok-soft: #12291D; --warn: #EAAE52; --warn-soft: #2E220C;
+    --crit: #F08A82; --crit-soft: #331614;
+    --band: #101A30; --band-ink: #EEF2FA; --band-muted: #93A3C2; --band-line: rgba(255,255,255,0.14);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0C1322; --surface: #131C30; --ink: #E6EBF4; --muted: #9AA6BD; --rule: #25314A;
+  --navy: #93B3E8; --navy-soft: #1A2742; --copper: #FF8F45; --copper-soft: #33200F;
+  --ok: #5FCB93; --ok-soft: #12291D; --warn: #EAAE52; --warn-soft: #2E220C;
+  --crit: #F08A82; --crit-soft: #331614;
+  --band: #101A30; --band-ink: #EEF2FA; --band-muted: #93A3C2; --band-line: rgba(255,255,255,0.14);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15.5px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: var(--navy); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--copper); outline-offset: 2px; border-radius: 2px; }
+code, .mono { font-family: var(--f-mono); font-size: 0.86em; }
+
+.band { background: var(--band); color: var(--band-ink); padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); padding-block: 36px 30px; }
+.band-inner { max-width: 1180px; margin: 0 auto; display: grid; gap: 22px; }
+.eyebrow { font-family: var(--f-display); font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; font-size: 12.5px; color: var(--band-muted); }
+.band h1 { font-family: var(--f-display); font-weight: 700; font-size: clamp(30px, 5vw, 46px); line-height: 1.05; margin: 6px 0 10px; text-wrap: balance; letter-spacing: -0.01em; }
+.band .lede { max-width: 70ch; margin: 0; font-size: 16.5px; opacity: .92; }
+.ficha { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1px; background: var(--band-line); border: 1px solid var(--band-line); border-radius: 6px; overflow: hidden; margin: 0; }
+.ficha div { background: var(--band); padding: 12px 14px; min-width: 0; }
+.ficha dt { font-family: var(--f-display); font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--band-muted); }
+.ficha dd { margin: 3px 0 0; font-size: 14.5px; overflow-wrap: anywhere; }
+
+.wrap { max-width: 1220px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); padding-block: 28px 80px; display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 44px; align-items: start; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); font-size: 13.5px; }
+nav.toc .toc-h { font-family: var(--f-display); font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; font-size: 12px; color: var(--muted); margin: 0 0 10px; }
+nav.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; counter-reset: toc; }
+nav.toc li { counter-increment: toc; margin: 0; }
+nav.toc a { display: grid; grid-template-columns: 26px 1fr; text-decoration: none; color: var(--ink); padding: 5px 8px; border-radius: 4px; line-height: 1.35; }
+nav.toc a::before { content: counter(toc, decimal-leading-zero); font-family: var(--f-mono); font-size: 11.5px; color: var(--muted); padding-top: 1px; }
+nav.toc a:hover { background: var(--navy-soft); }
+main { min-width: 0; }
+@media (max-width: 1000px) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  nav.toc { position: static; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 14px 12px; }
+  nav.toc ol { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+}
+section { padding-block: 10px 26px; border-top: 1px solid var(--rule); scroll-margin-top: 16px; }
+section:first-child { border-top: 0; }
+h2 { font-family: var(--f-display); font-weight: 700; font-size: 28px; line-height: 1.15; margin: 22px 0 6px; text-wrap: balance; }
+h2 .num { font-family: var(--f-mono); font-weight: 500; font-size: 14px; color: var(--copper); display: block; letter-spacing: 0.04em; margin-bottom: 4px; }
+h3 { font-family: var(--f-display); font-weight: 600; font-size: 20px; margin: 26px 0 6px; color: var(--navy); text-wrap: balance; }
+h4 { font-family: var(--f-display); font-weight: 600; font-size: 15px; margin: 0 0 4px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+p, li { max-width: 74ch; }
+p { margin: 8px 0; }
+ul, ol { padding-left: 1.3em; margin: 8px 0; }
+li { margin: 3px 0; }
+.sub { color: var(--muted); margin-top: 0; }
+.small { font-size: 13.5px; color: var(--muted); }
+
+.note { border-radius: 6px; padding: 12px 14px; margin: 14px 0; background: var(--navy-soft); max-width: 78ch; }
+.note > :first-child { margin-top: 0; } .note > :last-child { margin-bottom: 0; }
+.note .lbl { font-family: var(--f-display); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; margin-right: 6px; color: var(--navy); }
+.note.warn { background: var(--warn-soft); } .note.warn .lbl { color: var(--warn); }
+.note.ok { background: var(--ok-soft); } .note.ok .lbl { color: var(--ok); }
+.chip { display: inline-block; font-family: var(--f-display); font-weight: 600; font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; white-space: nowrap; vertical-align: 1px; }
+.chip.ok { background: var(--ok-soft); color: var(--ok); }
+.chip.warn { background: var(--warn-soft); color: var(--warn); }
+.chip.crit { background: var(--crit-soft); color: var(--crit); }
+.chip.info { background: var(--navy-soft); color: var(--navy); }
+
+.tw { overflow-x: auto; margin: 12px 0 16px; border: 1px solid var(--rule); border-radius: 6px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--rule); }
+tr:last-child td { border-bottom: 0; }
+th { font-family: var(--f-display); font-weight: 600; font-size: 12.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); background: var(--bg); white-space: nowrap; }
+td.n, th.n { font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+td .det { display: block; color: var(--muted); font-size: 13px; }
+tr.total td { font-weight: 600; background: var(--bg); }
+tr.grand td { font-weight: 700; background: var(--navy-soft); font-size: 15px; }
+table.costos td:first-child { min-width: 260px; }
+
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 12px 0; }
+.panel { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 14px 16px; min-width: 0; }
+.panel p { margin: 4px 0 0; }
+
+/* Dotación y cifras de resumen */
+.dotacion { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 14px 16px; margin: 14px 0; display: grid; gap: 8px; max-width: 78ch; }
+.dotacion label { font-family: var(--f-display); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; font-size: 13px; color: var(--muted); }
+.dotacion .row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+.dotacion input[type=range] { flex: 1 1 220px; min-width: 0; accent-color: var(--copper); }
+.dotacion output { font-family: var(--f-display); font-weight: 700; font-size: 22px; font-variant-numeric: tabular-nums; min-width: 9ch; }
+.cifras { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; margin: 14px 0; }
+.cifras div { background: var(--surface); padding: 14px 16px; min-width: 0; }
+.cifras dt { font-family: var(--f-display); font-weight: 600; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.cifras dd { margin: 4px 0 0; font-family: var(--f-display); font-weight: 700; font-size: 26px; line-height: 1.15; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.cifras dd small { display: block; font-family: var(--f-body); font-weight: 400; font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+.cifras .dest dd { color: var(--copper); }
+
+footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--rule); padding-top: 16px; margin-top: 30px; }
+</style>
+
+<header class="band">
+  <div class="band-inner">
+    <div>
+      <div class="eyebrow">apalmo studio · Propuesta de implementación · Rev 0 · 16 de noviembre de 2026</div>
+      <h1>SIVPSO: vigilancia preventiva de salud ocupacional</h1>
+      <p class="lede">Una plataforma web y un operativo de salud en terreno para medir cada mes a los trabajadores, detectar a tiempo sobrepeso, hipertensión y riesgo metabólico, y avisar al prevencionista antes de que el problema se convierta en licencia médica.</p>
+    </div>
+    <dl class="ficha">
+      <div><dt>Cliente</dt><dd>Equipo SIVPSO · Ing. en Prevención de Riesgos, AIEP</dd></div>
+      <div><dt>Alcance</dt><dd>Piloto en una empresa, desde 10 trabajadores</dd></div>
+      <div><dt>Implementación</dt><dd><span data-o="impl"></span> · una vez</dd></div>
+      <div><dt>Operación y mantención</dt><dd><span data-o="opMes"></span> al mes</dd></div>
+      <div><dt>Plazo de puesta en marcha</dt><dd>16 semanas</dd></div>
+      <div><dt>Preparado por</dt><dd>Juan Apalmo · apalmo studio</dd></div>
+    </dl>
+  </div>
+</header>
+
+<div class="wrap">
+<nav class="toc" aria-label="Índice">
+  <p class="toc-h">Índice</p>
+  <ol>
+    <li><a href="#contexto">El problema</a></li>
+    <li><a href="#solucion">La solución</a></li>
+    <li><a href="#resumen">Resumen de costos</a></li>
+    <li><a href="#implementacion">Costos de implementación</a></li>
+    <li><a href="#operacion">Operación y mantención</a></li>
+    <li><a href="#plan">Plan de trabajo</a></li>
+    <li><a href="#equipo">Equipo y roles</a></li>
+    <li><a href="#normativa">Normativa y datos</a></li>
+    <li><a href="#confirmar">Por confirmar</a></li>
+  </ol>
+</nav>
+
+<main>
+<section id="contexto">
+  <h2><span class="num">01</span>El problema</h2>
+  <p>La mayoría de las empresas controla la salud de sus trabajadores una vez al año, o solo al ingreso. Entre un control y otro nadie ve cómo evolucionan el peso, la presión o la glicemia, y los casos se detectan cuando ya hay una enfermedad instalada. Un estudio de la Superintendencia de Seguridad Social encontró que el 94% de los conductores evaluados tenía sobrepeso u obesidad y que el 41% no alcanzaba la actividad física mínima recomendada.</p>
+  <p>El equipo SIVPSO diseñó un modelo de vigilancia preventiva continua. Esta propuesta lo lleva a la práctica: qué se construye, qué se compra, quién lo opera y cuánto cuesta ponerlo en marcha y mantenerlo.</p>
+</section>
+
+<section id="solucion">
+  <h2><span class="num">02</span>La solución</h2>
+  <div class="grid2">
+    <div class="panel"><h4>Operativo en terreno</h4><p>Un TENS visita la empresa una vez al mes y mide a cada trabajador. Dos veces al año, un laboratorio en convenio toma y procesa las muestras de sangre.</p></div>
+    <div class="panel"><h4>Plataforma web</h4><p>El TENS registra las mediciones desde una tablet. El sistema calcula los indicadores, los compara con los umbrales y clasifica a cada persona en un nivel de alerta.</p></div>
+    <div class="panel"><h4>Seguimiento</h4><p>El prevencionista ve un tablero con el estado de la dotación. La enfermera revisa las alertas altas, orienta al trabajador y lo deriva a su sistema de salud.</p></div>
+  </div>
+
+  <h3>Qué se mide</h3>
+  <p class="sub">Ocho indicadores y dos cuestionarios. El avance del proyecto compromete al menos ocho; esta lista es la propuesta para cumplirlo.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Indicador</th><th>Instrumento</th><th>Frecuencia</th></tr></thead>
+    <tbody>
+      <tr><td>Peso</td><td>Balanza clínica digital</td><td>Mensual</td></tr>
+      <tr><td>Talla</td><td>Tallímetro de la balanza</td><td>Al ingreso</td></tr>
+      <tr><td>Índice de masa corporal (IMC)</td><td>Cálculo automático: peso / talla²</td><td>Mensual</td></tr>
+      <tr><td>Perímetro de cintura</td><td>Cinta antropométrica</td><td>Mensual</td></tr>
+      <tr><td>Presión arterial</td><td>Tensiómetro digital de brazo, validado</td><td>Mensual</td></tr>
+      <tr><td>Frecuencia cardíaca en reposo</td><td>Lectura del mismo tensiómetro</td><td>Mensual</td></tr>
+      <tr><td>Glicemia en ayunas</td><td>Examen de sangre en laboratorio</td><td>Semestral</td></tr>
+      <tr><td>Perfil lipídico</td><td>Examen de sangre en laboratorio</td><td>Semestral</td></tr>
+      <tr><td>Actividad física</td><td>Cuestionario breve en la plataforma</td><td>Trimestral</td></tr>
+      <tr><td>Fatiga y somnolencia</td><td>Cuestionario breve en la plataforma</td><td>Trimestral</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Niveles de alerta</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Nivel</th><th>Cuándo se activa</th><th>Qué pasa</th></tr></thead>
+    <tbody>
+      <tr><td><span class="chip ok">Normal</span></td><td>Todos los indicadores dentro de rango.</td><td>Control mensual habitual.</td></tr>
+      <tr><td><span class="chip warn">Preventivo</span></td><td>Un indicador fuera de rango o con tendencia al alza en tres controles. Ejemplo: IMC entre 25 y 29,9 o presión desde 130/85 mmHg.</td><td>Consejería del prevencionista y seguimiento reforzado.</td></tr>
+      <tr><td><span class="chip crit">Alto</span></td><td>Valores en rango de riesgo. Ejemplo: IMC desde 30, presión desde 140/90 mmHg o glicemia en ayunas desde 126 mg/dL.</td><td>Revisión de la enfermera dentro de 48 horas y derivación a su prestador de salud.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small">Los umbrales son una propuesta inicial basada en criterios clínicos de uso habitual. La enfermera del proyecto los valida antes de configurarlos. El sistema orienta y deriva; no diagnostica.</p>
+</section>
+
+<section id="resumen">
+  <h2><span class="num">03</span>Resumen de costos</h2>
+  <p class="sub">El costo tiene una parte fija (construir la plataforma, comprar equipos) y una parte que crece con la dotación (exámenes, insumos, horas de terreno). Mueve el control para ver cómo cambia.</p>
+
+  <div class="dotacion">
+    <label for="n-trab">Trabajadores en vigilancia</label>
+    <div class="row">
+      <input type="range" id="n-trab" min="10" max="200" step="5" value="10">
+      <output for="n-trab" id="n-out">10</output>
+    </div>
+    <p class="small" style="margin:0">Base de la propuesta: 10 trabajadores, el mínimo indicado por el equipo. Todas las tablas de este documento se recalculan.</p>
+  </div>
+
+  <dl class="cifras">
+    <div class="dest"><dt>Implementación</dt><dd><span data-o="impl"></span><small>una sola vez, 16 semanas</small></dd></div>
+    <div><dt>Operación y mantención</dt><dd><span data-o="opAno"></span><small>al año</small></dd></div>
+    <div><dt>Equivalente mensual</dt><dd><span data-o="opMes"></span><small>operación y mantención</small></dd></div>
+    <div><dt>Por trabajador</dt><dd><span data-o="opTrab"></span><small>operación, al mes</small></dd></div>
+    <div class="dest"><dt>Total primer año</dt><dd><span data-o="ano1"></span><small>implementación + 12 meses</small></dd></div>
+  </dl>
+
+  <div class="tw"><table class="costos">
+    <thead><tr><th>Categoría</th><th class="n">Implementación</th><th class="n">Operación anual</th></tr></thead>
+    <tbody id="t-resumen"></tbody>
+  </table></div>
+
+  <div class="note warn"><span class="lbl">Valores de referencia</span> Montos en pesos chilenos, estimados a noviembre de 2026 con precios habituales de mercado. Honorarios en valores brutos; equipos y servicios sin IVA. Antes de comprometer un presupuesto hay que reemplazarlos por cotizaciones formales, sobre todo los del laboratorio y los equipos.</div>
+</section>
+
+<section id="implementacion">
+  <h2><span class="num">04</span>Costos de implementación</h2>
+  <p class="sub">Lo que cuesta dejar el sistema funcionando: desarrollo, equipamiento, línea base de salud de la dotación y puesta en marcha. Se paga una vez. Las cuatro categorías son las de la tabla de recursos del Avance 3.</p>
+
+  <h3>Recursos humanos</h3>
+  <div class="tw"><table class="costos">
+    <thead><tr><th>Recurso</th><th class="n">Cantidad</th><th class="n">Costo unitario</th><th class="n">Costo final</th></tr></thead>
+    <tbody id="t-i-rrhh"></tbody>
+  </table></div>
+
+  <h3>Recursos materiales</h3>
+  <div class="tw"><table class="costos">
+    <thead><tr><th>Recurso</th><th class="n">Cantidad</th><th class="n">Costo unitario</th><th class="n">Costo final</th></tr></thead>
+    <tbody id="t-i-mat"></tbody>
+  </table></div>
+
+  <h3>Recursos financieros</h3>
+  <div class="tw"><table class="costos">
+    <thead><tr><th>Recurso</th><th class="n">Cantidad</th><th class="n">Costo unitario</th><th class="n">Costo final</th></tr></thead>
+    <tbody id="t-i-fin"></tbody>
+  </table></div>
+
+  <h3>Recursos tecnológicos</h3>
+  <div class="tw"><table class="costos">
+    <thead><tr><th>Recurso</th><th class="n">Cantidad</th><th class="n">Costo unitario</th><th class="n">Costo final</th></tr></thead>
+    <tbody id="t-i-tec"></tbody>
+  </table></div>
+
+  <div class="tw"><table class="costos">
+    <tbody><tr class="grand"><td>Total implementación</td><td class="n"><span data-o="impl"></span></td></tr></tbody>
+  </table></div>
+</section>
+
+<section id="operacion">
+  <h2><span class="num">05</span>Operación y mantención</h2>
+  <p class="sub">Lo que cuesta mantener el sistema funcionando después de la puesta en marcha: sueldos y honorarios del equipo que lo opera, servicios tecnológicos, controles de salud y mantención de equipos y software. Se muestra por año.</p>
+
+  <h3>Sueldos y honorarios</h3>
+  <div class="tw"><table class="costos">
+    <thead><tr><th>Recurso</th><th class="n">Cantidad</th><th class="n">Costo unitario</th><th class="n">Veces al año</th><th class="n">Costo anual</th></tr></thead>
+    <tbody id="t-o-rrhh"></tbody>
+  </table></div>
+  <p class="small">Dedicación parcial pagada a honorarios. Si la empresa contrata a estas personas con contrato de trabajo, hay que sumar cotizaciones del empleador, vacaciones y gratificación.</p>
+
+  <h3>Controles de salud y terreno</h3>
+  <div class="tw"><table class="costos">
+    <thead><tr><th>Recurso</th><th class="n">Cantidad</th><th class="n">Costo unitario</th><th class="n">Veces al año</th><th class="n">Costo anual</th></tr></thead>
+    <tbody id="t-o-salud"></tbody>
+  </table></div>
+
+  <h3>Servicios tecnológicos</h3>
+  <div class="tw"><table class="costos">
+    <thead><tr><th>Recurso</th><th class="n">Cantidad</th><th class="n">Costo unitario</th><th class="n">Veces al año</th><th class="n">Costo anual</th></tr></thead>
+    <tbody id="t-o-tec"></tbody>
+  </table></div>
+
+  <h3>Mantención y mejora</h3>
+  <div class="tw"><table class="costos">
+    <thead><tr><th>Recurso</th><th class="n">Cantidad</th><th class="n">Costo unitario</th><th class="n">Veces al año</th><th class="n">Costo anual</th></tr></thead>
+    <tbody id="t-o-mant"></tbody>
+  </table></div>
+
+  <div class="tw"><table class="costos">
+    <tbody>
+      <tr class="grand"><td>Total operación y mantención, por año</td><td class="n"><span data-o="opAno"></span></td></tr>
+      <tr class="total"><td>Equivalente mensual</td><td class="n"><span data-o="opMes"></span></td></tr>
+      <tr class="total"><td>Por trabajador, al mes</td><td class="n"><span data-o="opTrab"></span></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note"><span class="lbl">Cómo escala</span> Con la dotación crecen los exámenes, los kits de muestra, las jornadas del TENS (una por cada 25 trabajadores) y las horas de la enfermera. El desarrollo, el hosting y las horas del prevencionista se mantienen fijos en este rango. Sobre 100 trabajadores conviene revisar la dedicación del prevencionista.</div>
+</section>
+
+<section id="plan">
+  <h2><span class="num">06</span>Plan de trabajo</h2>
+  <p class="sub">Dieciséis semanas desde la aprobación hasta el sistema operando con la primera medición cargada.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Semanas</th><th>Etapa</th><th>Entregable</th><th>Responsable</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">1–2</td><td>Levantamiento con la empresa piloto y definición del modelo de vigilancia.</td><td>Indicadores, umbrales y protocolos por nivel de alerta.</td><td>Prevencionista, enfermera</td></tr>
+      <tr><td class="mono">2–3</td><td>Marco legal y consentimiento informado.</td><td>Consentimiento y política de tratamiento de datos.</td><td>Asesor legal</td></tr>
+      <tr><td class="mono">3–4</td><td>Diseño de la plataforma.</td><td>Maquetas navegables aprobadas.</td><td>apalmo studio</td></tr>
+      <tr><td class="mono">5–11</td><td>Desarrollo: registro, mediciones, alertas, tablero y reportes.</td><td>Plataforma en ambiente de pruebas.</td><td>apalmo studio</td></tr>
+      <tr><td class="mono">9–10</td><td>Compra de equipos y convenio con el laboratorio.</td><td>Equipos recibidos y convenio firmado.</td><td>Equipo SIVPSO</td></tr>
+      <tr><td class="mono">12</td><td>Pruebas con datos ficticios y revisión de seguridad.</td><td>Informe de pruebas.</td><td>apalmo studio, prevencionista</td></tr>
+      <tr><td class="mono">13</td><td>Capacitación a trabajadores, Comité Paritario y operadores.</td><td>Personas capacitadas y consentimientos firmados.</td><td>Prevencionista</td></tr>
+      <tr><td class="mono">14–15</td><td>Línea base: primera medición y exámenes de sangre.</td><td>Dotación medida y cargada en la plataforma.</td><td>TENS, laboratorio</td></tr>
+      <tr><td class="mono">16</td><td>Primer informe y entrega.</td><td>Informe de línea base y sistema en operación.</td><td>Todos</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="equipo">
+  <h2><span class="num">07</span>Equipo y roles</h2>
+  <div class="tw"><table>
+    <thead><tr><th>Rol</th><th>Función</th><th>Etapa</th></tr></thead>
+    <tbody>
+      <tr><td>Equipo SIVPSO</td><td>Dirección del proyecto, coordinación con la empresa piloto, compras y convenio con el laboratorio.</td><td>Implementación</td></tr>
+      <tr><td>Prevencionista de riesgos</td><td>Diseña el modelo de vigilancia y los protocolos. En operación administra el programa, sigue las alertas e informa a la empresa y al Comité Paritario.</td><td>Ambas</td></tr>
+      <tr><td>Enfermera o enfermero</td><td>Valida los umbrales clínicos y el protocolo de medición. En operación revisa las alertas altas, orienta y deriva.</td><td>Ambas</td></tr>
+      <tr><td>TENS</td><td>Mide a los trabajadores en terreno y registra los datos en la plataforma.</td><td>Ambas</td></tr>
+      <tr><td>Laboratorio o centro médico en convenio</td><td>Toma y procesa las muestras de sangre y entrega los resultados.</td><td>Ambas</td></tr>
+      <tr><td>apalmo studio (informático)</td><td>Diseña, desarrolla y publica la plataforma. En operación da soporte, respalda los datos y hace las mejoras.</td><td>Ambas</td></tr>
+      <tr><td>Asesor legal</td><td>Redacta el consentimiento informado y la política de tratamiento de datos de salud.</td><td>Implementación</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="normativa">
+  <h2><span class="num">08</span>Normativa y datos</h2>
+  <div class="tw"><table>
+    <thead><tr><th>Norma</th><th>Qué exige al proyecto</th></tr></thead>
+    <tbody>
+      <tr><td>Ley N.° 16.744 y Decreto Supremo N.° 44</td><td>Enmarcan la vigilancia de la salud y la gestión preventiva. El sistema entrega evidencia para el programa preventivo de la empresa.</td></tr>
+      <tr><td>Ley N.° 19.628 y Ley N.° 21.719</td><td>Los datos de salud son datos sensibles: se requiere consentimiento expreso, finalidad acotada y medidas de seguridad. La Ley 21.719 eleva las exigencias y las sanciones; el asesor legal confirma su fecha de entrada en vigencia y los ajustes necesarios.</td></tr>
+      <tr><td>Ley N.° 20.584</td><td>Resguarda la confidencialidad de la información de salud de las personas.</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><strong>La empresa no ve fichas individuales.</strong> El empleador recibe solo estadísticas agregadas. El detalle por persona lo ven la enfermera y el propio trabajador.</li>
+    <li><strong>Participación voluntaria.</strong> Cada trabajador firma un consentimiento y puede retirarse cuando quiera, sin consecuencias laborales.</li>
+    <li><strong>Datos protegidos.</strong> Conexión cifrada, base de datos cifrada, acceso por roles, registro de quién consultó qué, y respaldos diarios.</li>
+    <li><strong>Muestras de sangre.</strong> Las toma y procesa un laboratorio con autorización sanitaria. Los kits presupuestados cubren los insumos del operativo; si el laboratorio los incluye en su tarifa, ese ítem se elimina.</li>
+  </ul>
+</section>
+
+<section id="confirmar">
+  <h2><span class="num">09</span>Por confirmar con el equipo</h2>
+  <ul>
+    <li>Empresa piloto y número real de trabajadores.</li>
+    <li>La lista definitiva de indicadores y los exámenes de sangre que se incluyen.</li>
+    <li>Laboratorio o centro médico en convenio y su tarifa.</li>
+    <li>Si el prevencionista y la enfermera son externos o los aporta la empresa piloto. Si los aporta la empresa, esos ítems salen del presupuesto.</li>
+    <li>Fuente de financiamiento y fecha de entrega del Avance 3.</li>
+  </ul>
+  <footer>apalmo studio · Propuesta de implementación SIVPSO · Rev 0 · 16 de noviembre de 2026. Valores de referencia, sujetos a cotización formal.</footer>
+</section>
+</main>
+</div>
+
+<script>
+  // q: cantidad en función de la dotación n. u: unidad. p: precio unitario. f: veces al año (solo operación).
+  const jTens = n => Math.ceil(n / 25);
+  const hEnf = n => Math.max(8, Math.ceil(n * 0.3));
+  const H_DEV = 20000, H_PREV = 12000, H_ENF = 15000, J_TENS = 45000;
+
+  const IMPL = {
+    rrhh: { nombre: "Recursos humanos", filas: [
+      ["Informático: levantamiento y diseño de interfaz", "Maquetas de registro, mediciones, tablero y reportes", () => 40, "h", H_DEV],
+      ["Informático: registro de trabajadores y consentimiento", "Ficha, consentimiento digital, roles y accesos", () => 50, "h", H_DEV],
+      ["Informático: captura de mediciones", "Formulario para tablet y carga de resultados de laboratorio", () => 50, "h", H_DEV],
+      ["Informático: motor de alertas", "Tres niveles, umbrales configurables y avisos", () => 40, "h", H_DEV],
+      ["Informático: tablero y reportes", "Indicadores, tendencias e informes para la empresa", () => 60, "h", H_DEV],
+      ["Informático: seguridad y protección de datos", "Cifrado, registro de accesos y respaldos", () => 40, "h", H_DEV],
+      ["Informático: pruebas, publicación y capacitación", "", () => 40, "h", H_DEV],
+      ["Prevencionista de riesgos", "Modelo de vigilancia, protocolos y capacitación. Media jornada por 2 meses", () => 120, "h", H_PREV],
+      ["Enfermera o enfermero", "Umbrales clínicos, protocolo de medición y validación", () => 40, "h", H_ENF],
+      ["TENS: operativo de línea base", "Primera medición de toda la dotación", jTens, "jornada", J_TENS],
+      ["Asesor legal en protección de datos", "Consentimiento informado y política de tratamiento", () => 1, "global", 450000],
+    ]},
+    mat: { nombre: "Recursos materiales", filas: [
+      ["Balanza clínica digital con tallímetro", "", () => 1, "un.", 250000],
+      ["Tensiómetro digital de brazo, validado", "Uno en uso y uno de respaldo", () => 2, "un.", 45000],
+      ["Cinta métrica antropométrica", "", () => 2, "un.", 8000],
+      ["Kit de toma de muestra", "Tubos, agujas, guantes, alcohol y torniquete, por trabajador", n => n, "kit", 3500],
+      ["Cooler de transporte y contenedor cortopunzante", "", () => 1, "set", 45000],
+      ["Tablet para registro en terreno", "", () => 1, "un.", 220000],
+      ["Impresión y artículos de oficina", "Consentimientos, fichas y afiches", () => 1, "global", 60000],
+    ]},
+    fin: { nombre: "Recursos financieros", filas: [
+      ["Movilización del equipo", "Visitas a la empresa y al centro médico", () => 20, "traslado", 5000],
+      ["Exámenes de laboratorio de línea base", "Glicemia y perfil lipídico, por trabajador", n => n, "examen", 15000],
+    ], imprevistos: 0.10 },
+    tec: { nombre: "Recursos tecnológicos", filas: [
+      ["Dominio .cl", "Primer año", () => 1, "año", 10000],
+      ["Hosting y base de datos cifrada", "Durante los 4 meses de implementación", () => 4, "mes", 25000],
+      ["Servicio de notificaciones", "Correo y mensajería para alertas", () => 4, "mes", 10000],
+      ["Respaldo cifrado de datos", "", () => 4, "mes", 5000],
+      ["Herramienta de IA generativa", "Apoyo a documentación y análisis", () => 4, "mes", 20000],
+      ["Computadores del equipo", "Aporte propio del equipo, valorizado por uso", () => 3, "equipo", 60000],
+    ]},
+  };
+
+  const OPER = {
+    rrhh: { nombre: "Sueldos y honorarios", filas: [
+      ["Prevencionista de riesgos", "Administra el programa, sigue alertas e informa", () => 24, "h/mes", H_PREV, 12],
+      ["Enfermera o enfermero", "Revisa alertas altas, orienta y deriva", hEnf, "h/mes", H_ENF, 12],
+      ["TENS", "Control mensual en terreno", jTens, "jornada/mes", J_TENS, 12],
+      ["Informático: soporte y mantención", "Correcciones, actualizaciones y atención de usuarios", () => 10, "h/mes", H_DEV, 12],
+    ]},
+    salud: { nombre: "Controles de salud y terreno", filas: [
+      ["Exámenes de laboratorio de control", "Glicemia y perfil lipídico, por trabajador", n => n, "examen", 15000, 2],
+      ["Kit de toma de muestra", "Por trabajador", n => n, "kit", 3500, 2],
+      ["Movilización", "Visitas mensuales a la empresa", () => 4, "traslado/mes", 5000, 12],
+      ["Impresión y artículos de oficina", "", () => 1, "global", 60000, 1],
+    ]},
+    tec: { nombre: "Servicios tecnológicos", filas: [
+      ["Hosting y base de datos cifrada", "", () => 1, "mes", 25000, 12],
+      ["Servicio de notificaciones", "", () => 1, "mes", 10000, 12],
+      ["Respaldo cifrado de datos", "", () => 1, "mes", 5000, 12],
+      ["Renovación de dominio .cl", "", () => 1, "año", 10000, 1],
+    ]},
+    mant: { nombre: "Mantención y mejora", filas: [
+      ["Verificación y calibración de equipos", "Balanza y tensiómetros", () => 1, "servicio", 60000, 1],
+      ["Reposición de insumos de equipos", "Pilas, brazaletes y cintas", () => 1, "global", 40000, 1],
+      ["Mejoras de la plataforma", "Bolsa de horas para nuevos indicadores y reportes", () => 20, "h", H_DEV, 1],
+      ["Revisión anual de seguridad y datos", "Accesos, respaldos y cumplimiento legal", () => 1, "servicio", 300000, 1],
+      ["Capacitación anual", "Trabajadores, Comité Paritario y operadores", () => 1, "jornada", 150000, 1],
+    ], imprevistos: 0.05 },
+  };
+
+  const clp = v => "$" + Math.round(v).toLocaleString("es-CL");
+  const num = v => v.toLocaleString("es-CL");
+
+  function calcular(grupos, n, anual) {
+    const sub = {}; let base = 0;
+    for (const [k, g] of Object.entries(grupos)) {
+      g.calc = g.filas.map(([d, det, q, u, p, f]) => { const c = q(n); return { d, det, c, u, p, f, t: c * p * (anual ? f : 1) }; });
+      sub[k] = g.calc.reduce((s, r) => s + r.t, 0); base += sub[k];
+    }
+    for (const [k, g] of Object.entries(grupos)) if (g.imprevistos) {
+      const t = Math.round(base * g.imprevistos / 1000) * 1000;
+      g.calc.push({ d: "Imprevistos", det: Math.round(g.imprevistos * 100) + "% del resto del presupuesto", c: 1, u: "global", p: t, f: 1, t });
+      sub[k] += t;
+    }
+    return { sub, total: Object.values(sub).reduce((a, b) => a + b, 0) };
+  }
+
+  function pintar(id, g, anual) {
+    const filas = g.calc.map(r => `<tr><td>${r.d}${r.det ? `<span class="det">${r.det}</span>` : ""}</td><td class="n">${num(r.c)} ${r.u}</td><td class="n">${clp(r.p)}</td>${anual ? `<td class="n">${r.f}</td>` : ""}<td class="n">${clp(r.t)}</td></tr>`).join("");
+    const sub = g.calc.reduce((s, r) => s + r.t, 0);
+    document.getElementById(id).innerHTML = filas + `<tr class="total"><td>Subtotal ${g.nombre.toLowerCase()}</td><td></td><td></td>${anual ? "<td></td>" : ""}<td class="n">${clp(sub)}</td></tr>`;
+  }
+
+  const rango = document.getElementById("n-trab"), salida = document.getElementById("n-out");
+  function actualizar() {
+    const n = +rango.value;
+    salida.textContent = n + " personas";
+    const i = calcular(IMPL, n, false), o = calcular(OPER, n, true);
+    for (const k of ["rrhh", "mat", "fin", "tec"]) pintar("t-i-" + k, IMPL[k], false);
+    for (const k of ["rrhh", "salud", "tec", "mant"]) pintar("t-o-" + k, OPER[k], true);
+    const res = [
+      ["Personas: honorarios y sueldos", i.sub.rrhh, o.sub.rrhh],
+      ["Equipos, insumos y controles de salud", i.sub.mat + i.sub.fin, o.sub.salud],
+      ["Tecnología", i.sub.tec, o.sub.tec],
+      ["Mantención y mejora", null, o.sub.mant],
+    ];
+    document.getElementById("t-resumen").innerHTML = res.map(([c, a, b]) => `<tr><td>${c}</td><td class="n">${a == null ? "—" : clp(a)}</td><td class="n">${clp(b)}</td></tr>`).join("") +
+      `<tr class="grand"><td>Total</td><td class="n">${clp(i.total)}</td><td class="n">${clp(o.total)}</td></tr>`;
+    const v = { impl: clp(i.total), opAno: clp(o.total), opMes: clp(o.total / 12), opTrab: clp(o.total / 12 / n), ano1: clp(i.total + o.total) };
+    document.querySelectorAll("[data-o]").forEach(e => { e.textContent = v[e.dataset.o]; });
+  }
+  rango.addEventListener("input", actualizar);
+  actualizar();
+</script>
