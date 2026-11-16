@@ -118,6 +118,29 @@ table.costos td:first-child { min-width: 260px; }
 .cifras .dest dd { color: var(--copper); }
 
 footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--rule); padding-top: 16px; margin-top: 30px; }
+
+.aviso { border: 1.5px solid var(--warn); background: var(--warn-soft); border-radius: 6px; padding: 14px 16px; margin: 26px 0 0; max-width: 78ch; break-inside: avoid; }
+.aviso h4 { color: var(--warn); margin-bottom: 6px; }
+.aviso p { margin: 4px 0 0; }
+.solo-impreso { display: none; }
+@page { size: A4; margin: 14mm 12mm; }
+@media print {
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font-size: 12.5px; }
+  nav.toc, .solo-pantalla, .dotacion .row { display: none; }
+  .solo-impreso { display: block; }
+  .band { border-radius: 6px; padding: 24px 20px; }
+  .wrap { display: block; padding: 10px 0 0; max-width: none; }
+  section { padding-block: 4px 14px; }
+  h2 { font-size: 23px; margin-top: 14px; } h3 { font-size: 17px; margin-top: 16px; }
+  h2, h3, h4 { break-after: avoid; }
+  tr, .note, .panel, .cifras, .dotacion { break-inside: avoid; }
+  thead { display: table-header-group; }
+  table { font-size: 12px; } th, td { padding: 6px 10px; }
+  .tw { overflow: visible; }
+  .cifras dd { font-size: 21px; }
+  p, li, .note, .aviso, .dotacion { max-width: none; }
+}
 </style>
 
 <header class="band">
@@ -201,7 +224,7 @@ footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--rule)
 
 <section id="resumen">
   <h2><span class="num">03</span>Resumen de costos</h2>
-  <p class="sub">El costo tiene una parte fija (construir la plataforma, comprar equipos) y una parte que crece con la dotación (exámenes, insumos, horas de terreno). Mueve el control para ver cómo cambia.</p>
+  <p class="sub">El costo tiene una parte fija (construir la plataforma, comprar equipos) y una parte que crece con la dotación (exámenes, insumos, horas de terreno). <span class="solo-pantalla">Mueve el control para ver cómo cambia.</span></p>
 
   <div class="dotacion">
     <label for="n-trab">Trabajadores en vigilancia</label>
@@ -209,7 +232,7 @@ footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--rule)
       <input type="range" id="n-trab" min="10" max="200" step="5" value="10">
       <output for="n-trab" id="n-out">10</output>
     </div>
-    <p class="small" style="margin:0">Base de la propuesta: 10 trabajadores, el mínimo indicado por el equipo. Todas las tablas de este documento se recalculan.</p>
+    <p class="small" style="margin:0">Base de la propuesta: 10 trabajadores, el mínimo indicado por el equipo. <span class="solo-pantalla">Todas las tablas de este documento se recalculan.</span><span class="solo-impreso">Todos los montos de este documento están calculados para esa dotación.</span></p>
   </div>
 
   <dl class="cifras">
@@ -363,7 +386,12 @@ footer { color: var(--muted); font-size: 13px; border-top: 1px solid var(--rule)
     <li>Si el prevencionista y la enfermera son externos o los aporta la empresa piloto. Si los aporta la empresa, esos ítems salen del presupuesto.</li>
     <li>Fuente de financiamiento y fecha de entrega del Avance 3.</li>
   </ul>
-  <footer>apalmo studio · Propuesta de implementación SIVPSO · Rev 0 · 16 de noviembre de 2026. Valores de referencia, sujetos a cotización formal.</footer>
+  <div class="aviso" role="note">
+    <h4>Aviso: documento referencial con fines académicos</h4>
+    <p>Este documento fue elaborado exclusivamente con fines académicos, como apoyo a un proyecto de título de la carrera de Ingeniería en Prevención de Riesgos. Es solo referencial y no debe tomarse como una propuesta real.</p>
+    <p>No constituye una oferta comercial, una cotización ni un compromiso de servicio de apalmo studio o de terceros. Los montos, plazos, cantidades y supuestos son estimaciones y no provienen de cotizaciones formales. Los umbrales de salud mencionados son ilustrativos y no reemplazan el criterio de un profesional de la salud.</p>
+  </div>
+  <footer>apalmo studio · Propuesta de implementación SIVPSO · Rev 0 · 16 de noviembre de 2026. Documento referencial con fines académicos.</footer>
 </section>
 </main>
 </div>
